@@ -2,21 +2,21 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { useQuery, useMutation } from '@apollo/client/react';
 import type { Api } from '../../gql/graphql';
+import { GetApisDocument, DeleteApiDocument } from '../../gql/graphql';
 import { usePagination } from '../../hooks/usePagination';
 import { Pagination } from '../../components/Pagination';
 import { TableSkeleton } from '../../components/TableSkeleton';
 import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal';
 import { ApiForm } from './ApiForm';
-import { GET_APIS, DELETE_API } from './apis.gql';
 
 const PAGE_SIZE = 10;
 
 export function ApisPage() {
-  const { data, loading, error } = useQuery<{ apis: Api[] }>(GET_APIS);
+  const { data, loading, error } = useQuery(GetApisDocument);
   const apis = data?.apis ?? [];
 
-  const [deleteApi, { loading: deleting }] = useMutation(DELETE_API, {
-    refetchQueries: [GET_APIS],
+  const [deleteApi, { loading: deleting }] = useMutation(DeleteApiDocument, {
+    refetchQueries: [GetApisDocument],
   });
 
   const [createOpen, setCreateOpen] = useState(false);

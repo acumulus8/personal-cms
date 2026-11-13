@@ -8,7 +8,8 @@
     "start": "npx prisma migrate deploy && node --experimental-specifier-resolution=node ../../dist/index.js",
     "dev": "../../node_modules/.bin/tsx watch src/index.ts",
     "build": "../../node_modules/.bin/tsc && npx prisma generate",
-    "generate:schema": "tsx src/graphql/generate-schema.ts"
+    "generate:schema": "tsx src/graphql/generate-schema.ts",
+    "check-types": "tsc --noEmit"
   },
   "repository": {
     "type": "git",

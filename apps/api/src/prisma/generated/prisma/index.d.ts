@@ -34,10 +34,10 @@ export type Page = $Result.DefaultSelection<Prisma.$PagePayload>
  */
 export type Section = $Result.DefaultSelection<Prisma.$SectionPayload>
 /**
- * Model SectionContent
+ * Model SectionContentItem
  * 
  */
-export type SectionContent = $Result.DefaultSelection<Prisma.$SectionContentPayload>
+export type SectionContentItem = $Result.DefaultSelection<Prisma.$SectionContentItemPayload>
 /**
  * Model Content
  * 
@@ -53,11 +53,6 @@ export type ContentVersion = $Result.DefaultSelection<Prisma.$ContentVersionPayl
  * 
  */
 export type ContentVersionMedia = $Result.DefaultSelection<Prisma.$ContentVersionMediaPayload>
-/**
- * Model ContentMedia
- * 
- */
-export type ContentMedia = $Result.DefaultSelection<Prisma.$ContentMediaPayload>
 /**
  * Model Media
  * 
@@ -97,14 +92,10 @@ export namespace $Enums {
   HERO: 'HERO',
   BACKGROUND_IMAGE: 'BACKGROUND_IMAGE',
   BACKGROUND_VIDEO: 'BACKGROUND_VIDEO',
-  IMG_1_3_TXT_2_3: 'IMG_1_3_TXT_2_3',
-  TXT_2_3_IMG_1_3: 'TXT_2_3_IMG_1_3',
+  SPLIT_IMAGE_TEXT: 'SPLIT_IMAGE_TEXT',
   LIST: 'LIST',
-  LIST_ITEM: 'LIST_ITEM',
   GRID: 'GRID',
-  GRID_ITEM: 'GRID_ITEM',
   GALLERY: 'GALLERY',
-  GALLERY_ITEM: 'GALLERY_ITEM',
   BANNER: 'BANNER',
   CONTACT: 'CONTACT',
   CTA: 'CTA',
@@ -113,19 +104,6 @@ export namespace $Enums {
 };
 
 export type SectionType = (typeof SectionType)[keyof typeof SectionType]
-
-
-export const SectionContentType: {
-  TEXT: 'TEXT',
-  IMAGE: 'IMAGE',
-  VIDEO: 'VIDEO',
-  AUDIO: 'AUDIO',
-  DOCUMENT: 'DOCUMENT',
-  ARCHIVE: 'ARCHIVE',
-  OTHER: 'OTHER'
-};
-
-export type SectionContentType = (typeof SectionContentType)[keyof typeof SectionContentType]
 
 
 export const ContainerType: {
@@ -161,6 +139,18 @@ export const ContentType: {
 export type ContentType = (typeof ContentType)[keyof typeof ContentType]
 
 
+export const MediaType: {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  AUDIO: 'AUDIO',
+  DOCUMENT: 'DOCUMENT',
+  ARCHIVE: 'ARCHIVE',
+  OTHER: 'OTHER'
+};
+
+export type MediaType = (typeof MediaType)[keyof typeof MediaType]
+
+
 export const ContentState: {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED',
@@ -177,18 +167,6 @@ export const ContentVisibility: {
 };
 
 export type ContentVisibility = (typeof ContentVisibility)[keyof typeof ContentVisibility]
-
-
-export const MediaType: {
-  IMAGE: 'IMAGE',
-  VIDEO: 'VIDEO',
-  AUDIO: 'AUDIO',
-  DOCUMENT: 'DOCUMENT',
-  ARCHIVE: 'ARCHIVE',
-  OTHER: 'OTHER'
-};
-
-export type MediaType = (typeof MediaType)[keyof typeof MediaType]
 
 
 export const ProjectType: {
@@ -284,10 +262,6 @@ export type SectionType = $Enums.SectionType
 
 export const SectionType: typeof $Enums.SectionType
 
-export type SectionContentType = $Enums.SectionContentType
-
-export const SectionContentType: typeof $Enums.SectionContentType
-
 export type ContainerType = $Enums.ContainerType
 
 export const ContainerType: typeof $Enums.ContainerType
@@ -300,6 +274,10 @@ export type ContentType = $Enums.ContentType
 
 export const ContentType: typeof $Enums.ContentType
 
+export type MediaType = $Enums.MediaType
+
+export const MediaType: typeof $Enums.MediaType
+
 export type ContentState = $Enums.ContentState
 
 export const ContentState: typeof $Enums.ContentState
@@ -307,10 +285,6 @@ export const ContentState: typeof $Enums.ContentState
 export type ContentVisibility = $Enums.ContentVisibility
 
 export const ContentVisibility: typeof $Enums.ContentVisibility
-
-export type MediaType = $Enums.MediaType
-
-export const MediaType: typeof $Enums.MediaType
 
 export type ProjectType = $Enums.ProjectType
 
@@ -506,14 +480,14 @@ export class PrismaClient<
   get section(): Prisma.SectionDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.sectionContent`: Exposes CRUD operations for the **SectionContent** model.
+   * `prisma.sectionContentItem`: Exposes CRUD operations for the **SectionContentItem** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more SectionContents
-    * const sectionContents = await prisma.sectionContent.findMany()
+    * // Fetch zero or more SectionContentItems
+    * const sectionContentItems = await prisma.sectionContentItem.findMany()
     * ```
     */
-  get sectionContent(): Prisma.SectionContentDelegate<ExtArgs, ClientOptions>;
+  get sectionContentItem(): Prisma.SectionContentItemDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.content`: Exposes CRUD operations for the **Content** model.
@@ -544,16 +518,6 @@ export class PrismaClient<
     * ```
     */
   get contentVersionMedia(): Prisma.ContentVersionMediaDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.contentMedia`: Exposes CRUD operations for the **ContentMedia** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ContentMedias
-    * const contentMedias = await prisma.contentMedia.findMany()
-    * ```
-    */
-  get contentMedia(): Prisma.ContentMediaDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.media`: Exposes CRUD operations for the **Media** model.
@@ -1052,11 +1016,10 @@ export namespace Prisma {
     Client: 'Client',
     Page: 'Page',
     Section: 'Section',
-    SectionContent: 'SectionContent',
+    SectionContentItem: 'SectionContentItem',
     Content: 'Content',
     ContentVersion: 'ContentVersion',
     ContentVersionMedia: 'ContentVersionMedia',
-    ContentMedia: 'ContentMedia',
     Media: 'Media',
     Project: 'Project',
     Site: 'Site',
@@ -1078,7 +1041,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "address" | "client" | "page" | "section" | "sectionContent" | "content" | "contentVersion" | "contentVersionMedia" | "contentMedia" | "media" | "project" | "site" | "mobileApp" | "aPI" | "user"
+      modelProps: "address" | "client" | "page" | "section" | "sectionContentItem" | "content" | "contentVersion" | "contentVersionMedia" | "media" | "project" | "site" | "mobileApp" | "aPI" | "user"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1346,69 +1309,69 @@ export namespace Prisma {
           }
         }
       }
-      SectionContent: {
-        payload: Prisma.$SectionContentPayload<ExtArgs>
-        fields: Prisma.SectionContentFieldRefs
+      SectionContentItem: {
+        payload: Prisma.$SectionContentItemPayload<ExtArgs>
+        fields: Prisma.SectionContentItemFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.SectionContentFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SectionContentPayload> | null
+            args: Prisma.SectionContentItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionContentItemPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.SectionContentFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SectionContentPayload>
+            args: Prisma.SectionContentItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionContentItemPayload>
           }
           findFirst: {
-            args: Prisma.SectionContentFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SectionContentPayload> | null
+            args: Prisma.SectionContentItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionContentItemPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.SectionContentFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SectionContentPayload>
+            args: Prisma.SectionContentItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionContentItemPayload>
           }
           findMany: {
-            args: Prisma.SectionContentFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SectionContentPayload>[]
+            args: Prisma.SectionContentItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionContentItemPayload>[]
           }
           create: {
-            args: Prisma.SectionContentCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SectionContentPayload>
+            args: Prisma.SectionContentItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionContentItemPayload>
           }
           createMany: {
-            args: Prisma.SectionContentCreateManyArgs<ExtArgs>
+            args: Prisma.SectionContentItemCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           delete: {
-            args: Prisma.SectionContentDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SectionContentPayload>
+            args: Prisma.SectionContentItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionContentItemPayload>
           }
           update: {
-            args: Prisma.SectionContentUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SectionContentPayload>
+            args: Prisma.SectionContentItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionContentItemPayload>
           }
           deleteMany: {
-            args: Prisma.SectionContentDeleteManyArgs<ExtArgs>
+            args: Prisma.SectionContentItemDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.SectionContentUpdateManyArgs<ExtArgs>
+            args: Prisma.SectionContentItemUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.SectionContentUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SectionContentPayload>
+            args: Prisma.SectionContentItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SectionContentItemPayload>
           }
           aggregate: {
-            args: Prisma.SectionContentAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateSectionContent>
+            args: Prisma.SectionContentItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSectionContentItem>
           }
           groupBy: {
-            args: Prisma.SectionContentGroupByArgs<ExtArgs>
-            result: $Utils.Optional<SectionContentGroupByOutputType>[]
+            args: Prisma.SectionContentItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SectionContentItemGroupByOutputType>[]
           }
           count: {
-            args: Prisma.SectionContentCountArgs<ExtArgs>
-            result: $Utils.Optional<SectionContentCountAggregateOutputType> | number
+            args: Prisma.SectionContentItemCountArgs<ExtArgs>
+            result: $Utils.Optional<SectionContentItemCountAggregateOutputType> | number
           }
         }
       }
@@ -1607,72 +1570,6 @@ export namespace Prisma {
           count: {
             args: Prisma.ContentVersionMediaCountArgs<ExtArgs>
             result: $Utils.Optional<ContentVersionMediaCountAggregateOutputType> | number
-          }
-        }
-      }
-      ContentMedia: {
-        payload: Prisma.$ContentMediaPayload<ExtArgs>
-        fields: Prisma.ContentMediaFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ContentMediaFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContentMediaPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ContentMediaFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContentMediaPayload>
-          }
-          findFirst: {
-            args: Prisma.ContentMediaFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContentMediaPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ContentMediaFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContentMediaPayload>
-          }
-          findMany: {
-            args: Prisma.ContentMediaFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContentMediaPayload>[]
-          }
-          create: {
-            args: Prisma.ContentMediaCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContentMediaPayload>
-          }
-          createMany: {
-            args: Prisma.ContentMediaCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.ContentMediaDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContentMediaPayload>
-          }
-          update: {
-            args: Prisma.ContentMediaUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContentMediaPayload>
-          }
-          deleteMany: {
-            args: Prisma.ContentMediaDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ContentMediaUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.ContentMediaUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContentMediaPayload>
-          }
-          aggregate: {
-            args: Prisma.ContentMediaAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateContentMedia>
-          }
-          groupBy: {
-            args: Prisma.ContentMediaGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ContentMediaGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ContentMediaCountArgs<ExtArgs>
-            result: $Utils.Optional<ContentMediaCountAggregateOutputType> | number
           }
         }
       }
@@ -2184,11 +2081,10 @@ export namespace Prisma {
     client?: ClientOmit
     page?: PageOmit
     section?: SectionOmit
-    sectionContent?: SectionContentOmit
+    sectionContentItem?: SectionContentItemOmit
     content?: ContentOmit
     contentVersion?: ContentVersionOmit
     contentVersionMedia?: ContentVersionMediaOmit
-    contentMedia?: ContentMediaOmit
     media?: MediaOmit
     project?: ProjectOmit
     site?: SiteOmit
@@ -2395,12 +2291,12 @@ export namespace Prisma {
    */
 
   export type SectionCountOutputType = {
-    sectionContent: number
+    contents: number
     subSections: number
   }
 
   export type SectionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    sectionContent?: boolean | SectionCountOutputTypeCountSectionContentArgs
+    contents?: boolean | SectionCountOutputTypeCountContentsArgs
     subSections?: boolean | SectionCountOutputTypeCountSubSectionsArgs
   }
 
@@ -2418,8 +2314,8 @@ export namespace Prisma {
   /**
    * SectionCountOutputType without action
    */
-  export type SectionCountOutputTypeCountSectionContentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SectionContentWhereInput
+  export type SectionCountOutputTypeCountContentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SectionContentItemWhereInput
   }
 
   /**
@@ -2436,14 +2332,12 @@ export namespace Prisma {
 
   export type ContentCountOutputType = {
     versions: number
-    sectionContents: number
-    media: number
+    sectionItems: number
   }
 
   export type ContentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     versions?: boolean | ContentCountOutputTypeCountVersionsArgs
-    sectionContents?: boolean | ContentCountOutputTypeCountSectionContentsArgs
-    media?: boolean | ContentCountOutputTypeCountMediaArgs
+    sectionItems?: boolean | ContentCountOutputTypeCountSectionItemsArgs
   }
 
   // Custom InputTypes
@@ -2467,15 +2361,8 @@ export namespace Prisma {
   /**
    * ContentCountOutputType without action
    */
-  export type ContentCountOutputTypeCountSectionContentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SectionContentWhereInput
-  }
-
-  /**
-   * ContentCountOutputType without action
-   */
-  export type ContentCountOutputTypeCountMediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ContentMediaWhereInput
+  export type ContentCountOutputTypeCountSectionItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SectionContentItemWhereInput
   }
 
 
@@ -2516,13 +2403,11 @@ export namespace Prisma {
 
   export type MediaCountOutputType = {
     contentVersions: number
-    contentMedia: number
     featuredIn: number
   }
 
   export type MediaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contentVersions?: boolean | MediaCountOutputTypeCountContentVersionsArgs
-    contentMedia?: boolean | MediaCountOutputTypeCountContentMediaArgs
     featuredIn?: boolean | MediaCountOutputTypeCountFeaturedInArgs
   }
 
@@ -2542,13 +2427,6 @@ export namespace Prisma {
    */
   export type MediaCountOutputTypeCountContentVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ContentVersionMediaWhereInput
-  }
-
-  /**
-   * MediaCountOutputType without action
-   */
-  export type MediaCountOutputTypeCountContentMediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ContentMediaWhereInput
   }
 
   /**
@@ -4840,6 +4718,8 @@ export namespace Prisma {
     metaDescription: string | null
     ogImage: string | null
     keywords: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type PageMaxAggregateOutputType = {
@@ -4854,6 +4734,8 @@ export namespace Prisma {
     metaDescription: string | null
     ogImage: string | null
     keywords: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type PageCountAggregateOutputType = {
@@ -4868,6 +4750,8 @@ export namespace Prisma {
     metaDescription: number
     ogImage: number
     keywords: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -4900,6 +4784,8 @@ export namespace Prisma {
     metaDescription?: true
     ogImage?: true
     keywords?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type PageMaxAggregateInputType = {
@@ -4914,6 +4800,8 @@ export namespace Prisma {
     metaDescription?: true
     ogImage?: true
     keywords?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type PageCountAggregateInputType = {
@@ -4928,6 +4816,8 @@ export namespace Prisma {
     metaDescription?: true
     ogImage?: true
     keywords?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -5029,6 +4919,8 @@ export namespace Prisma {
     metaDescription: string | null
     ogImage: string | null
     keywords: string | null
+    createdAt: Date
+    updatedAt: Date
     _count: PageCountAggregateOutputType | null
     _avg: PageAvgAggregateOutputType | null
     _sum: PageSumAggregateOutputType | null
@@ -5062,6 +4954,8 @@ export namespace Prisma {
     metaDescription?: boolean
     ogImage?: boolean
     keywords?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     site?: boolean | Page$siteArgs<ExtArgs>
     mobileApp?: boolean | Page$mobileAppArgs<ExtArgs>
@@ -5085,9 +4979,11 @@ export namespace Prisma {
     metaDescription?: boolean
     ogImage?: boolean
     keywords?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type PageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "projectId" | "siteId" | "mobileAppId" | "parentId" | "metaTitle" | "metaDescription" | "ogImage" | "keywords", ExtArgs["result"]["page"]>
+  export type PageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "projectId" | "siteId" | "mobileAppId" | "parentId" | "metaTitle" | "metaDescription" | "ogImage" | "keywords" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
   export type PageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     site?: boolean | Page$siteArgs<ExtArgs>
@@ -5120,6 +5016,8 @@ export namespace Prisma {
       metaDescription: string | null
       ogImage: string | null
       keywords: string | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["page"]>
     composites: {}
   }
@@ -5506,6 +5404,8 @@ export namespace Prisma {
     readonly metaDescription: FieldRef<"Page", 'String'>
     readonly ogImage: FieldRef<"Page", 'String'>
     readonly keywords: FieldRef<"Page", 'String'>
+    readonly createdAt: FieldRef<"Page", 'DateTime'>
+    readonly updatedAt: FieldRef<"Page", 'DateTime'>
   }
     
 
@@ -6227,8 +6127,8 @@ export namespace Prisma {
     parentId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    sectionContent?: boolean | Section$sectionContentArgs<ExtArgs>
     page?: boolean | PageDefaultArgs<ExtArgs>
+    contents?: boolean | Section$contentsArgs<ExtArgs>
     parentSection?: boolean | Section$parentSectionArgs<ExtArgs>
     subSections?: boolean | Section$subSectionsArgs<ExtArgs>
     _count?: boolean | SectionCountOutputTypeDefaultArgs<ExtArgs>
@@ -6251,8 +6151,8 @@ export namespace Prisma {
 
   export type SectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "name" | "order" | "pageId" | "containerType" | "columnLayout" | "parentId" | "createdAt" | "updatedAt", ExtArgs["result"]["section"]>
   export type SectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    sectionContent?: boolean | Section$sectionContentArgs<ExtArgs>
     page?: boolean | PageDefaultArgs<ExtArgs>
+    contents?: boolean | Section$contentsArgs<ExtArgs>
     parentSection?: boolean | Section$parentSectionArgs<ExtArgs>
     subSections?: boolean | Section$subSectionsArgs<ExtArgs>
     _count?: boolean | SectionCountOutputTypeDefaultArgs<ExtArgs>
@@ -6261,8 +6161,8 @@ export namespace Prisma {
   export type $SectionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Section"
     objects: {
-      sectionContent: Prisma.$SectionContentPayload<ExtArgs>[]
       page: Prisma.$PagePayload<ExtArgs>
+      contents: Prisma.$SectionContentItemPayload<ExtArgs>[]
       parentSection: Prisma.$SectionPayload<ExtArgs> | null
       subSections: Prisma.$SectionPayload<ExtArgs>[]
     }
@@ -6617,8 +6517,8 @@ export namespace Prisma {
    */
   export interface Prisma__SectionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    sectionContent<T extends Section$sectionContentArgs<ExtArgs> = {}>(args?: Subset<T, Section$sectionContentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionContentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     page<T extends PageDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PageDefaultArgs<ExtArgs>>): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    contents<T extends Section$contentsArgs<ExtArgs> = {}>(args?: Subset<T, Section$contentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionContentItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     parentSection<T extends Section$parentSectionArgs<ExtArgs> = {}>(args?: Subset<T, Section$parentSectionArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     subSections<T extends Section$subSectionsArgs<ExtArgs> = {}>(args?: Subset<T, Section$subSectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -7008,27 +6908,27 @@ export namespace Prisma {
   }
 
   /**
-   * Section.sectionContent
+   * Section.contents
    */
-  export type Section$sectionContentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Section$contentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
-    where?: SectionContentWhereInput
-    orderBy?: SectionContentOrderByWithRelationInput | SectionContentOrderByWithRelationInput[]
-    cursor?: SectionContentWhereUniqueInput
+    include?: SectionContentItemInclude<ExtArgs> | null
+    where?: SectionContentItemWhereInput
+    orderBy?: SectionContentItemOrderByWithRelationInput | SectionContentItemOrderByWithRelationInput[]
+    cursor?: SectionContentItemWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: SectionContentScalarFieldEnum | SectionContentScalarFieldEnum[]
+    distinct?: SectionContentItemScalarFieldEnum | SectionContentItemScalarFieldEnum[]
   }
 
   /**
@@ -7094,390 +6994,360 @@ export namespace Prisma {
 
 
   /**
-   * Model SectionContent
+   * Model SectionContentItem
    */
 
-  export type AggregateSectionContent = {
-    _count: SectionContentCountAggregateOutputType | null
-    _avg: SectionContentAvgAggregateOutputType | null
-    _sum: SectionContentSumAggregateOutputType | null
-    _min: SectionContentMinAggregateOutputType | null
-    _max: SectionContentMaxAggregateOutputType | null
+  export type AggregateSectionContentItem = {
+    _count: SectionContentItemCountAggregateOutputType | null
+    _avg: SectionContentItemAvgAggregateOutputType | null
+    _sum: SectionContentItemSumAggregateOutputType | null
+    _min: SectionContentItemMinAggregateOutputType | null
+    _max: SectionContentItemMaxAggregateOutputType | null
   }
 
-  export type SectionContentAvgAggregateOutputType = {
-    id: number | null
-    contentId: number | null
+  export type SectionContentItemAvgAggregateOutputType = {
     sectionId: number | null
-  }
-
-  export type SectionContentSumAggregateOutputType = {
-    id: number | null
     contentId: number | null
-    sectionId: number | null
+    order: number | null
   }
 
-  export type SectionContentMinAggregateOutputType = {
-    id: number | null
-    type: $Enums.SectionContentType | null
+  export type SectionContentItemSumAggregateOutputType = {
+    sectionId: number | null
     contentId: number | null
-    sectionId: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
+    order: number | null
   }
 
-  export type SectionContentMaxAggregateOutputType = {
-    id: number | null
-    type: $Enums.SectionContentType | null
+  export type SectionContentItemMinAggregateOutputType = {
+    sectionId: number | null
     contentId: number | null
-    sectionId: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
+    order: number | null
   }
 
-  export type SectionContentCountAggregateOutputType = {
-    id: number
-    type: number
-    contentId: number
+  export type SectionContentItemMaxAggregateOutputType = {
+    sectionId: number | null
+    contentId: number | null
+    order: number | null
+  }
+
+  export type SectionContentItemCountAggregateOutputType = {
     sectionId: number
-    createdAt: number
-    updatedAt: number
+    contentId: number
+    order: number
     _all: number
   }
 
 
-  export type SectionContentAvgAggregateInputType = {
-    id?: true
-    contentId?: true
+  export type SectionContentItemAvgAggregateInputType = {
     sectionId?: true
+    contentId?: true
+    order?: true
   }
 
-  export type SectionContentSumAggregateInputType = {
-    id?: true
-    contentId?: true
+  export type SectionContentItemSumAggregateInputType = {
     sectionId?: true
+    contentId?: true
+    order?: true
   }
 
-  export type SectionContentMinAggregateInputType = {
-    id?: true
-    type?: true
-    contentId?: true
+  export type SectionContentItemMinAggregateInputType = {
     sectionId?: true
-    createdAt?: true
-    updatedAt?: true
+    contentId?: true
+    order?: true
   }
 
-  export type SectionContentMaxAggregateInputType = {
-    id?: true
-    type?: true
-    contentId?: true
+  export type SectionContentItemMaxAggregateInputType = {
     sectionId?: true
-    createdAt?: true
-    updatedAt?: true
+    contentId?: true
+    order?: true
   }
 
-  export type SectionContentCountAggregateInputType = {
-    id?: true
-    type?: true
-    contentId?: true
+  export type SectionContentItemCountAggregateInputType = {
     sectionId?: true
-    createdAt?: true
-    updatedAt?: true
+    contentId?: true
+    order?: true
     _all?: true
   }
 
-  export type SectionContentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which SectionContent to aggregate.
+     * Filter which SectionContentItem to aggregate.
      */
-    where?: SectionContentWhereInput
+    where?: SectionContentItemWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SectionContents to fetch.
+     * Determine the order of SectionContentItems to fetch.
      */
-    orderBy?: SectionContentOrderByWithRelationInput | SectionContentOrderByWithRelationInput[]
+    orderBy?: SectionContentItemOrderByWithRelationInput | SectionContentItemOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: SectionContentWhereUniqueInput
+    cursor?: SectionContentItemWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SectionContents from the position of the cursor.
+     * Take `±n` SectionContentItems from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SectionContents.
+     * Skip the first `n` SectionContentItems.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned SectionContents
+     * Count returned SectionContentItems
     **/
-    _count?: true | SectionContentCountAggregateInputType
+    _count?: true | SectionContentItemCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: SectionContentAvgAggregateInputType
+    _avg?: SectionContentItemAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: SectionContentSumAggregateInputType
+    _sum?: SectionContentItemSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: SectionContentMinAggregateInputType
+    _min?: SectionContentItemMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: SectionContentMaxAggregateInputType
+    _max?: SectionContentItemMaxAggregateInputType
   }
 
-  export type GetSectionContentAggregateType<T extends SectionContentAggregateArgs> = {
-        [P in keyof T & keyof AggregateSectionContent]: P extends '_count' | 'count'
+  export type GetSectionContentItemAggregateType<T extends SectionContentItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateSectionContentItem]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateSectionContent[P]>
-      : GetScalarType<T[P], AggregateSectionContent[P]>
+        : GetScalarType<T[P], AggregateSectionContentItem[P]>
+      : GetScalarType<T[P], AggregateSectionContentItem[P]>
   }
 
 
 
 
-  export type SectionContentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SectionContentWhereInput
-    orderBy?: SectionContentOrderByWithAggregationInput | SectionContentOrderByWithAggregationInput[]
-    by: SectionContentScalarFieldEnum[] | SectionContentScalarFieldEnum
-    having?: SectionContentScalarWhereWithAggregatesInput
+  export type SectionContentItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SectionContentItemWhereInput
+    orderBy?: SectionContentItemOrderByWithAggregationInput | SectionContentItemOrderByWithAggregationInput[]
+    by: SectionContentItemScalarFieldEnum[] | SectionContentItemScalarFieldEnum
+    having?: SectionContentItemScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: SectionContentCountAggregateInputType | true
-    _avg?: SectionContentAvgAggregateInputType
-    _sum?: SectionContentSumAggregateInputType
-    _min?: SectionContentMinAggregateInputType
-    _max?: SectionContentMaxAggregateInputType
+    _count?: SectionContentItemCountAggregateInputType | true
+    _avg?: SectionContentItemAvgAggregateInputType
+    _sum?: SectionContentItemSumAggregateInputType
+    _min?: SectionContentItemMinAggregateInputType
+    _max?: SectionContentItemMaxAggregateInputType
   }
 
-  export type SectionContentGroupByOutputType = {
-    id: number
-    type: $Enums.SectionContentType
-    contentId: number
+  export type SectionContentItemGroupByOutputType = {
     sectionId: number
-    createdAt: Date
-    updatedAt: Date
-    _count: SectionContentCountAggregateOutputType | null
-    _avg: SectionContentAvgAggregateOutputType | null
-    _sum: SectionContentSumAggregateOutputType | null
-    _min: SectionContentMinAggregateOutputType | null
-    _max: SectionContentMaxAggregateOutputType | null
+    contentId: number
+    order: number
+    _count: SectionContentItemCountAggregateOutputType | null
+    _avg: SectionContentItemAvgAggregateOutputType | null
+    _sum: SectionContentItemSumAggregateOutputType | null
+    _min: SectionContentItemMinAggregateOutputType | null
+    _max: SectionContentItemMaxAggregateOutputType | null
   }
 
-  type GetSectionContentGroupByPayload<T extends SectionContentGroupByArgs> = Prisma.PrismaPromise<
+  type GetSectionContentItemGroupByPayload<T extends SectionContentItemGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<SectionContentGroupByOutputType, T['by']> &
+      PickEnumerable<SectionContentItemGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof SectionContentGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof SectionContentItemGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], SectionContentGroupByOutputType[P]>
-            : GetScalarType<T[P], SectionContentGroupByOutputType[P]>
+              : GetScalarType<T[P], SectionContentItemGroupByOutputType[P]>
+            : GetScalarType<T[P], SectionContentItemGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type SectionContentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    type?: boolean
-    contentId?: boolean
+  export type SectionContentItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     sectionId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    content?: boolean | ContentDefaultArgs<ExtArgs>
+    contentId?: boolean
+    order?: boolean
     section?: boolean | SectionDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["sectionContent"]>
+    content?: boolean | ContentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sectionContentItem"]>
 
 
 
-  export type SectionContentSelectScalar = {
-    id?: boolean
-    type?: boolean
-    contentId?: boolean
+  export type SectionContentItemSelectScalar = {
     sectionId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
+    contentId?: boolean
+    order?: boolean
   }
 
-  export type SectionContentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "contentId" | "sectionId" | "createdAt" | "updatedAt", ExtArgs["result"]["sectionContent"]>
-  export type SectionContentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    content?: boolean | ContentDefaultArgs<ExtArgs>
+  export type SectionContentItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"sectionId" | "contentId" | "order", ExtArgs["result"]["sectionContentItem"]>
+  export type SectionContentItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     section?: boolean | SectionDefaultArgs<ExtArgs>
+    content?: boolean | ContentDefaultArgs<ExtArgs>
   }
 
-  export type $SectionContentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "SectionContent"
+  export type $SectionContentItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SectionContentItem"
     objects: {
-      content: Prisma.$ContentPayload<ExtArgs>
       section: Prisma.$SectionPayload<ExtArgs>
+      content: Prisma.$ContentPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: number
-      type: $Enums.SectionContentType
-      contentId: number
       sectionId: number
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["sectionContent"]>
+      contentId: number
+      order: number
+    }, ExtArgs["result"]["sectionContentItem"]>
     composites: {}
   }
 
-  type SectionContentGetPayload<S extends boolean | null | undefined | SectionContentDefaultArgs> = $Result.GetResult<Prisma.$SectionContentPayload, S>
+  type SectionContentItemGetPayload<S extends boolean | null | undefined | SectionContentItemDefaultArgs> = $Result.GetResult<Prisma.$SectionContentItemPayload, S>
 
-  type SectionContentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<SectionContentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: SectionContentCountAggregateInputType | true
+  type SectionContentItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SectionContentItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SectionContentItemCountAggregateInputType | true
     }
 
-  export interface SectionContentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SectionContent'], meta: { name: 'SectionContent' } }
+  export interface SectionContentItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SectionContentItem'], meta: { name: 'SectionContentItem' } }
     /**
-     * Find zero or one SectionContent that matches the filter.
-     * @param {SectionContentFindUniqueArgs} args - Arguments to find a SectionContent
+     * Find zero or one SectionContentItem that matches the filter.
+     * @param {SectionContentItemFindUniqueArgs} args - Arguments to find a SectionContentItem
      * @example
-     * // Get one SectionContent
-     * const sectionContent = await prisma.sectionContent.findUnique({
+     * // Get one SectionContentItem
+     * const sectionContentItem = await prisma.sectionContentItem.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends SectionContentFindUniqueArgs>(args: SelectSubset<T, SectionContentFindUniqueArgs<ExtArgs>>): Prisma__SectionContentClient<$Result.GetResult<Prisma.$SectionContentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends SectionContentItemFindUniqueArgs>(args: SelectSubset<T, SectionContentItemFindUniqueArgs<ExtArgs>>): Prisma__SectionContentItemClient<$Result.GetResult<Prisma.$SectionContentItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one SectionContent that matches the filter or throw an error with `error.code='P2025'`
+     * Find one SectionContentItem that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {SectionContentFindUniqueOrThrowArgs} args - Arguments to find a SectionContent
+     * @param {SectionContentItemFindUniqueOrThrowArgs} args - Arguments to find a SectionContentItem
      * @example
-     * // Get one SectionContent
-     * const sectionContent = await prisma.sectionContent.findUniqueOrThrow({
+     * // Get one SectionContentItem
+     * const sectionContentItem = await prisma.sectionContentItem.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends SectionContentFindUniqueOrThrowArgs>(args: SelectSubset<T, SectionContentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SectionContentClient<$Result.GetResult<Prisma.$SectionContentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends SectionContentItemFindUniqueOrThrowArgs>(args: SelectSubset<T, SectionContentItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SectionContentItemClient<$Result.GetResult<Prisma.$SectionContentItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first SectionContent that matches the filter.
+     * Find the first SectionContentItem that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SectionContentFindFirstArgs} args - Arguments to find a SectionContent
+     * @param {SectionContentItemFindFirstArgs} args - Arguments to find a SectionContentItem
      * @example
-     * // Get one SectionContent
-     * const sectionContent = await prisma.sectionContent.findFirst({
+     * // Get one SectionContentItem
+     * const sectionContentItem = await prisma.sectionContentItem.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends SectionContentFindFirstArgs>(args?: SelectSubset<T, SectionContentFindFirstArgs<ExtArgs>>): Prisma__SectionContentClient<$Result.GetResult<Prisma.$SectionContentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends SectionContentItemFindFirstArgs>(args?: SelectSubset<T, SectionContentItemFindFirstArgs<ExtArgs>>): Prisma__SectionContentItemClient<$Result.GetResult<Prisma.$SectionContentItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first SectionContent that matches the filter or
+     * Find the first SectionContentItem that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SectionContentFindFirstOrThrowArgs} args - Arguments to find a SectionContent
+     * @param {SectionContentItemFindFirstOrThrowArgs} args - Arguments to find a SectionContentItem
      * @example
-     * // Get one SectionContent
-     * const sectionContent = await prisma.sectionContent.findFirstOrThrow({
+     * // Get one SectionContentItem
+     * const sectionContentItem = await prisma.sectionContentItem.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends SectionContentFindFirstOrThrowArgs>(args?: SelectSubset<T, SectionContentFindFirstOrThrowArgs<ExtArgs>>): Prisma__SectionContentClient<$Result.GetResult<Prisma.$SectionContentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends SectionContentItemFindFirstOrThrowArgs>(args?: SelectSubset<T, SectionContentItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__SectionContentItemClient<$Result.GetResult<Prisma.$SectionContentItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more SectionContents that matches the filter.
+     * Find zero or more SectionContentItems that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SectionContentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {SectionContentItemFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all SectionContents
-     * const sectionContents = await prisma.sectionContent.findMany()
+     * // Get all SectionContentItems
+     * const sectionContentItems = await prisma.sectionContentItem.findMany()
      * 
-     * // Get first 10 SectionContents
-     * const sectionContents = await prisma.sectionContent.findMany({ take: 10 })
+     * // Get first 10 SectionContentItems
+     * const sectionContentItems = await prisma.sectionContentItem.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const sectionContentWithIdOnly = await prisma.sectionContent.findMany({ select: { id: true } })
+     * // Only select the `sectionId`
+     * const sectionContentItemWithSectionIdOnly = await prisma.sectionContentItem.findMany({ select: { sectionId: true } })
      * 
      */
-    findMany<T extends SectionContentFindManyArgs>(args?: SelectSubset<T, SectionContentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionContentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends SectionContentItemFindManyArgs>(args?: SelectSubset<T, SectionContentItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionContentItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a SectionContent.
-     * @param {SectionContentCreateArgs} args - Arguments to create a SectionContent.
+     * Create a SectionContentItem.
+     * @param {SectionContentItemCreateArgs} args - Arguments to create a SectionContentItem.
      * @example
-     * // Create one SectionContent
-     * const SectionContent = await prisma.sectionContent.create({
+     * // Create one SectionContentItem
+     * const SectionContentItem = await prisma.sectionContentItem.create({
      *   data: {
-     *     // ... data to create a SectionContent
+     *     // ... data to create a SectionContentItem
      *   }
      * })
      * 
      */
-    create<T extends SectionContentCreateArgs>(args: SelectSubset<T, SectionContentCreateArgs<ExtArgs>>): Prisma__SectionContentClient<$Result.GetResult<Prisma.$SectionContentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends SectionContentItemCreateArgs>(args: SelectSubset<T, SectionContentItemCreateArgs<ExtArgs>>): Prisma__SectionContentItemClient<$Result.GetResult<Prisma.$SectionContentItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many SectionContents.
-     * @param {SectionContentCreateManyArgs} args - Arguments to create many SectionContents.
+     * Create many SectionContentItems.
+     * @param {SectionContentItemCreateManyArgs} args - Arguments to create many SectionContentItems.
      * @example
-     * // Create many SectionContents
-     * const sectionContent = await prisma.sectionContent.createMany({
+     * // Create many SectionContentItems
+     * const sectionContentItem = await prisma.sectionContentItem.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends SectionContentCreateManyArgs>(args?: SelectSubset<T, SectionContentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends SectionContentItemCreateManyArgs>(args?: SelectSubset<T, SectionContentItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a SectionContent.
-     * @param {SectionContentDeleteArgs} args - Arguments to delete one SectionContent.
+     * Delete a SectionContentItem.
+     * @param {SectionContentItemDeleteArgs} args - Arguments to delete one SectionContentItem.
      * @example
-     * // Delete one SectionContent
-     * const SectionContent = await prisma.sectionContent.delete({
+     * // Delete one SectionContentItem
+     * const SectionContentItem = await prisma.sectionContentItem.delete({
      *   where: {
-     *     // ... filter to delete one SectionContent
+     *     // ... filter to delete one SectionContentItem
      *   }
      * })
      * 
      */
-    delete<T extends SectionContentDeleteArgs>(args: SelectSubset<T, SectionContentDeleteArgs<ExtArgs>>): Prisma__SectionContentClient<$Result.GetResult<Prisma.$SectionContentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends SectionContentItemDeleteArgs>(args: SelectSubset<T, SectionContentItemDeleteArgs<ExtArgs>>): Prisma__SectionContentItemClient<$Result.GetResult<Prisma.$SectionContentItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one SectionContent.
-     * @param {SectionContentUpdateArgs} args - Arguments to update one SectionContent.
+     * Update one SectionContentItem.
+     * @param {SectionContentItemUpdateArgs} args - Arguments to update one SectionContentItem.
      * @example
-     * // Update one SectionContent
-     * const sectionContent = await prisma.sectionContent.update({
+     * // Update one SectionContentItem
+     * const sectionContentItem = await prisma.sectionContentItem.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -7487,30 +7357,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends SectionContentUpdateArgs>(args: SelectSubset<T, SectionContentUpdateArgs<ExtArgs>>): Prisma__SectionContentClient<$Result.GetResult<Prisma.$SectionContentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends SectionContentItemUpdateArgs>(args: SelectSubset<T, SectionContentItemUpdateArgs<ExtArgs>>): Prisma__SectionContentItemClient<$Result.GetResult<Prisma.$SectionContentItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more SectionContents.
-     * @param {SectionContentDeleteManyArgs} args - Arguments to filter SectionContents to delete.
+     * Delete zero or more SectionContentItems.
+     * @param {SectionContentItemDeleteManyArgs} args - Arguments to filter SectionContentItems to delete.
      * @example
-     * // Delete a few SectionContents
-     * const { count } = await prisma.sectionContent.deleteMany({
+     * // Delete a few SectionContentItems
+     * const { count } = await prisma.sectionContentItem.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends SectionContentDeleteManyArgs>(args?: SelectSubset<T, SectionContentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends SectionContentItemDeleteManyArgs>(args?: SelectSubset<T, SectionContentItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more SectionContents.
+     * Update zero or more SectionContentItems.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SectionContentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {SectionContentItemUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many SectionContents
-     * const sectionContent = await prisma.sectionContent.updateMany({
+     * // Update many SectionContentItems
+     * const sectionContentItem = await prisma.sectionContentItem.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -7520,56 +7390,56 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends SectionContentUpdateManyArgs>(args: SelectSubset<T, SectionContentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends SectionContentItemUpdateManyArgs>(args: SelectSubset<T, SectionContentItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one SectionContent.
-     * @param {SectionContentUpsertArgs} args - Arguments to update or create a SectionContent.
+     * Create or update one SectionContentItem.
+     * @param {SectionContentItemUpsertArgs} args - Arguments to update or create a SectionContentItem.
      * @example
-     * // Update or create a SectionContent
-     * const sectionContent = await prisma.sectionContent.upsert({
+     * // Update or create a SectionContentItem
+     * const sectionContentItem = await prisma.sectionContentItem.upsert({
      *   create: {
-     *     // ... data to create a SectionContent
+     *     // ... data to create a SectionContentItem
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the SectionContent we want to update
+     *     // ... the filter for the SectionContentItem we want to update
      *   }
      * })
      */
-    upsert<T extends SectionContentUpsertArgs>(args: SelectSubset<T, SectionContentUpsertArgs<ExtArgs>>): Prisma__SectionContentClient<$Result.GetResult<Prisma.$SectionContentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends SectionContentItemUpsertArgs>(args: SelectSubset<T, SectionContentItemUpsertArgs<ExtArgs>>): Prisma__SectionContentItemClient<$Result.GetResult<Prisma.$SectionContentItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of SectionContents.
+     * Count the number of SectionContentItems.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SectionContentCountArgs} args - Arguments to filter SectionContents to count.
+     * @param {SectionContentItemCountArgs} args - Arguments to filter SectionContentItems to count.
      * @example
-     * // Count the number of SectionContents
-     * const count = await prisma.sectionContent.count({
+     * // Count the number of SectionContentItems
+     * const count = await prisma.sectionContentItem.count({
      *   where: {
-     *     // ... the filter for the SectionContents we want to count
+     *     // ... the filter for the SectionContentItems we want to count
      *   }
      * })
     **/
-    count<T extends SectionContentCountArgs>(
-      args?: Subset<T, SectionContentCountArgs>,
+    count<T extends SectionContentItemCountArgs>(
+      args?: Subset<T, SectionContentItemCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], SectionContentCountAggregateOutputType>
+          : GetScalarType<T['select'], SectionContentItemCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a SectionContent.
+     * Allows you to perform aggregations operations on a SectionContentItem.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SectionContentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {SectionContentItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -7589,13 +7459,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends SectionContentAggregateArgs>(args: Subset<T, SectionContentAggregateArgs>): Prisma.PrismaPromise<GetSectionContentAggregateType<T>>
+    aggregate<T extends SectionContentItemAggregateArgs>(args: Subset<T, SectionContentItemAggregateArgs>): Prisma.PrismaPromise<GetSectionContentItemAggregateType<T>>
 
     /**
-     * Group by SectionContent.
+     * Group by SectionContentItem.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SectionContentGroupByArgs} args - Group by arguments.
+     * @param {SectionContentItemGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -7610,14 +7480,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends SectionContentGroupByArgs,
+      T extends SectionContentItemGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: SectionContentGroupByArgs['orderBy'] }
-        : { orderBy?: SectionContentGroupByArgs['orderBy'] },
+        ? { orderBy: SectionContentItemGroupByArgs['orderBy'] }
+        : { orderBy?: SectionContentItemGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -7666,23 +7536,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, SectionContentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSectionContentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, SectionContentItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSectionContentItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the SectionContent model
+   * Fields of the SectionContentItem model
    */
-  readonly fields: SectionContentFieldRefs;
+  readonly fields: SectionContentItemFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for SectionContent.
+   * The delegate class that acts as a "Promise-like" for SectionContentItem.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SectionContentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__SectionContentItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    content<T extends ContentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContentDefaultArgs<ExtArgs>>): Prisma__ContentClient<$Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     section<T extends SectionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SectionDefaultArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    content<T extends ContentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContentDefaultArgs<ExtArgs>>): Prisma__ContentClient<$Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7709,378 +7579,375 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the SectionContent model
+   * Fields of the SectionContentItem model
    */
-  interface SectionContentFieldRefs {
-    readonly id: FieldRef<"SectionContent", 'Int'>
-    readonly type: FieldRef<"SectionContent", 'SectionContentType'>
-    readonly contentId: FieldRef<"SectionContent", 'Int'>
-    readonly sectionId: FieldRef<"SectionContent", 'Int'>
-    readonly createdAt: FieldRef<"SectionContent", 'DateTime'>
-    readonly updatedAt: FieldRef<"SectionContent", 'DateTime'>
+  interface SectionContentItemFieldRefs {
+    readonly sectionId: FieldRef<"SectionContentItem", 'Int'>
+    readonly contentId: FieldRef<"SectionContentItem", 'Int'>
+    readonly order: FieldRef<"SectionContentItem", 'Int'>
   }
     
 
   // Custom InputTypes
   /**
-   * SectionContent findUnique
+   * SectionContentItem findUnique
    */
-  export type SectionContentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
+    include?: SectionContentItemInclude<ExtArgs> | null
     /**
-     * Filter, which SectionContent to fetch.
+     * Filter, which SectionContentItem to fetch.
      */
-    where: SectionContentWhereUniqueInput
+    where: SectionContentItemWhereUniqueInput
   }
 
   /**
-   * SectionContent findUniqueOrThrow
+   * SectionContentItem findUniqueOrThrow
    */
-  export type SectionContentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
+    include?: SectionContentItemInclude<ExtArgs> | null
     /**
-     * Filter, which SectionContent to fetch.
+     * Filter, which SectionContentItem to fetch.
      */
-    where: SectionContentWhereUniqueInput
+    where: SectionContentItemWhereUniqueInput
   }
 
   /**
-   * SectionContent findFirst
+   * SectionContentItem findFirst
    */
-  export type SectionContentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
+    include?: SectionContentItemInclude<ExtArgs> | null
     /**
-     * Filter, which SectionContent to fetch.
+     * Filter, which SectionContentItem to fetch.
      */
-    where?: SectionContentWhereInput
+    where?: SectionContentItemWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SectionContents to fetch.
+     * Determine the order of SectionContentItems to fetch.
      */
-    orderBy?: SectionContentOrderByWithRelationInput | SectionContentOrderByWithRelationInput[]
+    orderBy?: SectionContentItemOrderByWithRelationInput | SectionContentItemOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for SectionContents.
+     * Sets the position for searching for SectionContentItems.
      */
-    cursor?: SectionContentWhereUniqueInput
+    cursor?: SectionContentItemWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SectionContents from the position of the cursor.
+     * Take `±n` SectionContentItems from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SectionContents.
+     * Skip the first `n` SectionContentItems.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of SectionContents.
+     * Filter by unique combinations of SectionContentItems.
      */
-    distinct?: SectionContentScalarFieldEnum | SectionContentScalarFieldEnum[]
+    distinct?: SectionContentItemScalarFieldEnum | SectionContentItemScalarFieldEnum[]
   }
 
   /**
-   * SectionContent findFirstOrThrow
+   * SectionContentItem findFirstOrThrow
    */
-  export type SectionContentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
+    include?: SectionContentItemInclude<ExtArgs> | null
     /**
-     * Filter, which SectionContent to fetch.
+     * Filter, which SectionContentItem to fetch.
      */
-    where?: SectionContentWhereInput
+    where?: SectionContentItemWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SectionContents to fetch.
+     * Determine the order of SectionContentItems to fetch.
      */
-    orderBy?: SectionContentOrderByWithRelationInput | SectionContentOrderByWithRelationInput[]
+    orderBy?: SectionContentItemOrderByWithRelationInput | SectionContentItemOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for SectionContents.
+     * Sets the position for searching for SectionContentItems.
      */
-    cursor?: SectionContentWhereUniqueInput
+    cursor?: SectionContentItemWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SectionContents from the position of the cursor.
+     * Take `±n` SectionContentItems from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SectionContents.
+     * Skip the first `n` SectionContentItems.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of SectionContents.
+     * Filter by unique combinations of SectionContentItems.
      */
-    distinct?: SectionContentScalarFieldEnum | SectionContentScalarFieldEnum[]
+    distinct?: SectionContentItemScalarFieldEnum | SectionContentItemScalarFieldEnum[]
   }
 
   /**
-   * SectionContent findMany
+   * SectionContentItem findMany
    */
-  export type SectionContentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
+    include?: SectionContentItemInclude<ExtArgs> | null
     /**
-     * Filter, which SectionContents to fetch.
+     * Filter, which SectionContentItems to fetch.
      */
-    where?: SectionContentWhereInput
+    where?: SectionContentItemWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SectionContents to fetch.
+     * Determine the order of SectionContentItems to fetch.
      */
-    orderBy?: SectionContentOrderByWithRelationInput | SectionContentOrderByWithRelationInput[]
+    orderBy?: SectionContentItemOrderByWithRelationInput | SectionContentItemOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing SectionContents.
+     * Sets the position for listing SectionContentItems.
      */
-    cursor?: SectionContentWhereUniqueInput
+    cursor?: SectionContentItemWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SectionContents from the position of the cursor.
+     * Take `±n` SectionContentItems from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SectionContents.
+     * Skip the first `n` SectionContentItems.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of SectionContents.
+     * Filter by unique combinations of SectionContentItems.
      */
-    distinct?: SectionContentScalarFieldEnum | SectionContentScalarFieldEnum[]
+    distinct?: SectionContentItemScalarFieldEnum | SectionContentItemScalarFieldEnum[]
   }
 
   /**
-   * SectionContent create
+   * SectionContentItem create
    */
-  export type SectionContentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
+    include?: SectionContentItemInclude<ExtArgs> | null
     /**
-     * The data needed to create a SectionContent.
+     * The data needed to create a SectionContentItem.
      */
-    data: XOR<SectionContentCreateInput, SectionContentUncheckedCreateInput>
+    data: XOR<SectionContentItemCreateInput, SectionContentItemUncheckedCreateInput>
   }
 
   /**
-   * SectionContent createMany
+   * SectionContentItem createMany
    */
-  export type SectionContentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many SectionContents.
+     * The data used to create many SectionContentItems.
      */
-    data: SectionContentCreateManyInput | SectionContentCreateManyInput[]
+    data: SectionContentItemCreateManyInput | SectionContentItemCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * SectionContent update
+   * SectionContentItem update
    */
-  export type SectionContentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
+    include?: SectionContentItemInclude<ExtArgs> | null
     /**
-     * The data needed to update a SectionContent.
+     * The data needed to update a SectionContentItem.
      */
-    data: XOR<SectionContentUpdateInput, SectionContentUncheckedUpdateInput>
+    data: XOR<SectionContentItemUpdateInput, SectionContentItemUncheckedUpdateInput>
     /**
-     * Choose, which SectionContent to update.
+     * Choose, which SectionContentItem to update.
      */
-    where: SectionContentWhereUniqueInput
+    where: SectionContentItemWhereUniqueInput
   }
 
   /**
-   * SectionContent updateMany
+   * SectionContentItem updateMany
    */
-  export type SectionContentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update SectionContents.
+     * The data used to update SectionContentItems.
      */
-    data: XOR<SectionContentUpdateManyMutationInput, SectionContentUncheckedUpdateManyInput>
+    data: XOR<SectionContentItemUpdateManyMutationInput, SectionContentItemUncheckedUpdateManyInput>
     /**
-     * Filter which SectionContents to update
+     * Filter which SectionContentItems to update
      */
-    where?: SectionContentWhereInput
+    where?: SectionContentItemWhereInput
     /**
-     * Limit how many SectionContents to update.
+     * Limit how many SectionContentItems to update.
      */
     limit?: number
   }
 
   /**
-   * SectionContent upsert
+   * SectionContentItem upsert
    */
-  export type SectionContentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
+    include?: SectionContentItemInclude<ExtArgs> | null
     /**
-     * The filter to search for the SectionContent to update in case it exists.
+     * The filter to search for the SectionContentItem to update in case it exists.
      */
-    where: SectionContentWhereUniqueInput
+    where: SectionContentItemWhereUniqueInput
     /**
-     * In case the SectionContent found by the `where` argument doesn't exist, create a new SectionContent with this data.
+     * In case the SectionContentItem found by the `where` argument doesn't exist, create a new SectionContentItem with this data.
      */
-    create: XOR<SectionContentCreateInput, SectionContentUncheckedCreateInput>
+    create: XOR<SectionContentItemCreateInput, SectionContentItemUncheckedCreateInput>
     /**
-     * In case the SectionContent was found with the provided `where` argument, update it with this data.
+     * In case the SectionContentItem was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<SectionContentUpdateInput, SectionContentUncheckedUpdateInput>
+    update: XOR<SectionContentItemUpdateInput, SectionContentItemUncheckedUpdateInput>
   }
 
   /**
-   * SectionContent delete
+   * SectionContentItem delete
    */
-  export type SectionContentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
+    include?: SectionContentItemInclude<ExtArgs> | null
     /**
-     * Filter which SectionContent to delete.
+     * Filter which SectionContentItem to delete.
      */
-    where: SectionContentWhereUniqueInput
+    where: SectionContentItemWhereUniqueInput
   }
 
   /**
-   * SectionContent deleteMany
+   * SectionContentItem deleteMany
    */
-  export type SectionContentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which SectionContents to delete
+     * Filter which SectionContentItems to delete
      */
-    where?: SectionContentWhereInput
+    where?: SectionContentItemWhereInput
     /**
-     * Limit how many SectionContents to delete.
+     * Limit how many SectionContentItems to delete.
      */
     limit?: number
   }
 
   /**
-   * SectionContent without action
+   * SectionContentItem without action
    */
-  export type SectionContentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SectionContentItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
+    include?: SectionContentItemInclude<ExtArgs> | null
   }
 
 
@@ -8332,8 +8199,7 @@ export namespace Prisma {
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     versions?: boolean | Content$versionsArgs<ExtArgs>
-    sectionContents?: boolean | Content$sectionContentsArgs<ExtArgs>
-    media?: boolean | Content$mediaArgs<ExtArgs>
+    sectionItems?: boolean | Content$sectionItemsArgs<ExtArgs>
     featuredMedia?: boolean | Content$featuredMediaArgs<ExtArgs>
     _count?: boolean | ContentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["content"]>
@@ -8357,8 +8223,7 @@ export namespace Prisma {
   export type ContentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     versions?: boolean | Content$versionsArgs<ExtArgs>
-    sectionContents?: boolean | Content$sectionContentsArgs<ExtArgs>
-    media?: boolean | Content$mediaArgs<ExtArgs>
+    sectionItems?: boolean | Content$sectionItemsArgs<ExtArgs>
     featuredMedia?: boolean | Content$featuredMediaArgs<ExtArgs>
     _count?: boolean | ContentCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -8368,8 +8233,7 @@ export namespace Prisma {
     objects: {
       project: Prisma.$ProjectPayload<ExtArgs>
       versions: Prisma.$ContentVersionPayload<ExtArgs>[]
-      sectionContents: Prisma.$SectionContentPayload<ExtArgs>[]
-      media: Prisma.$ContentMediaPayload<ExtArgs>[]
+      sectionItems: Prisma.$SectionContentItemPayload<ExtArgs>[]
       featuredMedia: Prisma.$MediaPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -8725,8 +8589,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     versions<T extends Content$versionsArgs<ExtArgs> = {}>(args?: Subset<T, Content$versionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    sectionContents<T extends Content$sectionContentsArgs<ExtArgs> = {}>(args?: Subset<T, Content$sectionContentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionContentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    media<T extends Content$mediaArgs<ExtArgs> = {}>(args?: Subset<T, Content$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sectionItems<T extends Content$sectionItemsArgs<ExtArgs> = {}>(args?: Subset<T, Content$sectionItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionContentItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     featuredMedia<T extends Content$featuredMediaArgs<ExtArgs> = {}>(args?: Subset<T, Content$featuredMediaArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9139,51 +9002,27 @@ export namespace Prisma {
   }
 
   /**
-   * Content.sectionContents
+   * Content.sectionItems
    */
-  export type Content$sectionContentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Content$sectionItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SectionContent
+     * Select specific fields to fetch from the SectionContentItem
      */
-    select?: SectionContentSelect<ExtArgs> | null
+    select?: SectionContentItemSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SectionContent
+     * Omit specific fields from the SectionContentItem
      */
-    omit?: SectionContentOmit<ExtArgs> | null
+    omit?: SectionContentItemOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SectionContentInclude<ExtArgs> | null
-    where?: SectionContentWhereInput
-    orderBy?: SectionContentOrderByWithRelationInput | SectionContentOrderByWithRelationInput[]
-    cursor?: SectionContentWhereUniqueInput
+    include?: SectionContentItemInclude<ExtArgs> | null
+    where?: SectionContentItemWhereInput
+    orderBy?: SectionContentItemOrderByWithRelationInput | SectionContentItemOrderByWithRelationInput[]
+    cursor?: SectionContentItemWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: SectionContentScalarFieldEnum | SectionContentScalarFieldEnum[]
-  }
-
-  /**
-   * Content.media
-   */
-  export type Content$mediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-    where?: ContentMediaWhereInput
-    orderBy?: ContentMediaOrderByWithRelationInput | ContentMediaOrderByWithRelationInput[]
-    cursor?: ContentMediaWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ContentMediaScalarFieldEnum | ContentMediaScalarFieldEnum[]
+    distinct?: SectionContentItemScalarFieldEnum | SectionContentItemScalarFieldEnum[]
   }
 
   /**
@@ -11240,1001 +11079,6 @@ export namespace Prisma {
 
 
   /**
-   * Model ContentMedia
-   */
-
-  export type AggregateContentMedia = {
-    _count: ContentMediaCountAggregateOutputType | null
-    _avg: ContentMediaAvgAggregateOutputType | null
-    _sum: ContentMediaSumAggregateOutputType | null
-    _min: ContentMediaMinAggregateOutputType | null
-    _max: ContentMediaMaxAggregateOutputType | null
-  }
-
-  export type ContentMediaAvgAggregateOutputType = {
-    id: number | null
-    contentId: number | null
-    mediaId: number | null
-    order: number | null
-  }
-
-  export type ContentMediaSumAggregateOutputType = {
-    id: number | null
-    contentId: number | null
-    mediaId: number | null
-    order: number | null
-  }
-
-  export type ContentMediaMinAggregateOutputType = {
-    id: number | null
-    contentId: number | null
-    mediaId: number | null
-    order: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type ContentMediaMaxAggregateOutputType = {
-    id: number | null
-    contentId: number | null
-    mediaId: number | null
-    order: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type ContentMediaCountAggregateOutputType = {
-    id: number
-    contentId: number
-    mediaId: number
-    order: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type ContentMediaAvgAggregateInputType = {
-    id?: true
-    contentId?: true
-    mediaId?: true
-    order?: true
-  }
-
-  export type ContentMediaSumAggregateInputType = {
-    id?: true
-    contentId?: true
-    mediaId?: true
-    order?: true
-  }
-
-  export type ContentMediaMinAggregateInputType = {
-    id?: true
-    contentId?: true
-    mediaId?: true
-    order?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type ContentMediaMaxAggregateInputType = {
-    id?: true
-    contentId?: true
-    mediaId?: true
-    order?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type ContentMediaCountAggregateInputType = {
-    id?: true
-    contentId?: true
-    mediaId?: true
-    order?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type ContentMediaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ContentMedia to aggregate.
-     */
-    where?: ContentMediaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ContentMedias to fetch.
-     */
-    orderBy?: ContentMediaOrderByWithRelationInput | ContentMediaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ContentMediaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ContentMedias from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ContentMedias.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ContentMedias
-    **/
-    _count?: true | ContentMediaCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ContentMediaAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ContentMediaSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ContentMediaMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ContentMediaMaxAggregateInputType
-  }
-
-  export type GetContentMediaAggregateType<T extends ContentMediaAggregateArgs> = {
-        [P in keyof T & keyof AggregateContentMedia]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateContentMedia[P]>
-      : GetScalarType<T[P], AggregateContentMedia[P]>
-  }
-
-
-
-
-  export type ContentMediaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ContentMediaWhereInput
-    orderBy?: ContentMediaOrderByWithAggregationInput | ContentMediaOrderByWithAggregationInput[]
-    by: ContentMediaScalarFieldEnum[] | ContentMediaScalarFieldEnum
-    having?: ContentMediaScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ContentMediaCountAggregateInputType | true
-    _avg?: ContentMediaAvgAggregateInputType
-    _sum?: ContentMediaSumAggregateInputType
-    _min?: ContentMediaMinAggregateInputType
-    _max?: ContentMediaMaxAggregateInputType
-  }
-
-  export type ContentMediaGroupByOutputType = {
-    id: number
-    contentId: number
-    mediaId: number
-    order: number
-    createdAt: Date
-    updatedAt: Date
-    _count: ContentMediaCountAggregateOutputType | null
-    _avg: ContentMediaAvgAggregateOutputType | null
-    _sum: ContentMediaSumAggregateOutputType | null
-    _min: ContentMediaMinAggregateOutputType | null
-    _max: ContentMediaMaxAggregateOutputType | null
-  }
-
-  type GetContentMediaGroupByPayload<T extends ContentMediaGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ContentMediaGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ContentMediaGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ContentMediaGroupByOutputType[P]>
-            : GetScalarType<T[P], ContentMediaGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ContentMediaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    contentId?: boolean
-    mediaId?: boolean
-    order?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    content?: boolean | ContentDefaultArgs<ExtArgs>
-    media?: boolean | MediaDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["contentMedia"]>
-
-
-
-  export type ContentMediaSelectScalar = {
-    id?: boolean
-    contentId?: boolean
-    mediaId?: boolean
-    order?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type ContentMediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contentId" | "mediaId" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["contentMedia"]>
-  export type ContentMediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    content?: boolean | ContentDefaultArgs<ExtArgs>
-    media?: boolean | MediaDefaultArgs<ExtArgs>
-  }
-
-  export type $ContentMediaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ContentMedia"
-    objects: {
-      content: Prisma.$ContentPayload<ExtArgs>
-      media: Prisma.$MediaPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      contentId: number
-      mediaId: number
-      order: number
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["contentMedia"]>
-    composites: {}
-  }
-
-  type ContentMediaGetPayload<S extends boolean | null | undefined | ContentMediaDefaultArgs> = $Result.GetResult<Prisma.$ContentMediaPayload, S>
-
-  type ContentMediaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ContentMediaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ContentMediaCountAggregateInputType | true
-    }
-
-  export interface ContentMediaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContentMedia'], meta: { name: 'ContentMedia' } }
-    /**
-     * Find zero or one ContentMedia that matches the filter.
-     * @param {ContentMediaFindUniqueArgs} args - Arguments to find a ContentMedia
-     * @example
-     * // Get one ContentMedia
-     * const contentMedia = await prisma.contentMedia.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ContentMediaFindUniqueArgs>(args: SelectSubset<T, ContentMediaFindUniqueArgs<ExtArgs>>): Prisma__ContentMediaClient<$Result.GetResult<Prisma.$ContentMediaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one ContentMedia that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ContentMediaFindUniqueOrThrowArgs} args - Arguments to find a ContentMedia
-     * @example
-     * // Get one ContentMedia
-     * const contentMedia = await prisma.contentMedia.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ContentMediaFindUniqueOrThrowArgs>(args: SelectSubset<T, ContentMediaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContentMediaClient<$Result.GetResult<Prisma.$ContentMediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ContentMedia that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContentMediaFindFirstArgs} args - Arguments to find a ContentMedia
-     * @example
-     * // Get one ContentMedia
-     * const contentMedia = await prisma.contentMedia.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ContentMediaFindFirstArgs>(args?: SelectSubset<T, ContentMediaFindFirstArgs<ExtArgs>>): Prisma__ContentMediaClient<$Result.GetResult<Prisma.$ContentMediaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ContentMedia that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContentMediaFindFirstOrThrowArgs} args - Arguments to find a ContentMedia
-     * @example
-     * // Get one ContentMedia
-     * const contentMedia = await prisma.contentMedia.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ContentMediaFindFirstOrThrowArgs>(args?: SelectSubset<T, ContentMediaFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContentMediaClient<$Result.GetResult<Prisma.$ContentMediaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more ContentMedias that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContentMediaFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ContentMedias
-     * const contentMedias = await prisma.contentMedia.findMany()
-     * 
-     * // Get first 10 ContentMedias
-     * const contentMedias = await prisma.contentMedia.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const contentMediaWithIdOnly = await prisma.contentMedia.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ContentMediaFindManyArgs>(args?: SelectSubset<T, ContentMediaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a ContentMedia.
-     * @param {ContentMediaCreateArgs} args - Arguments to create a ContentMedia.
-     * @example
-     * // Create one ContentMedia
-     * const ContentMedia = await prisma.contentMedia.create({
-     *   data: {
-     *     // ... data to create a ContentMedia
-     *   }
-     * })
-     * 
-     */
-    create<T extends ContentMediaCreateArgs>(args: SelectSubset<T, ContentMediaCreateArgs<ExtArgs>>): Prisma__ContentMediaClient<$Result.GetResult<Prisma.$ContentMediaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many ContentMedias.
-     * @param {ContentMediaCreateManyArgs} args - Arguments to create many ContentMedias.
-     * @example
-     * // Create many ContentMedias
-     * const contentMedia = await prisma.contentMedia.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ContentMediaCreateManyArgs>(args?: SelectSubset<T, ContentMediaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a ContentMedia.
-     * @param {ContentMediaDeleteArgs} args - Arguments to delete one ContentMedia.
-     * @example
-     * // Delete one ContentMedia
-     * const ContentMedia = await prisma.contentMedia.delete({
-     *   where: {
-     *     // ... filter to delete one ContentMedia
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ContentMediaDeleteArgs>(args: SelectSubset<T, ContentMediaDeleteArgs<ExtArgs>>): Prisma__ContentMediaClient<$Result.GetResult<Prisma.$ContentMediaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one ContentMedia.
-     * @param {ContentMediaUpdateArgs} args - Arguments to update one ContentMedia.
-     * @example
-     * // Update one ContentMedia
-     * const contentMedia = await prisma.contentMedia.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ContentMediaUpdateArgs>(args: SelectSubset<T, ContentMediaUpdateArgs<ExtArgs>>): Prisma__ContentMediaClient<$Result.GetResult<Prisma.$ContentMediaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more ContentMedias.
-     * @param {ContentMediaDeleteManyArgs} args - Arguments to filter ContentMedias to delete.
-     * @example
-     * // Delete a few ContentMedias
-     * const { count } = await prisma.contentMedia.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ContentMediaDeleteManyArgs>(args?: SelectSubset<T, ContentMediaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ContentMedias.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContentMediaUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ContentMedias
-     * const contentMedia = await prisma.contentMedia.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ContentMediaUpdateManyArgs>(args: SelectSubset<T, ContentMediaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one ContentMedia.
-     * @param {ContentMediaUpsertArgs} args - Arguments to update or create a ContentMedia.
-     * @example
-     * // Update or create a ContentMedia
-     * const contentMedia = await prisma.contentMedia.upsert({
-     *   create: {
-     *     // ... data to create a ContentMedia
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ContentMedia we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ContentMediaUpsertArgs>(args: SelectSubset<T, ContentMediaUpsertArgs<ExtArgs>>): Prisma__ContentMediaClient<$Result.GetResult<Prisma.$ContentMediaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of ContentMedias.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContentMediaCountArgs} args - Arguments to filter ContentMedias to count.
-     * @example
-     * // Count the number of ContentMedias
-     * const count = await prisma.contentMedia.count({
-     *   where: {
-     *     // ... the filter for the ContentMedias we want to count
-     *   }
-     * })
-    **/
-    count<T extends ContentMediaCountArgs>(
-      args?: Subset<T, ContentMediaCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ContentMediaCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ContentMedia.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContentMediaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ContentMediaAggregateArgs>(args: Subset<T, ContentMediaAggregateArgs>): Prisma.PrismaPromise<GetContentMediaAggregateType<T>>
-
-    /**
-     * Group by ContentMedia.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContentMediaGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ContentMediaGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ContentMediaGroupByArgs['orderBy'] }
-        : { orderBy?: ContentMediaGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ContentMediaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContentMediaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ContentMedia model
-   */
-  readonly fields: ContentMediaFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ContentMedia.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ContentMediaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    content<T extends ContentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContentDefaultArgs<ExtArgs>>): Prisma__ContentClient<$Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    media<T extends MediaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MediaDefaultArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the ContentMedia model
-   */
-  interface ContentMediaFieldRefs {
-    readonly id: FieldRef<"ContentMedia", 'Int'>
-    readonly contentId: FieldRef<"ContentMedia", 'Int'>
-    readonly mediaId: FieldRef<"ContentMedia", 'Int'>
-    readonly order: FieldRef<"ContentMedia", 'Int'>
-    readonly createdAt: FieldRef<"ContentMedia", 'DateTime'>
-    readonly updatedAt: FieldRef<"ContentMedia", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * ContentMedia findUnique
-   */
-  export type ContentMediaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-    /**
-     * Filter, which ContentMedia to fetch.
-     */
-    where: ContentMediaWhereUniqueInput
-  }
-
-  /**
-   * ContentMedia findUniqueOrThrow
-   */
-  export type ContentMediaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-    /**
-     * Filter, which ContentMedia to fetch.
-     */
-    where: ContentMediaWhereUniqueInput
-  }
-
-  /**
-   * ContentMedia findFirst
-   */
-  export type ContentMediaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-    /**
-     * Filter, which ContentMedia to fetch.
-     */
-    where?: ContentMediaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ContentMedias to fetch.
-     */
-    orderBy?: ContentMediaOrderByWithRelationInput | ContentMediaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ContentMedias.
-     */
-    cursor?: ContentMediaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ContentMedias from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ContentMedias.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ContentMedias.
-     */
-    distinct?: ContentMediaScalarFieldEnum | ContentMediaScalarFieldEnum[]
-  }
-
-  /**
-   * ContentMedia findFirstOrThrow
-   */
-  export type ContentMediaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-    /**
-     * Filter, which ContentMedia to fetch.
-     */
-    where?: ContentMediaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ContentMedias to fetch.
-     */
-    orderBy?: ContentMediaOrderByWithRelationInput | ContentMediaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ContentMedias.
-     */
-    cursor?: ContentMediaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ContentMedias from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ContentMedias.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ContentMedias.
-     */
-    distinct?: ContentMediaScalarFieldEnum | ContentMediaScalarFieldEnum[]
-  }
-
-  /**
-   * ContentMedia findMany
-   */
-  export type ContentMediaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-    /**
-     * Filter, which ContentMedias to fetch.
-     */
-    where?: ContentMediaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ContentMedias to fetch.
-     */
-    orderBy?: ContentMediaOrderByWithRelationInput | ContentMediaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ContentMedias.
-     */
-    cursor?: ContentMediaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ContentMedias from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ContentMedias.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ContentMedias.
-     */
-    distinct?: ContentMediaScalarFieldEnum | ContentMediaScalarFieldEnum[]
-  }
-
-  /**
-   * ContentMedia create
-   */
-  export type ContentMediaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-    /**
-     * The data needed to create a ContentMedia.
-     */
-    data: XOR<ContentMediaCreateInput, ContentMediaUncheckedCreateInput>
-  }
-
-  /**
-   * ContentMedia createMany
-   */
-  export type ContentMediaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ContentMedias.
-     */
-    data: ContentMediaCreateManyInput | ContentMediaCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ContentMedia update
-   */
-  export type ContentMediaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-    /**
-     * The data needed to update a ContentMedia.
-     */
-    data: XOR<ContentMediaUpdateInput, ContentMediaUncheckedUpdateInput>
-    /**
-     * Choose, which ContentMedia to update.
-     */
-    where: ContentMediaWhereUniqueInput
-  }
-
-  /**
-   * ContentMedia updateMany
-   */
-  export type ContentMediaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ContentMedias.
-     */
-    data: XOR<ContentMediaUpdateManyMutationInput, ContentMediaUncheckedUpdateManyInput>
-    /**
-     * Filter which ContentMedias to update
-     */
-    where?: ContentMediaWhereInput
-    /**
-     * Limit how many ContentMedias to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ContentMedia upsert
-   */
-  export type ContentMediaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-    /**
-     * The filter to search for the ContentMedia to update in case it exists.
-     */
-    where: ContentMediaWhereUniqueInput
-    /**
-     * In case the ContentMedia found by the `where` argument doesn't exist, create a new ContentMedia with this data.
-     */
-    create: XOR<ContentMediaCreateInput, ContentMediaUncheckedCreateInput>
-    /**
-     * In case the ContentMedia was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ContentMediaUpdateInput, ContentMediaUncheckedUpdateInput>
-  }
-
-  /**
-   * ContentMedia delete
-   */
-  export type ContentMediaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-    /**
-     * Filter which ContentMedia to delete.
-     */
-    where: ContentMediaWhereUniqueInput
-  }
-
-  /**
-   * ContentMedia deleteMany
-   */
-  export type ContentMediaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ContentMedias to delete
-     */
-    where?: ContentMediaWhereInput
-    /**
-     * Limit how many ContentMedias to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * ContentMedia without action
-   */
-  export type ContentMediaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Model Media
    */
 
@@ -12527,7 +11371,6 @@ export namespace Prisma {
     owner?: boolean | ClientDefaultArgs<ExtArgs>
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     contentVersions?: boolean | Media$contentVersionsArgs<ExtArgs>
-    contentMedia?: boolean | Media$contentMediaArgs<ExtArgs>
     featuredIn?: boolean | Media$featuredInArgs<ExtArgs>
     _count?: boolean | MediaCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
@@ -12556,7 +11399,6 @@ export namespace Prisma {
     owner?: boolean | ClientDefaultArgs<ExtArgs>
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     contentVersions?: boolean | Media$contentVersionsArgs<ExtArgs>
-    contentMedia?: boolean | Media$contentMediaArgs<ExtArgs>
     featuredIn?: boolean | Media$featuredInArgs<ExtArgs>
     _count?: boolean | MediaCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -12567,7 +11409,6 @@ export namespace Prisma {
       owner: Prisma.$ClientPayload<ExtArgs>
       project: Prisma.$ProjectPayload<ExtArgs>
       contentVersions: Prisma.$ContentVersionMediaPayload<ExtArgs>[]
-      contentMedia: Prisma.$ContentMediaPayload<ExtArgs>[]
       featuredIn: Prisma.$ContentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -12928,7 +11769,6 @@ export namespace Prisma {
     owner<T extends ClientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientDefaultArgs<ExtArgs>>): Prisma__ClientClient<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     contentVersions<T extends Media$contentVersionsArgs<ExtArgs> = {}>(args?: Subset<T, Media$contentVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentVersionMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    contentMedia<T extends Media$contentMediaArgs<ExtArgs> = {}>(args?: Subset<T, Media$contentMediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     featuredIn<T extends Media$featuredInArgs<ExtArgs> = {}>(args?: Subset<T, Media$featuredInArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -13342,30 +12182,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ContentVersionMediaScalarFieldEnum | ContentVersionMediaScalarFieldEnum[]
-  }
-
-  /**
-   * Media.contentMedia
-   */
-  export type Media$contentMediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContentMedia
-     */
-    select?: ContentMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContentMedia
-     */
-    omit?: ContentMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContentMediaInclude<ExtArgs> | null
-    where?: ContentMediaWhereInput
-    orderBy?: ContentMediaOrderByWithRelationInput | ContentMediaOrderByWithRelationInput[]
-    cursor?: ContentMediaWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ContentMediaScalarFieldEnum | ContentMediaScalarFieldEnum[]
   }
 
   /**
@@ -18722,7 +17538,9 @@ export namespace Prisma {
     metaTitle: 'metaTitle',
     metaDescription: 'metaDescription',
     ogImage: 'ogImage',
-    keywords: 'keywords'
+    keywords: 'keywords',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
@@ -18744,16 +17562,13 @@ export namespace Prisma {
   export type SectionScalarFieldEnum = (typeof SectionScalarFieldEnum)[keyof typeof SectionScalarFieldEnum]
 
 
-  export const SectionContentScalarFieldEnum: {
-    id: 'id',
-    type: 'type',
-    contentId: 'contentId',
+  export const SectionContentItemScalarFieldEnum: {
     sectionId: 'sectionId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    contentId: 'contentId',
+    order: 'order'
   };
 
-  export type SectionContentScalarFieldEnum = (typeof SectionContentScalarFieldEnum)[keyof typeof SectionContentScalarFieldEnum]
+  export type SectionContentItemScalarFieldEnum = (typeof SectionContentItemScalarFieldEnum)[keyof typeof SectionContentItemScalarFieldEnum]
 
 
   export const ContentScalarFieldEnum: {
@@ -18795,18 +17610,6 @@ export namespace Prisma {
   };
 
   export type ContentVersionMediaScalarFieldEnum = (typeof ContentVersionMediaScalarFieldEnum)[keyof typeof ContentVersionMediaScalarFieldEnum]
-
-
-  export const ContentMediaScalarFieldEnum: {
-    id: 'id',
-    contentId: 'contentId',
-    mediaId: 'mediaId',
-    order: 'order',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type ContentMediaScalarFieldEnum = (typeof ContentMediaScalarFieldEnum)[keyof typeof ContentMediaScalarFieldEnum]
 
 
   export const MediaScalarFieldEnum: {
@@ -19110,13 +17913,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'SectionContentType'
-   */
-  export type EnumSectionContentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SectionContentType'>
-    
-
-
-  /**
    * Reference to a field of type 'ContentType'
    */
   export type EnumContentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentType'>
@@ -19386,6 +18182,8 @@ export namespace Prisma {
     metaDescription?: StringNullableFilter<"Page"> | string | null
     ogImage?: StringNullableFilter<"Page"> | string | null
     keywords?: StringNullableFilter<"Page"> | string | null
+    createdAt?: DateTimeFilter<"Page"> | Date | string
+    updatedAt?: DateTimeFilter<"Page"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     site?: XOR<SiteNullableScalarRelationFilter, SiteWhereInput> | null
     mobileApp?: XOR<MobileAppNullableScalarRelationFilter, MobileAppWhereInput> | null
@@ -19406,6 +18204,8 @@ export namespace Prisma {
     metaDescription?: SortOrderInput | SortOrder
     ogImage?: SortOrderInput | SortOrder
     keywords?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     project?: ProjectOrderByWithRelationInput
     site?: SiteOrderByWithRelationInput
     mobileApp?: MobileAppOrderByWithRelationInput
@@ -19431,6 +18231,8 @@ export namespace Prisma {
     metaDescription?: StringNullableFilter<"Page"> | string | null
     ogImage?: StringNullableFilter<"Page"> | string | null
     keywords?: StringNullableFilter<"Page"> | string | null
+    createdAt?: DateTimeFilter<"Page"> | Date | string
+    updatedAt?: DateTimeFilter<"Page"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     site?: XOR<SiteNullableScalarRelationFilter, SiteWhereInput> | null
     mobileApp?: XOR<MobileAppNullableScalarRelationFilter, MobileAppWhereInput> | null
@@ -19451,6 +18253,8 @@ export namespace Prisma {
     metaDescription?: SortOrderInput | SortOrder
     ogImage?: SortOrderInput | SortOrder
     keywords?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: PageCountOrderByAggregateInput
     _avg?: PageAvgOrderByAggregateInput
     _max?: PageMaxOrderByAggregateInput
@@ -19473,6 +18277,8 @@ export namespace Prisma {
     metaDescription?: StringNullableWithAggregatesFilter<"Page"> | string | null
     ogImage?: StringNullableWithAggregatesFilter<"Page"> | string | null
     keywords?: StringNullableWithAggregatesFilter<"Page"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Page"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Page"> | Date | string
   }
 
   export type SectionWhereInput = {
@@ -19489,8 +18295,8 @@ export namespace Prisma {
     parentId?: IntNullableFilter<"Section"> | number | null
     createdAt?: DateTimeFilter<"Section"> | Date | string
     updatedAt?: DateTimeFilter<"Section"> | Date | string
-    sectionContent?: SectionContentListRelationFilter
     page?: XOR<PageScalarRelationFilter, PageWhereInput>
+    contents?: SectionContentItemListRelationFilter
     parentSection?: XOR<SectionNullableScalarRelationFilter, SectionWhereInput> | null
     subSections?: SectionListRelationFilter
   }
@@ -19506,8 +18312,8 @@ export namespace Prisma {
     parentId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    sectionContent?: SectionContentOrderByRelationAggregateInput
     page?: PageOrderByWithRelationInput
+    contents?: SectionContentItemOrderByRelationAggregateInput
     parentSection?: SectionOrderByWithRelationInput
     subSections?: SectionOrderByRelationAggregateInput
     _relevance?: SectionOrderByRelevanceInput
@@ -19527,8 +18333,8 @@ export namespace Prisma {
     parentId?: IntNullableFilter<"Section"> | number | null
     createdAt?: DateTimeFilter<"Section"> | Date | string
     updatedAt?: DateTimeFilter<"Section"> | Date | string
-    sectionContent?: SectionContentListRelationFilter
     page?: XOR<PageScalarRelationFilter, PageWhereInput>
+    contents?: SectionContentItemListRelationFilter
     parentSection?: XOR<SectionNullableScalarRelationFilter, SectionWhereInput> | null
     subSections?: SectionListRelationFilter
   }, "id">
@@ -19567,69 +18373,55 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Section"> | Date | string
   }
 
-  export type SectionContentWhereInput = {
-    AND?: SectionContentWhereInput | SectionContentWhereInput[]
-    OR?: SectionContentWhereInput[]
-    NOT?: SectionContentWhereInput | SectionContentWhereInput[]
-    id?: IntFilter<"SectionContent"> | number
-    type?: EnumSectionContentTypeFilter<"SectionContent"> | $Enums.SectionContentType
-    contentId?: IntFilter<"SectionContent"> | number
-    sectionId?: IntFilter<"SectionContent"> | number
-    createdAt?: DateTimeFilter<"SectionContent"> | Date | string
-    updatedAt?: DateTimeFilter<"SectionContent"> | Date | string
-    content?: XOR<ContentScalarRelationFilter, ContentWhereInput>
+  export type SectionContentItemWhereInput = {
+    AND?: SectionContentItemWhereInput | SectionContentItemWhereInput[]
+    OR?: SectionContentItemWhereInput[]
+    NOT?: SectionContentItemWhereInput | SectionContentItemWhereInput[]
+    sectionId?: IntFilter<"SectionContentItem"> | number
+    contentId?: IntFilter<"SectionContentItem"> | number
+    order?: IntFilter<"SectionContentItem"> | number
     section?: XOR<SectionScalarRelationFilter, SectionWhereInput>
+    content?: XOR<ContentScalarRelationFilter, ContentWhereInput>
   }
 
-  export type SectionContentOrderByWithRelationInput = {
-    id?: SortOrder
-    type?: SortOrder
-    contentId?: SortOrder
+  export type SectionContentItemOrderByWithRelationInput = {
     sectionId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    content?: ContentOrderByWithRelationInput
+    contentId?: SortOrder
+    order?: SortOrder
     section?: SectionOrderByWithRelationInput
+    content?: ContentOrderByWithRelationInput
   }
 
-  export type SectionContentWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: SectionContentWhereInput | SectionContentWhereInput[]
-    OR?: SectionContentWhereInput[]
-    NOT?: SectionContentWhereInput | SectionContentWhereInput[]
-    type?: EnumSectionContentTypeFilter<"SectionContent"> | $Enums.SectionContentType
-    contentId?: IntFilter<"SectionContent"> | number
-    sectionId?: IntFilter<"SectionContent"> | number
-    createdAt?: DateTimeFilter<"SectionContent"> | Date | string
-    updatedAt?: DateTimeFilter<"SectionContent"> | Date | string
-    content?: XOR<ContentScalarRelationFilter, ContentWhereInput>
+  export type SectionContentItemWhereUniqueInput = Prisma.AtLeast<{
+    sectionId_contentId?: SectionContentItemSectionIdContentIdCompoundUniqueInput
+    AND?: SectionContentItemWhereInput | SectionContentItemWhereInput[]
+    OR?: SectionContentItemWhereInput[]
+    NOT?: SectionContentItemWhereInput | SectionContentItemWhereInput[]
+    sectionId?: IntFilter<"SectionContentItem"> | number
+    contentId?: IntFilter<"SectionContentItem"> | number
+    order?: IntFilter<"SectionContentItem"> | number
     section?: XOR<SectionScalarRelationFilter, SectionWhereInput>
-  }, "id">
+    content?: XOR<ContentScalarRelationFilter, ContentWhereInput>
+  }, "sectionId_contentId">
 
-  export type SectionContentOrderByWithAggregationInput = {
-    id?: SortOrder
-    type?: SortOrder
-    contentId?: SortOrder
+  export type SectionContentItemOrderByWithAggregationInput = {
     sectionId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: SectionContentCountOrderByAggregateInput
-    _avg?: SectionContentAvgOrderByAggregateInput
-    _max?: SectionContentMaxOrderByAggregateInput
-    _min?: SectionContentMinOrderByAggregateInput
-    _sum?: SectionContentSumOrderByAggregateInput
+    contentId?: SortOrder
+    order?: SortOrder
+    _count?: SectionContentItemCountOrderByAggregateInput
+    _avg?: SectionContentItemAvgOrderByAggregateInput
+    _max?: SectionContentItemMaxOrderByAggregateInput
+    _min?: SectionContentItemMinOrderByAggregateInput
+    _sum?: SectionContentItemSumOrderByAggregateInput
   }
 
-  export type SectionContentScalarWhereWithAggregatesInput = {
-    AND?: SectionContentScalarWhereWithAggregatesInput | SectionContentScalarWhereWithAggregatesInput[]
-    OR?: SectionContentScalarWhereWithAggregatesInput[]
-    NOT?: SectionContentScalarWhereWithAggregatesInput | SectionContentScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"SectionContent"> | number
-    type?: EnumSectionContentTypeWithAggregatesFilter<"SectionContent"> | $Enums.SectionContentType
-    contentId?: IntWithAggregatesFilter<"SectionContent"> | number
-    sectionId?: IntWithAggregatesFilter<"SectionContent"> | number
-    createdAt?: DateTimeWithAggregatesFilter<"SectionContent"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"SectionContent"> | Date | string
+  export type SectionContentItemScalarWhereWithAggregatesInput = {
+    AND?: SectionContentItemScalarWhereWithAggregatesInput | SectionContentItemScalarWhereWithAggregatesInput[]
+    OR?: SectionContentItemScalarWhereWithAggregatesInput[]
+    NOT?: SectionContentItemScalarWhereWithAggregatesInput | SectionContentItemScalarWhereWithAggregatesInput[]
+    sectionId?: IntWithAggregatesFilter<"SectionContentItem"> | number
+    contentId?: IntWithAggregatesFilter<"SectionContentItem"> | number
+    order?: IntWithAggregatesFilter<"SectionContentItem"> | number
   }
 
   export type ContentWhereInput = {
@@ -19648,8 +18440,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Content"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     versions?: ContentVersionListRelationFilter
-    sectionContents?: SectionContentListRelationFilter
-    media?: ContentMediaListRelationFilter
+    sectionItems?: SectionContentItemListRelationFilter
     featuredMedia?: XOR<MediaNullableScalarRelationFilter, MediaWhereInput> | null
   }
 
@@ -19666,8 +18457,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     project?: ProjectOrderByWithRelationInput
     versions?: ContentVersionOrderByRelationAggregateInput
-    sectionContents?: SectionContentOrderByRelationAggregateInput
-    media?: ContentMediaOrderByRelationAggregateInput
+    sectionItems?: SectionContentItemOrderByRelationAggregateInput
     featuredMedia?: MediaOrderByWithRelationInput
     _relevance?: ContentOrderByRelevanceInput
   }
@@ -19688,8 +18478,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Content"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     versions?: ContentVersionListRelationFilter
-    sectionContents?: SectionContentListRelationFilter
-    media?: ContentMediaListRelationFilter
+    sectionItems?: SectionContentItemListRelationFilter
     featuredMedia?: XOR<MediaNullableScalarRelationFilter, MediaWhereInput> | null
   }, "id">
 
@@ -19865,72 +18654,6 @@ export namespace Prisma {
     order?: IntWithAggregatesFilter<"ContentVersionMedia"> | number
   }
 
-  export type ContentMediaWhereInput = {
-    AND?: ContentMediaWhereInput | ContentMediaWhereInput[]
-    OR?: ContentMediaWhereInput[]
-    NOT?: ContentMediaWhereInput | ContentMediaWhereInput[]
-    id?: IntFilter<"ContentMedia"> | number
-    contentId?: IntFilter<"ContentMedia"> | number
-    mediaId?: IntFilter<"ContentMedia"> | number
-    order?: IntFilter<"ContentMedia"> | number
-    createdAt?: DateTimeFilter<"ContentMedia"> | Date | string
-    updatedAt?: DateTimeFilter<"ContentMedia"> | Date | string
-    content?: XOR<ContentScalarRelationFilter, ContentWhereInput>
-    media?: XOR<MediaScalarRelationFilter, MediaWhereInput>
-  }
-
-  export type ContentMediaOrderByWithRelationInput = {
-    id?: SortOrder
-    contentId?: SortOrder
-    mediaId?: SortOrder
-    order?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    content?: ContentOrderByWithRelationInput
-    media?: MediaOrderByWithRelationInput
-  }
-
-  export type ContentMediaWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    contentId_mediaId?: ContentMediaContentIdMediaIdCompoundUniqueInput
-    AND?: ContentMediaWhereInput | ContentMediaWhereInput[]
-    OR?: ContentMediaWhereInput[]
-    NOT?: ContentMediaWhereInput | ContentMediaWhereInput[]
-    contentId?: IntFilter<"ContentMedia"> | number
-    mediaId?: IntFilter<"ContentMedia"> | number
-    order?: IntFilter<"ContentMedia"> | number
-    createdAt?: DateTimeFilter<"ContentMedia"> | Date | string
-    updatedAt?: DateTimeFilter<"ContentMedia"> | Date | string
-    content?: XOR<ContentScalarRelationFilter, ContentWhereInput>
-    media?: XOR<MediaScalarRelationFilter, MediaWhereInput>
-  }, "id" | "contentId_mediaId">
-
-  export type ContentMediaOrderByWithAggregationInput = {
-    id?: SortOrder
-    contentId?: SortOrder
-    mediaId?: SortOrder
-    order?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: ContentMediaCountOrderByAggregateInput
-    _avg?: ContentMediaAvgOrderByAggregateInput
-    _max?: ContentMediaMaxOrderByAggregateInput
-    _min?: ContentMediaMinOrderByAggregateInput
-    _sum?: ContentMediaSumOrderByAggregateInput
-  }
-
-  export type ContentMediaScalarWhereWithAggregatesInput = {
-    AND?: ContentMediaScalarWhereWithAggregatesInput | ContentMediaScalarWhereWithAggregatesInput[]
-    OR?: ContentMediaScalarWhereWithAggregatesInput[]
-    NOT?: ContentMediaScalarWhereWithAggregatesInput | ContentMediaScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"ContentMedia"> | number
-    contentId?: IntWithAggregatesFilter<"ContentMedia"> | number
-    mediaId?: IntWithAggregatesFilter<"ContentMedia"> | number
-    order?: IntWithAggregatesFilter<"ContentMedia"> | number
-    createdAt?: DateTimeWithAggregatesFilter<"ContentMedia"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"ContentMedia"> | Date | string
-  }
-
   export type MediaWhereInput = {
     AND?: MediaWhereInput | MediaWhereInput[]
     OR?: MediaWhereInput[]
@@ -19952,7 +18675,6 @@ export namespace Prisma {
     owner?: XOR<ClientScalarRelationFilter, ClientWhereInput>
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     contentVersions?: ContentVersionMediaListRelationFilter
-    contentMedia?: ContentMediaListRelationFilter
     featuredIn?: ContentListRelationFilter
   }
 
@@ -19974,7 +18696,6 @@ export namespace Prisma {
     owner?: ClientOrderByWithRelationInput
     project?: ProjectOrderByWithRelationInput
     contentVersions?: ContentVersionMediaOrderByRelationAggregateInput
-    contentMedia?: ContentMediaOrderByRelationAggregateInput
     featuredIn?: ContentOrderByRelationAggregateInput
     _relevance?: MediaOrderByRelevanceInput
   }
@@ -20000,7 +18721,6 @@ export namespace Prisma {
     owner?: XOR<ClientScalarRelationFilter, ClientWhereInput>
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     contentVersions?: ContentVersionMediaListRelationFilter
-    contentMedia?: ContentMediaListRelationFilter
     featuredIn?: ContentListRelationFilter
   }, "id">
 
@@ -20621,6 +19341,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutPagesInput
     site?: SiteCreateNestedOneWithoutPagesInput
     mobileApp?: MobileAppCreateNestedOneWithoutPagesInput
@@ -20641,6 +19363,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     sections?: SectionUncheckedCreateNestedManyWithoutPageInput
     subPages?: PageUncheckedCreateNestedManyWithoutParentPageInput
   }
@@ -20652,6 +19376,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutPagesNestedInput
     site?: SiteUpdateOneWithoutPagesNestedInput
     mobileApp?: MobileAppUpdateOneWithoutPagesNestedInput
@@ -20672,6 +19398,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: SectionUncheckedUpdateManyWithoutPageNestedInput
     subPages?: PageUncheckedUpdateManyWithoutParentPageNestedInput
   }
@@ -20688,6 +19416,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PageUpdateManyMutationInput = {
@@ -20697,6 +19427,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PageUncheckedUpdateManyInput = {
@@ -20711,6 +19443,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SectionCreateInput = {
@@ -20721,8 +19455,8 @@ export namespace Prisma {
     columnLayout?: $Enums.ColumnLayout | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sectionContent?: SectionContentCreateNestedManyWithoutSectionInput
     page: PageCreateNestedOneWithoutSectionsInput
+    contents?: SectionContentItemCreateNestedManyWithoutSectionInput
     parentSection?: SectionCreateNestedOneWithoutSubSectionsInput
     subSections?: SectionCreateNestedManyWithoutParentSectionInput
   }
@@ -20738,7 +19472,7 @@ export namespace Prisma {
     parentId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sectionContent?: SectionContentUncheckedCreateNestedManyWithoutSectionInput
+    contents?: SectionContentItemUncheckedCreateNestedManyWithoutSectionInput
     subSections?: SectionUncheckedCreateNestedManyWithoutParentSectionInput
   }
 
@@ -20750,8 +19484,8 @@ export namespace Prisma {
     columnLayout?: NullableEnumColumnLayoutFieldUpdateOperationsInput | $Enums.ColumnLayout | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sectionContent?: SectionContentUpdateManyWithoutSectionNestedInput
     page?: PageUpdateOneRequiredWithoutSectionsNestedInput
+    contents?: SectionContentItemUpdateManyWithoutSectionNestedInput
     parentSection?: SectionUpdateOneWithoutSubSectionsNestedInput
     subSections?: SectionUpdateManyWithoutParentSectionNestedInput
   }
@@ -20767,7 +19501,7 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sectionContent?: SectionContentUncheckedUpdateManyWithoutSectionNestedInput
+    contents?: SectionContentItemUncheckedUpdateManyWithoutSectionNestedInput
     subSections?: SectionUncheckedUpdateManyWithoutParentSectionNestedInput
   }
 
@@ -20807,62 +19541,44 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SectionContentCreateInput = {
-    type?: $Enums.SectionContentType
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    content: ContentCreateNestedOneWithoutSectionContentsInput
-    section: SectionCreateNestedOneWithoutSectionContentInput
+  export type SectionContentItemCreateInput = {
+    order?: number
+    section: SectionCreateNestedOneWithoutContentsInput
+    content: ContentCreateNestedOneWithoutSectionItemsInput
   }
 
-  export type SectionContentUncheckedCreateInput = {
-    id?: number
-    type?: $Enums.SectionContentType
-    contentId: number
+  export type SectionContentItemUncheckedCreateInput = {
     sectionId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type SectionContentUpdateInput = {
-    type?: EnumSectionContentTypeFieldUpdateOperationsInput | $Enums.SectionContentType
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    content?: ContentUpdateOneRequiredWithoutSectionContentsNestedInput
-    section?: SectionUpdateOneRequiredWithoutSectionContentNestedInput
-  }
-
-  export type SectionContentUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: EnumSectionContentTypeFieldUpdateOperationsInput | $Enums.SectionContentType
-    contentId?: IntFieldUpdateOperationsInput | number
-    sectionId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SectionContentCreateManyInput = {
-    id?: number
-    type?: $Enums.SectionContentType
     contentId: number
-    sectionId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    order?: number
   }
 
-  export type SectionContentUpdateManyMutationInput = {
-    type?: EnumSectionContentTypeFieldUpdateOperationsInput | $Enums.SectionContentType
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type SectionContentItemUpdateInput = {
+    order?: IntFieldUpdateOperationsInput | number
+    section?: SectionUpdateOneRequiredWithoutContentsNestedInput
+    content?: ContentUpdateOneRequiredWithoutSectionItemsNestedInput
   }
 
-  export type SectionContentUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: EnumSectionContentTypeFieldUpdateOperationsInput | $Enums.SectionContentType
-    contentId?: IntFieldUpdateOperationsInput | number
+  export type SectionContentItemUncheckedUpdateInput = {
     sectionId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contentId?: IntFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type SectionContentItemCreateManyInput = {
+    sectionId: number
+    contentId: number
+    order?: number
+  }
+
+  export type SectionContentItemUpdateManyMutationInput = {
+    order?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type SectionContentItemUncheckedUpdateManyInput = {
+    sectionId?: IntFieldUpdateOperationsInput | number
+    contentId?: IntFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
   }
 
   export type ContentCreateInput = {
@@ -20875,8 +19591,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutContentsInput
     versions?: ContentVersionCreateNestedManyWithoutContentInput
-    sectionContents?: SectionContentCreateNestedManyWithoutContentInput
-    media?: ContentMediaCreateNestedManyWithoutContentInput
+    sectionItems?: SectionContentItemCreateNestedManyWithoutContentInput
     featuredMedia?: MediaCreateNestedOneWithoutFeaturedInInput
   }
 
@@ -20892,8 +19607,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     versions?: ContentVersionUncheckedCreateNestedManyWithoutContentInput
-    sectionContents?: SectionContentUncheckedCreateNestedManyWithoutContentInput
-    media?: ContentMediaUncheckedCreateNestedManyWithoutContentInput
+    sectionItems?: SectionContentItemUncheckedCreateNestedManyWithoutContentInput
   }
 
   export type ContentUpdateInput = {
@@ -20906,8 +19620,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutContentsNestedInput
     versions?: ContentVersionUpdateManyWithoutContentNestedInput
-    sectionContents?: SectionContentUpdateManyWithoutContentNestedInput
-    media?: ContentMediaUpdateManyWithoutContentNestedInput
+    sectionItems?: SectionContentItemUpdateManyWithoutContentNestedInput
     featuredMedia?: MediaUpdateOneWithoutFeaturedInNestedInput
   }
 
@@ -20923,8 +19636,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     versions?: ContentVersionUncheckedUpdateManyWithoutContentNestedInput
-    sectionContents?: SectionContentUncheckedUpdateManyWithoutContentNestedInput
-    media?: ContentMediaUncheckedUpdateManyWithoutContentNestedInput
+    sectionItems?: SectionContentItemUncheckedUpdateManyWithoutContentNestedInput
   }
 
   export type ContentCreateManyInput = {
@@ -21094,64 +19806,6 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
   }
 
-  export type ContentMediaCreateInput = {
-    order?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    content: ContentCreateNestedOneWithoutMediaInput
-    media: MediaCreateNestedOneWithoutContentMediaInput
-  }
-
-  export type ContentMediaUncheckedCreateInput = {
-    id?: number
-    contentId: number
-    mediaId: number
-    order?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ContentMediaUpdateInput = {
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    content?: ContentUpdateOneRequiredWithoutMediaNestedInput
-    media?: MediaUpdateOneRequiredWithoutContentMediaNestedInput
-  }
-
-  export type ContentMediaUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    contentId?: IntFieldUpdateOperationsInput | number
-    mediaId?: IntFieldUpdateOperationsInput | number
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ContentMediaCreateManyInput = {
-    id?: number
-    contentId: number
-    mediaId: number
-    order?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ContentMediaUpdateManyMutationInput = {
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ContentMediaUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    contentId?: IntFieldUpdateOperationsInput | number
-    mediaId?: IntFieldUpdateOperationsInput | number
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type MediaCreateInput = {
     type?: $Enums.MediaType
     url: string
@@ -21167,7 +19821,6 @@ export namespace Prisma {
     owner: ClientCreateNestedOneWithoutMediaInput
     project: ProjectCreateNestedOneWithoutMediaInput
     contentVersions?: ContentVersionMediaCreateNestedManyWithoutMediaInput
-    contentMedia?: ContentMediaCreateNestedManyWithoutMediaInput
     featuredIn?: ContentCreateNestedManyWithoutFeaturedMediaInput
   }
 
@@ -21187,7 +19840,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     contentVersions?: ContentVersionMediaUncheckedCreateNestedManyWithoutMediaInput
-    contentMedia?: ContentMediaUncheckedCreateNestedManyWithoutMediaInput
     featuredIn?: ContentUncheckedCreateNestedManyWithoutFeaturedMediaInput
   }
 
@@ -21206,7 +19858,6 @@ export namespace Prisma {
     owner?: ClientUpdateOneRequiredWithoutMediaNestedInput
     project?: ProjectUpdateOneRequiredWithoutMediaNestedInput
     contentVersions?: ContentVersionMediaUpdateManyWithoutMediaNestedInput
-    contentMedia?: ContentMediaUpdateManyWithoutMediaNestedInput
     featuredIn?: ContentUpdateManyWithoutFeaturedMediaNestedInput
   }
 
@@ -21226,7 +19877,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contentVersions?: ContentVersionMediaUncheckedUpdateManyWithoutMediaNestedInput
-    contentMedia?: ContentMediaUncheckedUpdateManyWithoutMediaNestedInput
     featuredIn?: ContentUncheckedUpdateManyWithoutFeaturedMediaNestedInput
   }
 
@@ -22039,6 +20689,8 @@ export namespace Prisma {
     metaDescription?: SortOrder
     ogImage?: SortOrder
     keywords?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type PageAvgOrderByAggregateInput = {
@@ -22061,6 +20713,8 @@ export namespace Prisma {
     metaDescription?: SortOrder
     ogImage?: SortOrder
     keywords?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type PageMinOrderByAggregateInput = {
@@ -22075,6 +20729,8 @@ export namespace Prisma {
     metaDescription?: SortOrder
     ogImage?: SortOrder
     keywords?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type PageSumOrderByAggregateInput = {
@@ -22122,15 +20778,15 @@ export namespace Prisma {
     not?: NestedEnumColumnLayoutNullableFilter<$PrismaModel> | $Enums.ColumnLayout | null
   }
 
-  export type SectionContentListRelationFilter = {
-    every?: SectionContentWhereInput
-    some?: SectionContentWhereInput
-    none?: SectionContentWhereInput
-  }
-
   export type PageScalarRelationFilter = {
     is?: PageWhereInput
     isNot?: PageWhereInput
+  }
+
+  export type SectionContentItemListRelationFilter = {
+    every?: SectionContentItemWhereInput
+    some?: SectionContentItemWhereInput
+    none?: SectionContentItemWhereInput
   }
 
   export type SectionNullableScalarRelationFilter = {
@@ -22138,7 +20794,7 @@ export namespace Prisma {
     isNot?: SectionWhereInput | null
   }
 
-  export type SectionContentOrderByRelationAggregateInput = {
+  export type SectionContentItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -22231,11 +20887,9 @@ export namespace Prisma {
     _max?: NestedEnumColumnLayoutNullableFilter<$PrismaModel>
   }
 
-  export type EnumSectionContentTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.SectionContentType | EnumSectionContentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SectionContentType[]
-    notIn?: $Enums.SectionContentType[]
-    not?: NestedEnumSectionContentTypeFilter<$PrismaModel> | $Enums.SectionContentType
+  export type SectionScalarRelationFilter = {
+    is?: SectionWhereInput
+    isNot?: SectionWhereInput
   }
 
   export type ContentScalarRelationFilter = {
@@ -22243,58 +20897,39 @@ export namespace Prisma {
     isNot?: ContentWhereInput
   }
 
-  export type SectionScalarRelationFilter = {
-    is?: SectionWhereInput
-    isNot?: SectionWhereInput
+  export type SectionContentItemSectionIdContentIdCompoundUniqueInput = {
+    sectionId: number
+    contentId: number
   }
 
-  export type SectionContentCountOrderByAggregateInput = {
-    id?: SortOrder
-    type?: SortOrder
-    contentId?: SortOrder
+  export type SectionContentItemCountOrderByAggregateInput = {
     sectionId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type SectionContentAvgOrderByAggregateInput = {
-    id?: SortOrder
     contentId?: SortOrder
-    sectionId?: SortOrder
+    order?: SortOrder
   }
 
-  export type SectionContentMaxOrderByAggregateInput = {
-    id?: SortOrder
-    type?: SortOrder
+  export type SectionContentItemAvgOrderByAggregateInput = {
+    sectionId?: SortOrder
     contentId?: SortOrder
-    sectionId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    order?: SortOrder
   }
 
-  export type SectionContentMinOrderByAggregateInput = {
-    id?: SortOrder
-    type?: SortOrder
+  export type SectionContentItemMaxOrderByAggregateInput = {
+    sectionId?: SortOrder
     contentId?: SortOrder
-    sectionId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    order?: SortOrder
   }
 
-  export type SectionContentSumOrderByAggregateInput = {
-    id?: SortOrder
+  export type SectionContentItemMinOrderByAggregateInput = {
+    sectionId?: SortOrder
     contentId?: SortOrder
-    sectionId?: SortOrder
+    order?: SortOrder
   }
 
-  export type EnumSectionContentTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.SectionContentType | EnumSectionContentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SectionContentType[]
-    notIn?: $Enums.SectionContentType[]
-    not?: NestedEnumSectionContentTypeWithAggregatesFilter<$PrismaModel> | $Enums.SectionContentType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumSectionContentTypeFilter<$PrismaModel>
-    _max?: NestedEnumSectionContentTypeFilter<$PrismaModel>
+  export type SectionContentItemSumOrderByAggregateInput = {
+    sectionId?: SortOrder
+    contentId?: SortOrder
+    order?: SortOrder
   }
 
   export type EnumContentTypeFilter<$PrismaModel = never> = {
@@ -22324,22 +20959,12 @@ export namespace Prisma {
     none?: ContentVersionWhereInput
   }
 
-  export type ContentMediaListRelationFilter = {
-    every?: ContentMediaWhereInput
-    some?: ContentMediaWhereInput
-    none?: ContentMediaWhereInput
-  }
-
   export type MediaNullableScalarRelationFilter = {
     is?: MediaWhereInput | null
     isNot?: MediaWhereInput | null
   }
 
   export type ContentVersionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ContentMediaOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -22590,52 +21215,6 @@ export namespace Prisma {
 
   export type ContentVersionMediaSumOrderByAggregateInput = {
     contentVersionId?: SortOrder
-    mediaId?: SortOrder
-    order?: SortOrder
-  }
-
-  export type ContentMediaContentIdMediaIdCompoundUniqueInput = {
-    contentId: number
-    mediaId: number
-  }
-
-  export type ContentMediaCountOrderByAggregateInput = {
-    id?: SortOrder
-    contentId?: SortOrder
-    mediaId?: SortOrder
-    order?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type ContentMediaAvgOrderByAggregateInput = {
-    id?: SortOrder
-    contentId?: SortOrder
-    mediaId?: SortOrder
-    order?: SortOrder
-  }
-
-  export type ContentMediaMaxOrderByAggregateInput = {
-    id?: SortOrder
-    contentId?: SortOrder
-    mediaId?: SortOrder
-    order?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type ContentMediaMinOrderByAggregateInput = {
-    id?: SortOrder
-    contentId?: SortOrder
-    mediaId?: SortOrder
-    order?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type ContentMediaSumOrderByAggregateInput = {
-    id?: SortOrder
-    contentId?: SortOrder
     mediaId?: SortOrder
     order?: SortOrder
   }
@@ -23505,17 +22084,17 @@ export namespace Prisma {
     deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
   }
 
-  export type SectionContentCreateNestedManyWithoutSectionInput = {
-    create?: XOR<SectionContentCreateWithoutSectionInput, SectionContentUncheckedCreateWithoutSectionInput> | SectionContentCreateWithoutSectionInput[] | SectionContentUncheckedCreateWithoutSectionInput[]
-    connectOrCreate?: SectionContentCreateOrConnectWithoutSectionInput | SectionContentCreateOrConnectWithoutSectionInput[]
-    createMany?: SectionContentCreateManySectionInputEnvelope
-    connect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-  }
-
   export type PageCreateNestedOneWithoutSectionsInput = {
     create?: XOR<PageCreateWithoutSectionsInput, PageUncheckedCreateWithoutSectionsInput>
     connectOrCreate?: PageCreateOrConnectWithoutSectionsInput
     connect?: PageWhereUniqueInput
+  }
+
+  export type SectionContentItemCreateNestedManyWithoutSectionInput = {
+    create?: XOR<SectionContentItemCreateWithoutSectionInput, SectionContentItemUncheckedCreateWithoutSectionInput> | SectionContentItemCreateWithoutSectionInput[] | SectionContentItemUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: SectionContentItemCreateOrConnectWithoutSectionInput | SectionContentItemCreateOrConnectWithoutSectionInput[]
+    createMany?: SectionContentItemCreateManySectionInputEnvelope
+    connect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
   }
 
   export type SectionCreateNestedOneWithoutSubSectionsInput = {
@@ -23531,11 +22110,11 @@ export namespace Prisma {
     connect?: SectionWhereUniqueInput | SectionWhereUniqueInput[]
   }
 
-  export type SectionContentUncheckedCreateNestedManyWithoutSectionInput = {
-    create?: XOR<SectionContentCreateWithoutSectionInput, SectionContentUncheckedCreateWithoutSectionInput> | SectionContentCreateWithoutSectionInput[] | SectionContentUncheckedCreateWithoutSectionInput[]
-    connectOrCreate?: SectionContentCreateOrConnectWithoutSectionInput | SectionContentCreateOrConnectWithoutSectionInput[]
-    createMany?: SectionContentCreateManySectionInputEnvelope
-    connect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
+  export type SectionContentItemUncheckedCreateNestedManyWithoutSectionInput = {
+    create?: XOR<SectionContentItemCreateWithoutSectionInput, SectionContentItemUncheckedCreateWithoutSectionInput> | SectionContentItemCreateWithoutSectionInput[] | SectionContentItemUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: SectionContentItemCreateOrConnectWithoutSectionInput | SectionContentItemCreateOrConnectWithoutSectionInput[]
+    createMany?: SectionContentItemCreateManySectionInputEnvelope
+    connect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
   }
 
   export type SectionUncheckedCreateNestedManyWithoutParentSectionInput = {
@@ -23557,26 +22136,26 @@ export namespace Prisma {
     set?: $Enums.ColumnLayout | null
   }
 
-  export type SectionContentUpdateManyWithoutSectionNestedInput = {
-    create?: XOR<SectionContentCreateWithoutSectionInput, SectionContentUncheckedCreateWithoutSectionInput> | SectionContentCreateWithoutSectionInput[] | SectionContentUncheckedCreateWithoutSectionInput[]
-    connectOrCreate?: SectionContentCreateOrConnectWithoutSectionInput | SectionContentCreateOrConnectWithoutSectionInput[]
-    upsert?: SectionContentUpsertWithWhereUniqueWithoutSectionInput | SectionContentUpsertWithWhereUniqueWithoutSectionInput[]
-    createMany?: SectionContentCreateManySectionInputEnvelope
-    set?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    disconnect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    delete?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    connect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    update?: SectionContentUpdateWithWhereUniqueWithoutSectionInput | SectionContentUpdateWithWhereUniqueWithoutSectionInput[]
-    updateMany?: SectionContentUpdateManyWithWhereWithoutSectionInput | SectionContentUpdateManyWithWhereWithoutSectionInput[]
-    deleteMany?: SectionContentScalarWhereInput | SectionContentScalarWhereInput[]
-  }
-
   export type PageUpdateOneRequiredWithoutSectionsNestedInput = {
     create?: XOR<PageCreateWithoutSectionsInput, PageUncheckedCreateWithoutSectionsInput>
     connectOrCreate?: PageCreateOrConnectWithoutSectionsInput
     upsert?: PageUpsertWithoutSectionsInput
     connect?: PageWhereUniqueInput
     update?: XOR<XOR<PageUpdateToOneWithWhereWithoutSectionsInput, PageUpdateWithoutSectionsInput>, PageUncheckedUpdateWithoutSectionsInput>
+  }
+
+  export type SectionContentItemUpdateManyWithoutSectionNestedInput = {
+    create?: XOR<SectionContentItemCreateWithoutSectionInput, SectionContentItemUncheckedCreateWithoutSectionInput> | SectionContentItemCreateWithoutSectionInput[] | SectionContentItemUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: SectionContentItemCreateOrConnectWithoutSectionInput | SectionContentItemCreateOrConnectWithoutSectionInput[]
+    upsert?: SectionContentItemUpsertWithWhereUniqueWithoutSectionInput | SectionContentItemUpsertWithWhereUniqueWithoutSectionInput[]
+    createMany?: SectionContentItemCreateManySectionInputEnvelope
+    set?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    disconnect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    delete?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    connect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    update?: SectionContentItemUpdateWithWhereUniqueWithoutSectionInput | SectionContentItemUpdateWithWhereUniqueWithoutSectionInput[]
+    updateMany?: SectionContentItemUpdateManyWithWhereWithoutSectionInput | SectionContentItemUpdateManyWithWhereWithoutSectionInput[]
+    deleteMany?: SectionContentItemScalarWhereInput | SectionContentItemScalarWhereInput[]
   }
 
   export type SectionUpdateOneWithoutSubSectionsNestedInput = {
@@ -23603,18 +22182,18 @@ export namespace Prisma {
     deleteMany?: SectionScalarWhereInput | SectionScalarWhereInput[]
   }
 
-  export type SectionContentUncheckedUpdateManyWithoutSectionNestedInput = {
-    create?: XOR<SectionContentCreateWithoutSectionInput, SectionContentUncheckedCreateWithoutSectionInput> | SectionContentCreateWithoutSectionInput[] | SectionContentUncheckedCreateWithoutSectionInput[]
-    connectOrCreate?: SectionContentCreateOrConnectWithoutSectionInput | SectionContentCreateOrConnectWithoutSectionInput[]
-    upsert?: SectionContentUpsertWithWhereUniqueWithoutSectionInput | SectionContentUpsertWithWhereUniqueWithoutSectionInput[]
-    createMany?: SectionContentCreateManySectionInputEnvelope
-    set?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    disconnect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    delete?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    connect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    update?: SectionContentUpdateWithWhereUniqueWithoutSectionInput | SectionContentUpdateWithWhereUniqueWithoutSectionInput[]
-    updateMany?: SectionContentUpdateManyWithWhereWithoutSectionInput | SectionContentUpdateManyWithWhereWithoutSectionInput[]
-    deleteMany?: SectionContentScalarWhereInput | SectionContentScalarWhereInput[]
+  export type SectionContentItemUncheckedUpdateManyWithoutSectionNestedInput = {
+    create?: XOR<SectionContentItemCreateWithoutSectionInput, SectionContentItemUncheckedCreateWithoutSectionInput> | SectionContentItemCreateWithoutSectionInput[] | SectionContentItemUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: SectionContentItemCreateOrConnectWithoutSectionInput | SectionContentItemCreateOrConnectWithoutSectionInput[]
+    upsert?: SectionContentItemUpsertWithWhereUniqueWithoutSectionInput | SectionContentItemUpsertWithWhereUniqueWithoutSectionInput[]
+    createMany?: SectionContentItemCreateManySectionInputEnvelope
+    set?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    disconnect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    delete?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    connect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    update?: SectionContentItemUpdateWithWhereUniqueWithoutSectionInput | SectionContentItemUpdateWithWhereUniqueWithoutSectionInput[]
+    updateMany?: SectionContentItemUpdateManyWithWhereWithoutSectionInput | SectionContentItemUpdateManyWithWhereWithoutSectionInput[]
+    deleteMany?: SectionContentItemScalarWhereInput | SectionContentItemScalarWhereInput[]
   }
 
   export type SectionUncheckedUpdateManyWithoutParentSectionNestedInput = {
@@ -23631,36 +22210,32 @@ export namespace Prisma {
     deleteMany?: SectionScalarWhereInput | SectionScalarWhereInput[]
   }
 
-  export type ContentCreateNestedOneWithoutSectionContentsInput = {
-    create?: XOR<ContentCreateWithoutSectionContentsInput, ContentUncheckedCreateWithoutSectionContentsInput>
-    connectOrCreate?: ContentCreateOrConnectWithoutSectionContentsInput
-    connect?: ContentWhereUniqueInput
-  }
-
-  export type SectionCreateNestedOneWithoutSectionContentInput = {
-    create?: XOR<SectionCreateWithoutSectionContentInput, SectionUncheckedCreateWithoutSectionContentInput>
-    connectOrCreate?: SectionCreateOrConnectWithoutSectionContentInput
+  export type SectionCreateNestedOneWithoutContentsInput = {
+    create?: XOR<SectionCreateWithoutContentsInput, SectionUncheckedCreateWithoutContentsInput>
+    connectOrCreate?: SectionCreateOrConnectWithoutContentsInput
     connect?: SectionWhereUniqueInput
   }
 
-  export type EnumSectionContentTypeFieldUpdateOperationsInput = {
-    set?: $Enums.SectionContentType
-  }
-
-  export type ContentUpdateOneRequiredWithoutSectionContentsNestedInput = {
-    create?: XOR<ContentCreateWithoutSectionContentsInput, ContentUncheckedCreateWithoutSectionContentsInput>
-    connectOrCreate?: ContentCreateOrConnectWithoutSectionContentsInput
-    upsert?: ContentUpsertWithoutSectionContentsInput
+  export type ContentCreateNestedOneWithoutSectionItemsInput = {
+    create?: XOR<ContentCreateWithoutSectionItemsInput, ContentUncheckedCreateWithoutSectionItemsInput>
+    connectOrCreate?: ContentCreateOrConnectWithoutSectionItemsInput
     connect?: ContentWhereUniqueInput
-    update?: XOR<XOR<ContentUpdateToOneWithWhereWithoutSectionContentsInput, ContentUpdateWithoutSectionContentsInput>, ContentUncheckedUpdateWithoutSectionContentsInput>
   }
 
-  export type SectionUpdateOneRequiredWithoutSectionContentNestedInput = {
-    create?: XOR<SectionCreateWithoutSectionContentInput, SectionUncheckedCreateWithoutSectionContentInput>
-    connectOrCreate?: SectionCreateOrConnectWithoutSectionContentInput
-    upsert?: SectionUpsertWithoutSectionContentInput
+  export type SectionUpdateOneRequiredWithoutContentsNestedInput = {
+    create?: XOR<SectionCreateWithoutContentsInput, SectionUncheckedCreateWithoutContentsInput>
+    connectOrCreate?: SectionCreateOrConnectWithoutContentsInput
+    upsert?: SectionUpsertWithoutContentsInput
     connect?: SectionWhereUniqueInput
-    update?: XOR<XOR<SectionUpdateToOneWithWhereWithoutSectionContentInput, SectionUpdateWithoutSectionContentInput>, SectionUncheckedUpdateWithoutSectionContentInput>
+    update?: XOR<XOR<SectionUpdateToOneWithWhereWithoutContentsInput, SectionUpdateWithoutContentsInput>, SectionUncheckedUpdateWithoutContentsInput>
+  }
+
+  export type ContentUpdateOneRequiredWithoutSectionItemsNestedInput = {
+    create?: XOR<ContentCreateWithoutSectionItemsInput, ContentUncheckedCreateWithoutSectionItemsInput>
+    connectOrCreate?: ContentCreateOrConnectWithoutSectionItemsInput
+    upsert?: ContentUpsertWithoutSectionItemsInput
+    connect?: ContentWhereUniqueInput
+    update?: XOR<XOR<ContentUpdateToOneWithWhereWithoutSectionItemsInput, ContentUpdateWithoutSectionItemsInput>, ContentUncheckedUpdateWithoutSectionItemsInput>
   }
 
   export type ProjectCreateNestedOneWithoutContentsInput = {
@@ -23676,18 +22251,11 @@ export namespace Prisma {
     connect?: ContentVersionWhereUniqueInput | ContentVersionWhereUniqueInput[]
   }
 
-  export type SectionContentCreateNestedManyWithoutContentInput = {
-    create?: XOR<SectionContentCreateWithoutContentInput, SectionContentUncheckedCreateWithoutContentInput> | SectionContentCreateWithoutContentInput[] | SectionContentUncheckedCreateWithoutContentInput[]
-    connectOrCreate?: SectionContentCreateOrConnectWithoutContentInput | SectionContentCreateOrConnectWithoutContentInput[]
-    createMany?: SectionContentCreateManyContentInputEnvelope
-    connect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-  }
-
-  export type ContentMediaCreateNestedManyWithoutContentInput = {
-    create?: XOR<ContentMediaCreateWithoutContentInput, ContentMediaUncheckedCreateWithoutContentInput> | ContentMediaCreateWithoutContentInput[] | ContentMediaUncheckedCreateWithoutContentInput[]
-    connectOrCreate?: ContentMediaCreateOrConnectWithoutContentInput | ContentMediaCreateOrConnectWithoutContentInput[]
-    createMany?: ContentMediaCreateManyContentInputEnvelope
-    connect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
+  export type SectionContentItemCreateNestedManyWithoutContentInput = {
+    create?: XOR<SectionContentItemCreateWithoutContentInput, SectionContentItemUncheckedCreateWithoutContentInput> | SectionContentItemCreateWithoutContentInput[] | SectionContentItemUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: SectionContentItemCreateOrConnectWithoutContentInput | SectionContentItemCreateOrConnectWithoutContentInput[]
+    createMany?: SectionContentItemCreateManyContentInputEnvelope
+    connect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
   }
 
   export type MediaCreateNestedOneWithoutFeaturedInInput = {
@@ -23703,18 +22271,11 @@ export namespace Prisma {
     connect?: ContentVersionWhereUniqueInput | ContentVersionWhereUniqueInput[]
   }
 
-  export type SectionContentUncheckedCreateNestedManyWithoutContentInput = {
-    create?: XOR<SectionContentCreateWithoutContentInput, SectionContentUncheckedCreateWithoutContentInput> | SectionContentCreateWithoutContentInput[] | SectionContentUncheckedCreateWithoutContentInput[]
-    connectOrCreate?: SectionContentCreateOrConnectWithoutContentInput | SectionContentCreateOrConnectWithoutContentInput[]
-    createMany?: SectionContentCreateManyContentInputEnvelope
-    connect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-  }
-
-  export type ContentMediaUncheckedCreateNestedManyWithoutContentInput = {
-    create?: XOR<ContentMediaCreateWithoutContentInput, ContentMediaUncheckedCreateWithoutContentInput> | ContentMediaCreateWithoutContentInput[] | ContentMediaUncheckedCreateWithoutContentInput[]
-    connectOrCreate?: ContentMediaCreateOrConnectWithoutContentInput | ContentMediaCreateOrConnectWithoutContentInput[]
-    createMany?: ContentMediaCreateManyContentInputEnvelope
-    connect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
+  export type SectionContentItemUncheckedCreateNestedManyWithoutContentInput = {
+    create?: XOR<SectionContentItemCreateWithoutContentInput, SectionContentItemUncheckedCreateWithoutContentInput> | SectionContentItemCreateWithoutContentInput[] | SectionContentItemUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: SectionContentItemCreateOrConnectWithoutContentInput | SectionContentItemCreateOrConnectWithoutContentInput[]
+    createMany?: SectionContentItemCreateManyContentInputEnvelope
+    connect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
   }
 
   export type EnumContentTypeFieldUpdateOperationsInput = {
@@ -23751,32 +22312,18 @@ export namespace Prisma {
     deleteMany?: ContentVersionScalarWhereInput | ContentVersionScalarWhereInput[]
   }
 
-  export type SectionContentUpdateManyWithoutContentNestedInput = {
-    create?: XOR<SectionContentCreateWithoutContentInput, SectionContentUncheckedCreateWithoutContentInput> | SectionContentCreateWithoutContentInput[] | SectionContentUncheckedCreateWithoutContentInput[]
-    connectOrCreate?: SectionContentCreateOrConnectWithoutContentInput | SectionContentCreateOrConnectWithoutContentInput[]
-    upsert?: SectionContentUpsertWithWhereUniqueWithoutContentInput | SectionContentUpsertWithWhereUniqueWithoutContentInput[]
-    createMany?: SectionContentCreateManyContentInputEnvelope
-    set?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    disconnect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    delete?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    connect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    update?: SectionContentUpdateWithWhereUniqueWithoutContentInput | SectionContentUpdateWithWhereUniqueWithoutContentInput[]
-    updateMany?: SectionContentUpdateManyWithWhereWithoutContentInput | SectionContentUpdateManyWithWhereWithoutContentInput[]
-    deleteMany?: SectionContentScalarWhereInput | SectionContentScalarWhereInput[]
-  }
-
-  export type ContentMediaUpdateManyWithoutContentNestedInput = {
-    create?: XOR<ContentMediaCreateWithoutContentInput, ContentMediaUncheckedCreateWithoutContentInput> | ContentMediaCreateWithoutContentInput[] | ContentMediaUncheckedCreateWithoutContentInput[]
-    connectOrCreate?: ContentMediaCreateOrConnectWithoutContentInput | ContentMediaCreateOrConnectWithoutContentInput[]
-    upsert?: ContentMediaUpsertWithWhereUniqueWithoutContentInput | ContentMediaUpsertWithWhereUniqueWithoutContentInput[]
-    createMany?: ContentMediaCreateManyContentInputEnvelope
-    set?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    disconnect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    delete?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    connect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    update?: ContentMediaUpdateWithWhereUniqueWithoutContentInput | ContentMediaUpdateWithWhereUniqueWithoutContentInput[]
-    updateMany?: ContentMediaUpdateManyWithWhereWithoutContentInput | ContentMediaUpdateManyWithWhereWithoutContentInput[]
-    deleteMany?: ContentMediaScalarWhereInput | ContentMediaScalarWhereInput[]
+  export type SectionContentItemUpdateManyWithoutContentNestedInput = {
+    create?: XOR<SectionContentItemCreateWithoutContentInput, SectionContentItemUncheckedCreateWithoutContentInput> | SectionContentItemCreateWithoutContentInput[] | SectionContentItemUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: SectionContentItemCreateOrConnectWithoutContentInput | SectionContentItemCreateOrConnectWithoutContentInput[]
+    upsert?: SectionContentItemUpsertWithWhereUniqueWithoutContentInput | SectionContentItemUpsertWithWhereUniqueWithoutContentInput[]
+    createMany?: SectionContentItemCreateManyContentInputEnvelope
+    set?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    disconnect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    delete?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    connect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    update?: SectionContentItemUpdateWithWhereUniqueWithoutContentInput | SectionContentItemUpdateWithWhereUniqueWithoutContentInput[]
+    updateMany?: SectionContentItemUpdateManyWithWhereWithoutContentInput | SectionContentItemUpdateManyWithWhereWithoutContentInput[]
+    deleteMany?: SectionContentItemScalarWhereInput | SectionContentItemScalarWhereInput[]
   }
 
   export type MediaUpdateOneWithoutFeaturedInNestedInput = {
@@ -23803,32 +22350,18 @@ export namespace Prisma {
     deleteMany?: ContentVersionScalarWhereInput | ContentVersionScalarWhereInput[]
   }
 
-  export type SectionContentUncheckedUpdateManyWithoutContentNestedInput = {
-    create?: XOR<SectionContentCreateWithoutContentInput, SectionContentUncheckedCreateWithoutContentInput> | SectionContentCreateWithoutContentInput[] | SectionContentUncheckedCreateWithoutContentInput[]
-    connectOrCreate?: SectionContentCreateOrConnectWithoutContentInput | SectionContentCreateOrConnectWithoutContentInput[]
-    upsert?: SectionContentUpsertWithWhereUniqueWithoutContentInput | SectionContentUpsertWithWhereUniqueWithoutContentInput[]
-    createMany?: SectionContentCreateManyContentInputEnvelope
-    set?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    disconnect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    delete?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    connect?: SectionContentWhereUniqueInput | SectionContentWhereUniqueInput[]
-    update?: SectionContentUpdateWithWhereUniqueWithoutContentInput | SectionContentUpdateWithWhereUniqueWithoutContentInput[]
-    updateMany?: SectionContentUpdateManyWithWhereWithoutContentInput | SectionContentUpdateManyWithWhereWithoutContentInput[]
-    deleteMany?: SectionContentScalarWhereInput | SectionContentScalarWhereInput[]
-  }
-
-  export type ContentMediaUncheckedUpdateManyWithoutContentNestedInput = {
-    create?: XOR<ContentMediaCreateWithoutContentInput, ContentMediaUncheckedCreateWithoutContentInput> | ContentMediaCreateWithoutContentInput[] | ContentMediaUncheckedCreateWithoutContentInput[]
-    connectOrCreate?: ContentMediaCreateOrConnectWithoutContentInput | ContentMediaCreateOrConnectWithoutContentInput[]
-    upsert?: ContentMediaUpsertWithWhereUniqueWithoutContentInput | ContentMediaUpsertWithWhereUniqueWithoutContentInput[]
-    createMany?: ContentMediaCreateManyContentInputEnvelope
-    set?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    disconnect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    delete?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    connect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    update?: ContentMediaUpdateWithWhereUniqueWithoutContentInput | ContentMediaUpdateWithWhereUniqueWithoutContentInput[]
-    updateMany?: ContentMediaUpdateManyWithWhereWithoutContentInput | ContentMediaUpdateManyWithWhereWithoutContentInput[]
-    deleteMany?: ContentMediaScalarWhereInput | ContentMediaScalarWhereInput[]
+  export type SectionContentItemUncheckedUpdateManyWithoutContentNestedInput = {
+    create?: XOR<SectionContentItemCreateWithoutContentInput, SectionContentItemUncheckedCreateWithoutContentInput> | SectionContentItemCreateWithoutContentInput[] | SectionContentItemUncheckedCreateWithoutContentInput[]
+    connectOrCreate?: SectionContentItemCreateOrConnectWithoutContentInput | SectionContentItemCreateOrConnectWithoutContentInput[]
+    upsert?: SectionContentItemUpsertWithWhereUniqueWithoutContentInput | SectionContentItemUpsertWithWhereUniqueWithoutContentInput[]
+    createMany?: SectionContentItemCreateManyContentInputEnvelope
+    set?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    disconnect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    delete?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    connect?: SectionContentItemWhereUniqueInput | SectionContentItemWhereUniqueInput[]
+    update?: SectionContentItemUpdateWithWhereUniqueWithoutContentInput | SectionContentItemUpdateWithWhereUniqueWithoutContentInput[]
+    updateMany?: SectionContentItemUpdateManyWithWhereWithoutContentInput | SectionContentItemUpdateManyWithWhereWithoutContentInput[]
+    deleteMany?: SectionContentItemScalarWhereInput | SectionContentItemScalarWhereInput[]
   }
 
   export type ContentCreateNestedOneWithoutVersionsInput = {
@@ -23915,34 +22448,6 @@ export namespace Prisma {
     update?: XOR<XOR<MediaUpdateToOneWithWhereWithoutContentVersionsInput, MediaUpdateWithoutContentVersionsInput>, MediaUncheckedUpdateWithoutContentVersionsInput>
   }
 
-  export type ContentCreateNestedOneWithoutMediaInput = {
-    create?: XOR<ContentCreateWithoutMediaInput, ContentUncheckedCreateWithoutMediaInput>
-    connectOrCreate?: ContentCreateOrConnectWithoutMediaInput
-    connect?: ContentWhereUniqueInput
-  }
-
-  export type MediaCreateNestedOneWithoutContentMediaInput = {
-    create?: XOR<MediaCreateWithoutContentMediaInput, MediaUncheckedCreateWithoutContentMediaInput>
-    connectOrCreate?: MediaCreateOrConnectWithoutContentMediaInput
-    connect?: MediaWhereUniqueInput
-  }
-
-  export type ContentUpdateOneRequiredWithoutMediaNestedInput = {
-    create?: XOR<ContentCreateWithoutMediaInput, ContentUncheckedCreateWithoutMediaInput>
-    connectOrCreate?: ContentCreateOrConnectWithoutMediaInput
-    upsert?: ContentUpsertWithoutMediaInput
-    connect?: ContentWhereUniqueInput
-    update?: XOR<XOR<ContentUpdateToOneWithWhereWithoutMediaInput, ContentUpdateWithoutMediaInput>, ContentUncheckedUpdateWithoutMediaInput>
-  }
-
-  export type MediaUpdateOneRequiredWithoutContentMediaNestedInput = {
-    create?: XOR<MediaCreateWithoutContentMediaInput, MediaUncheckedCreateWithoutContentMediaInput>
-    connectOrCreate?: MediaCreateOrConnectWithoutContentMediaInput
-    upsert?: MediaUpsertWithoutContentMediaInput
-    connect?: MediaWhereUniqueInput
-    update?: XOR<XOR<MediaUpdateToOneWithWhereWithoutContentMediaInput, MediaUpdateWithoutContentMediaInput>, MediaUncheckedUpdateWithoutContentMediaInput>
-  }
-
   export type ClientCreateNestedOneWithoutMediaInput = {
     create?: XOR<ClientCreateWithoutMediaInput, ClientUncheckedCreateWithoutMediaInput>
     connectOrCreate?: ClientCreateOrConnectWithoutMediaInput
@@ -23962,13 +22467,6 @@ export namespace Prisma {
     connect?: ContentVersionMediaWhereUniqueInput | ContentVersionMediaWhereUniqueInput[]
   }
 
-  export type ContentMediaCreateNestedManyWithoutMediaInput = {
-    create?: XOR<ContentMediaCreateWithoutMediaInput, ContentMediaUncheckedCreateWithoutMediaInput> | ContentMediaCreateWithoutMediaInput[] | ContentMediaUncheckedCreateWithoutMediaInput[]
-    connectOrCreate?: ContentMediaCreateOrConnectWithoutMediaInput | ContentMediaCreateOrConnectWithoutMediaInput[]
-    createMany?: ContentMediaCreateManyMediaInputEnvelope
-    connect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-  }
-
   export type ContentCreateNestedManyWithoutFeaturedMediaInput = {
     create?: XOR<ContentCreateWithoutFeaturedMediaInput, ContentUncheckedCreateWithoutFeaturedMediaInput> | ContentCreateWithoutFeaturedMediaInput[] | ContentUncheckedCreateWithoutFeaturedMediaInput[]
     connectOrCreate?: ContentCreateOrConnectWithoutFeaturedMediaInput | ContentCreateOrConnectWithoutFeaturedMediaInput[]
@@ -23981,13 +22479,6 @@ export namespace Prisma {
     connectOrCreate?: ContentVersionMediaCreateOrConnectWithoutMediaInput | ContentVersionMediaCreateOrConnectWithoutMediaInput[]
     createMany?: ContentVersionMediaCreateManyMediaInputEnvelope
     connect?: ContentVersionMediaWhereUniqueInput | ContentVersionMediaWhereUniqueInput[]
-  }
-
-  export type ContentMediaUncheckedCreateNestedManyWithoutMediaInput = {
-    create?: XOR<ContentMediaCreateWithoutMediaInput, ContentMediaUncheckedCreateWithoutMediaInput> | ContentMediaCreateWithoutMediaInput[] | ContentMediaUncheckedCreateWithoutMediaInput[]
-    connectOrCreate?: ContentMediaCreateOrConnectWithoutMediaInput | ContentMediaCreateOrConnectWithoutMediaInput[]
-    createMany?: ContentMediaCreateManyMediaInputEnvelope
-    connect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
   }
 
   export type ContentUncheckedCreateNestedManyWithoutFeaturedMediaInput = {
@@ -24031,20 +22522,6 @@ export namespace Prisma {
     deleteMany?: ContentVersionMediaScalarWhereInput | ContentVersionMediaScalarWhereInput[]
   }
 
-  export type ContentMediaUpdateManyWithoutMediaNestedInput = {
-    create?: XOR<ContentMediaCreateWithoutMediaInput, ContentMediaUncheckedCreateWithoutMediaInput> | ContentMediaCreateWithoutMediaInput[] | ContentMediaUncheckedCreateWithoutMediaInput[]
-    connectOrCreate?: ContentMediaCreateOrConnectWithoutMediaInput | ContentMediaCreateOrConnectWithoutMediaInput[]
-    upsert?: ContentMediaUpsertWithWhereUniqueWithoutMediaInput | ContentMediaUpsertWithWhereUniqueWithoutMediaInput[]
-    createMany?: ContentMediaCreateManyMediaInputEnvelope
-    set?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    disconnect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    delete?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    connect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    update?: ContentMediaUpdateWithWhereUniqueWithoutMediaInput | ContentMediaUpdateWithWhereUniqueWithoutMediaInput[]
-    updateMany?: ContentMediaUpdateManyWithWhereWithoutMediaInput | ContentMediaUpdateManyWithWhereWithoutMediaInput[]
-    deleteMany?: ContentMediaScalarWhereInput | ContentMediaScalarWhereInput[]
-  }
-
   export type ContentUpdateManyWithoutFeaturedMediaNestedInput = {
     create?: XOR<ContentCreateWithoutFeaturedMediaInput, ContentUncheckedCreateWithoutFeaturedMediaInput> | ContentCreateWithoutFeaturedMediaInput[] | ContentUncheckedCreateWithoutFeaturedMediaInput[]
     connectOrCreate?: ContentCreateOrConnectWithoutFeaturedMediaInput | ContentCreateOrConnectWithoutFeaturedMediaInput[]
@@ -24071,20 +22548,6 @@ export namespace Prisma {
     update?: ContentVersionMediaUpdateWithWhereUniqueWithoutMediaInput | ContentVersionMediaUpdateWithWhereUniqueWithoutMediaInput[]
     updateMany?: ContentVersionMediaUpdateManyWithWhereWithoutMediaInput | ContentVersionMediaUpdateManyWithWhereWithoutMediaInput[]
     deleteMany?: ContentVersionMediaScalarWhereInput | ContentVersionMediaScalarWhereInput[]
-  }
-
-  export type ContentMediaUncheckedUpdateManyWithoutMediaNestedInput = {
-    create?: XOR<ContentMediaCreateWithoutMediaInput, ContentMediaUncheckedCreateWithoutMediaInput> | ContentMediaCreateWithoutMediaInput[] | ContentMediaUncheckedCreateWithoutMediaInput[]
-    connectOrCreate?: ContentMediaCreateOrConnectWithoutMediaInput | ContentMediaCreateOrConnectWithoutMediaInput[]
-    upsert?: ContentMediaUpsertWithWhereUniqueWithoutMediaInput | ContentMediaUpsertWithWhereUniqueWithoutMediaInput[]
-    createMany?: ContentMediaCreateManyMediaInputEnvelope
-    set?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    disconnect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    delete?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    connect?: ContentMediaWhereUniqueInput | ContentMediaWhereUniqueInput[]
-    update?: ContentMediaUpdateWithWhereUniqueWithoutMediaInput | ContentMediaUpdateWithWhereUniqueWithoutMediaInput[]
-    updateMany?: ContentMediaUpdateManyWithWhereWithoutMediaInput | ContentMediaUpdateManyWithWhereWithoutMediaInput[]
-    deleteMany?: ContentMediaScalarWhereInput | ContentMediaScalarWhereInput[]
   }
 
   export type ContentUncheckedUpdateManyWithoutFeaturedMediaNestedInput = {
@@ -24743,23 +23206,6 @@ export namespace Prisma {
     _max?: NestedEnumColumnLayoutNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumSectionContentTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.SectionContentType | EnumSectionContentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SectionContentType[]
-    notIn?: $Enums.SectionContentType[]
-    not?: NestedEnumSectionContentTypeFilter<$PrismaModel> | $Enums.SectionContentType
-  }
-
-  export type NestedEnumSectionContentTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.SectionContentType | EnumSectionContentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SectionContentType[]
-    notIn?: $Enums.SectionContentType[]
-    not?: NestedEnumSectionContentTypeWithAggregatesFilter<$PrismaModel> | $Enums.SectionContentType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumSectionContentTypeFilter<$PrismaModel>
-    _max?: NestedEnumSectionContentTypeFilter<$PrismaModel>
-  }
-
   export type NestedEnumContentTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.ContentType | EnumContentTypeFieldRefInput<$PrismaModel>
     in?: $Enums.ContentType[]
@@ -25085,7 +23531,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutMediaInput
     contentVersions?: ContentVersionMediaCreateNestedManyWithoutMediaInput
-    contentMedia?: ContentMediaCreateNestedManyWithoutMediaInput
     featuredIn?: ContentCreateNestedManyWithoutFeaturedMediaInput
   }
 
@@ -25104,7 +23549,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     contentVersions?: ContentVersionMediaUncheckedCreateNestedManyWithoutMediaInput
-    contentMedia?: ContentMediaUncheckedCreateNestedManyWithoutMediaInput
     featuredIn?: ContentUncheckedCreateNestedManyWithoutFeaturedMediaInput
   }
 
@@ -25363,7 +23807,7 @@ export namespace Prisma {
     columnLayout?: $Enums.ColumnLayout | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sectionContent?: SectionContentCreateNestedManyWithoutSectionInput
+    contents?: SectionContentItemCreateNestedManyWithoutSectionInput
     parentSection?: SectionCreateNestedOneWithoutSubSectionsInput
     subSections?: SectionCreateNestedManyWithoutParentSectionInput
   }
@@ -25378,7 +23822,7 @@ export namespace Prisma {
     parentId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sectionContent?: SectionContentUncheckedCreateNestedManyWithoutSectionInput
+    contents?: SectionContentItemUncheckedCreateNestedManyWithoutSectionInput
     subSections?: SectionUncheckedCreateNestedManyWithoutParentSectionInput
   }
 
@@ -25399,6 +23843,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutPagesInput
     site?: SiteCreateNestedOneWithoutPagesInput
     mobileApp?: MobileAppCreateNestedOneWithoutPagesInput
@@ -25417,6 +23863,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     sections?: SectionUncheckedCreateNestedManyWithoutPageInput
     subPages?: PageUncheckedCreateNestedManyWithoutParentPageInput
   }
@@ -25438,6 +23886,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutPagesInput
     site?: SiteCreateNestedOneWithoutPagesInput
     mobileApp?: MobileAppCreateNestedOneWithoutPagesInput
@@ -25457,6 +23907,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     sections?: SectionUncheckedCreateNestedManyWithoutPageInput
   }
 
@@ -25644,6 +24096,8 @@ export namespace Prisma {
     metaDescription?: StringNullableFilter<"Page"> | string | null
     ogImage?: StringNullableFilter<"Page"> | string | null
     keywords?: StringNullableFilter<"Page"> | string | null
+    createdAt?: DateTimeFilter<"Page"> | Date | string
+    updatedAt?: DateTimeFilter<"Page"> | Date | string
   }
 
   export type PageUpsertWithoutSubPagesInput = {
@@ -25664,6 +24118,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutPagesNestedInput
     site?: SiteUpdateOneWithoutPagesNestedInput
     mobileApp?: MobileAppUpdateOneWithoutPagesNestedInput
@@ -25683,32 +24139,9 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: SectionUncheckedUpdateManyWithoutPageNestedInput
-  }
-
-  export type SectionContentCreateWithoutSectionInput = {
-    type?: $Enums.SectionContentType
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    content: ContentCreateNestedOneWithoutSectionContentsInput
-  }
-
-  export type SectionContentUncheckedCreateWithoutSectionInput = {
-    id?: number
-    type?: $Enums.SectionContentType
-    contentId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type SectionContentCreateOrConnectWithoutSectionInput = {
-    where: SectionContentWhereUniqueInput
-    create: XOR<SectionContentCreateWithoutSectionInput, SectionContentUncheckedCreateWithoutSectionInput>
-  }
-
-  export type SectionContentCreateManySectionInputEnvelope = {
-    data: SectionContentCreateManySectionInput | SectionContentCreateManySectionInput[]
-    skipDuplicates?: boolean
   }
 
   export type PageCreateWithoutSectionsInput = {
@@ -25718,6 +24151,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutPagesInput
     site?: SiteCreateNestedOneWithoutPagesInput
     mobileApp?: MobileAppCreateNestedOneWithoutPagesInput
@@ -25737,12 +24172,34 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     subPages?: PageUncheckedCreateNestedManyWithoutParentPageInput
   }
 
   export type PageCreateOrConnectWithoutSectionsInput = {
     where: PageWhereUniqueInput
     create: XOR<PageCreateWithoutSectionsInput, PageUncheckedCreateWithoutSectionsInput>
+  }
+
+  export type SectionContentItemCreateWithoutSectionInput = {
+    order?: number
+    content: ContentCreateNestedOneWithoutSectionItemsInput
+  }
+
+  export type SectionContentItemUncheckedCreateWithoutSectionInput = {
+    contentId: number
+    order?: number
+  }
+
+  export type SectionContentItemCreateOrConnectWithoutSectionInput = {
+    where: SectionContentItemWhereUniqueInput
+    create: XOR<SectionContentItemCreateWithoutSectionInput, SectionContentItemUncheckedCreateWithoutSectionInput>
+  }
+
+  export type SectionContentItemCreateManySectionInputEnvelope = {
+    data: SectionContentItemCreateManySectionInput | SectionContentItemCreateManySectionInput[]
+    skipDuplicates?: boolean
   }
 
   export type SectionCreateWithoutSubSectionsInput = {
@@ -25753,8 +24210,8 @@ export namespace Prisma {
     columnLayout?: $Enums.ColumnLayout | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sectionContent?: SectionContentCreateNestedManyWithoutSectionInput
     page: PageCreateNestedOneWithoutSectionsInput
+    contents?: SectionContentItemCreateNestedManyWithoutSectionInput
     parentSection?: SectionCreateNestedOneWithoutSubSectionsInput
   }
 
@@ -25769,7 +24226,7 @@ export namespace Prisma {
     parentId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sectionContent?: SectionContentUncheckedCreateNestedManyWithoutSectionInput
+    contents?: SectionContentItemUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionCreateOrConnectWithoutSubSectionsInput = {
@@ -25785,8 +24242,8 @@ export namespace Prisma {
     columnLayout?: $Enums.ColumnLayout | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sectionContent?: SectionContentCreateNestedManyWithoutSectionInput
     page: PageCreateNestedOneWithoutSectionsInput
+    contents?: SectionContentItemCreateNestedManyWithoutSectionInput
     subSections?: SectionCreateNestedManyWithoutParentSectionInput
   }
 
@@ -25800,7 +24257,7 @@ export namespace Prisma {
     columnLayout?: $Enums.ColumnLayout | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sectionContent?: SectionContentUncheckedCreateNestedManyWithoutSectionInput
+    contents?: SectionContentItemUncheckedCreateNestedManyWithoutSectionInput
     subSections?: SectionUncheckedCreateNestedManyWithoutParentSectionInput
   }
 
@@ -25812,34 +24269,6 @@ export namespace Prisma {
   export type SectionCreateManyParentSectionInputEnvelope = {
     data: SectionCreateManyParentSectionInput | SectionCreateManyParentSectionInput[]
     skipDuplicates?: boolean
-  }
-
-  export type SectionContentUpsertWithWhereUniqueWithoutSectionInput = {
-    where: SectionContentWhereUniqueInput
-    update: XOR<SectionContentUpdateWithoutSectionInput, SectionContentUncheckedUpdateWithoutSectionInput>
-    create: XOR<SectionContentCreateWithoutSectionInput, SectionContentUncheckedCreateWithoutSectionInput>
-  }
-
-  export type SectionContentUpdateWithWhereUniqueWithoutSectionInput = {
-    where: SectionContentWhereUniqueInput
-    data: XOR<SectionContentUpdateWithoutSectionInput, SectionContentUncheckedUpdateWithoutSectionInput>
-  }
-
-  export type SectionContentUpdateManyWithWhereWithoutSectionInput = {
-    where: SectionContentScalarWhereInput
-    data: XOR<SectionContentUpdateManyMutationInput, SectionContentUncheckedUpdateManyWithoutSectionInput>
-  }
-
-  export type SectionContentScalarWhereInput = {
-    AND?: SectionContentScalarWhereInput | SectionContentScalarWhereInput[]
-    OR?: SectionContentScalarWhereInput[]
-    NOT?: SectionContentScalarWhereInput | SectionContentScalarWhereInput[]
-    id?: IntFilter<"SectionContent"> | number
-    type?: EnumSectionContentTypeFilter<"SectionContent"> | $Enums.SectionContentType
-    contentId?: IntFilter<"SectionContent"> | number
-    sectionId?: IntFilter<"SectionContent"> | number
-    createdAt?: DateTimeFilter<"SectionContent"> | Date | string
-    updatedAt?: DateTimeFilter<"SectionContent"> | Date | string
   }
 
   export type PageUpsertWithoutSectionsInput = {
@@ -25860,6 +24289,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutPagesNestedInput
     site?: SiteUpdateOneWithoutPagesNestedInput
     mobileApp?: MobileAppUpdateOneWithoutPagesNestedInput
@@ -25879,7 +24310,34 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subPages?: PageUncheckedUpdateManyWithoutParentPageNestedInput
+  }
+
+  export type SectionContentItemUpsertWithWhereUniqueWithoutSectionInput = {
+    where: SectionContentItemWhereUniqueInput
+    update: XOR<SectionContentItemUpdateWithoutSectionInput, SectionContentItemUncheckedUpdateWithoutSectionInput>
+    create: XOR<SectionContentItemCreateWithoutSectionInput, SectionContentItemUncheckedCreateWithoutSectionInput>
+  }
+
+  export type SectionContentItemUpdateWithWhereUniqueWithoutSectionInput = {
+    where: SectionContentItemWhereUniqueInput
+    data: XOR<SectionContentItemUpdateWithoutSectionInput, SectionContentItemUncheckedUpdateWithoutSectionInput>
+  }
+
+  export type SectionContentItemUpdateManyWithWhereWithoutSectionInput = {
+    where: SectionContentItemScalarWhereInput
+    data: XOR<SectionContentItemUpdateManyMutationInput, SectionContentItemUncheckedUpdateManyWithoutSectionInput>
+  }
+
+  export type SectionContentItemScalarWhereInput = {
+    AND?: SectionContentItemScalarWhereInput | SectionContentItemScalarWhereInput[]
+    OR?: SectionContentItemScalarWhereInput[]
+    NOT?: SectionContentItemScalarWhereInput | SectionContentItemScalarWhereInput[]
+    sectionId?: IntFilter<"SectionContentItem"> | number
+    contentId?: IntFilter<"SectionContentItem"> | number
+    order?: IntFilter<"SectionContentItem"> | number
   }
 
   export type SectionUpsertWithoutSubSectionsInput = {
@@ -25901,8 +24359,8 @@ export namespace Prisma {
     columnLayout?: NullableEnumColumnLayoutFieldUpdateOperationsInput | $Enums.ColumnLayout | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sectionContent?: SectionContentUpdateManyWithoutSectionNestedInput
     page?: PageUpdateOneRequiredWithoutSectionsNestedInput
+    contents?: SectionContentItemUpdateManyWithoutSectionNestedInput
     parentSection?: SectionUpdateOneWithoutSubSectionsNestedInput
   }
 
@@ -25917,7 +24375,7 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sectionContent?: SectionContentUncheckedUpdateManyWithoutSectionNestedInput
+    contents?: SectionContentItemUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUpsertWithWhereUniqueWithoutParentSectionInput = {
@@ -25936,41 +24394,7 @@ export namespace Prisma {
     data: XOR<SectionUpdateManyMutationInput, SectionUncheckedUpdateManyWithoutParentSectionInput>
   }
 
-  export type ContentCreateWithoutSectionContentsInput = {
-    type?: $Enums.ContentType
-    state?: $Enums.ContentState
-    visibility?: $Enums.ContentVisibility
-    slug?: string | null
-    title?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    project: ProjectCreateNestedOneWithoutContentsInput
-    versions?: ContentVersionCreateNestedManyWithoutContentInput
-    media?: ContentMediaCreateNestedManyWithoutContentInput
-    featuredMedia?: MediaCreateNestedOneWithoutFeaturedInInput
-  }
-
-  export type ContentUncheckedCreateWithoutSectionContentsInput = {
-    id?: number
-    type?: $Enums.ContentType
-    state?: $Enums.ContentState
-    visibility?: $Enums.ContentVisibility
-    slug?: string | null
-    title?: string | null
-    projectId: number
-    featuredMediaId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    versions?: ContentVersionUncheckedCreateNestedManyWithoutContentInput
-    media?: ContentMediaUncheckedCreateNestedManyWithoutContentInput
-  }
-
-  export type ContentCreateOrConnectWithoutSectionContentsInput = {
-    where: ContentWhereUniqueInput
-    create: XOR<ContentCreateWithoutSectionContentsInput, ContentUncheckedCreateWithoutSectionContentsInput>
-  }
-
-  export type SectionCreateWithoutSectionContentInput = {
+  export type SectionCreateWithoutContentsInput = {
     type: $Enums.SectionType
     name?: string | null
     order?: number
@@ -25983,7 +24407,7 @@ export namespace Prisma {
     subSections?: SectionCreateNestedManyWithoutParentSectionInput
   }
 
-  export type SectionUncheckedCreateWithoutSectionContentInput = {
+  export type SectionUncheckedCreateWithoutContentsInput = {
     id?: number
     type: $Enums.SectionType
     name?: string | null
@@ -25997,63 +24421,55 @@ export namespace Prisma {
     subSections?: SectionUncheckedCreateNestedManyWithoutParentSectionInput
   }
 
-  export type SectionCreateOrConnectWithoutSectionContentInput = {
+  export type SectionCreateOrConnectWithoutContentsInput = {
     where: SectionWhereUniqueInput
-    create: XOR<SectionCreateWithoutSectionContentInput, SectionUncheckedCreateWithoutSectionContentInput>
+    create: XOR<SectionCreateWithoutContentsInput, SectionUncheckedCreateWithoutContentsInput>
   }
 
-  export type ContentUpsertWithoutSectionContentsInput = {
-    update: XOR<ContentUpdateWithoutSectionContentsInput, ContentUncheckedUpdateWithoutSectionContentsInput>
-    create: XOR<ContentCreateWithoutSectionContentsInput, ContentUncheckedCreateWithoutSectionContentsInput>
-    where?: ContentWhereInput
+  export type ContentCreateWithoutSectionItemsInput = {
+    type?: $Enums.ContentType
+    state?: $Enums.ContentState
+    visibility?: $Enums.ContentVisibility
+    slug?: string | null
+    title?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutContentsInput
+    versions?: ContentVersionCreateNestedManyWithoutContentInput
+    featuredMedia?: MediaCreateNestedOneWithoutFeaturedInInput
   }
 
-  export type ContentUpdateToOneWithWhereWithoutSectionContentsInput = {
-    where?: ContentWhereInput
-    data: XOR<ContentUpdateWithoutSectionContentsInput, ContentUncheckedUpdateWithoutSectionContentsInput>
+  export type ContentUncheckedCreateWithoutSectionItemsInput = {
+    id?: number
+    type?: $Enums.ContentType
+    state?: $Enums.ContentState
+    visibility?: $Enums.ContentVisibility
+    slug?: string | null
+    title?: string | null
+    projectId: number
+    featuredMediaId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    versions?: ContentVersionUncheckedCreateNestedManyWithoutContentInput
   }
 
-  export type ContentUpdateWithoutSectionContentsInput = {
-    type?: EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
-    state?: EnumContentStateFieldUpdateOperationsInput | $Enums.ContentState
-    visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneRequiredWithoutContentsNestedInput
-    versions?: ContentVersionUpdateManyWithoutContentNestedInput
-    media?: ContentMediaUpdateManyWithoutContentNestedInput
-    featuredMedia?: MediaUpdateOneWithoutFeaturedInNestedInput
+  export type ContentCreateOrConnectWithoutSectionItemsInput = {
+    where: ContentWhereUniqueInput
+    create: XOR<ContentCreateWithoutSectionItemsInput, ContentUncheckedCreateWithoutSectionItemsInput>
   }
 
-  export type ContentUncheckedUpdateWithoutSectionContentsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
-    state?: EnumContentStateFieldUpdateOperationsInput | $Enums.ContentState
-    visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    projectId?: IntFieldUpdateOperationsInput | number
-    featuredMediaId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    versions?: ContentVersionUncheckedUpdateManyWithoutContentNestedInput
-    media?: ContentMediaUncheckedUpdateManyWithoutContentNestedInput
-  }
-
-  export type SectionUpsertWithoutSectionContentInput = {
-    update: XOR<SectionUpdateWithoutSectionContentInput, SectionUncheckedUpdateWithoutSectionContentInput>
-    create: XOR<SectionCreateWithoutSectionContentInput, SectionUncheckedCreateWithoutSectionContentInput>
+  export type SectionUpsertWithoutContentsInput = {
+    update: XOR<SectionUpdateWithoutContentsInput, SectionUncheckedUpdateWithoutContentsInput>
+    create: XOR<SectionCreateWithoutContentsInput, SectionUncheckedCreateWithoutContentsInput>
     where?: SectionWhereInput
   }
 
-  export type SectionUpdateToOneWithWhereWithoutSectionContentInput = {
+  export type SectionUpdateToOneWithWhereWithoutContentsInput = {
     where?: SectionWhereInput
-    data: XOR<SectionUpdateWithoutSectionContentInput, SectionUncheckedUpdateWithoutSectionContentInput>
+    data: XOR<SectionUpdateWithoutContentsInput, SectionUncheckedUpdateWithoutContentsInput>
   }
 
-  export type SectionUpdateWithoutSectionContentInput = {
+  export type SectionUpdateWithoutContentsInput = {
     type?: EnumSectionTypeFieldUpdateOperationsInput | $Enums.SectionType
     name?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -26066,7 +24482,7 @@ export namespace Prisma {
     subSections?: SectionUpdateManyWithoutParentSectionNestedInput
   }
 
-  export type SectionUncheckedUpdateWithoutSectionContentInput = {
+  export type SectionUncheckedUpdateWithoutContentsInput = {
     id?: IntFieldUpdateOperationsInput | number
     type?: EnumSectionTypeFieldUpdateOperationsInput | $Enums.SectionType
     name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26078,6 +24494,44 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subSections?: SectionUncheckedUpdateManyWithoutParentSectionNestedInput
+  }
+
+  export type ContentUpsertWithoutSectionItemsInput = {
+    update: XOR<ContentUpdateWithoutSectionItemsInput, ContentUncheckedUpdateWithoutSectionItemsInput>
+    create: XOR<ContentCreateWithoutSectionItemsInput, ContentUncheckedCreateWithoutSectionItemsInput>
+    where?: ContentWhereInput
+  }
+
+  export type ContentUpdateToOneWithWhereWithoutSectionItemsInput = {
+    where?: ContentWhereInput
+    data: XOR<ContentUpdateWithoutSectionItemsInput, ContentUncheckedUpdateWithoutSectionItemsInput>
+  }
+
+  export type ContentUpdateWithoutSectionItemsInput = {
+    type?: EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+    state?: EnumContentStateFieldUpdateOperationsInput | $Enums.ContentState
+    visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutContentsNestedInput
+    versions?: ContentVersionUpdateManyWithoutContentNestedInput
+    featuredMedia?: MediaUpdateOneWithoutFeaturedInNestedInput
+  }
+
+  export type ContentUncheckedUpdateWithoutSectionItemsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+    state?: EnumContentStateFieldUpdateOperationsInput | $Enums.ContentState
+    visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    projectId?: IntFieldUpdateOperationsInput | number
+    featuredMediaId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    versions?: ContentVersionUncheckedUpdateManyWithoutContentNestedInput
   }
 
   export type ProjectCreateWithoutContentsInput = {
@@ -26153,53 +24607,23 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type SectionContentCreateWithoutContentInput = {
-    type?: $Enums.SectionContentType
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    section: SectionCreateNestedOneWithoutSectionContentInput
+  export type SectionContentItemCreateWithoutContentInput = {
+    order?: number
+    section: SectionCreateNestedOneWithoutContentsInput
   }
 
-  export type SectionContentUncheckedCreateWithoutContentInput = {
-    id?: number
-    type?: $Enums.SectionContentType
+  export type SectionContentItemUncheckedCreateWithoutContentInput = {
     sectionId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type SectionContentCreateOrConnectWithoutContentInput = {
-    where: SectionContentWhereUniqueInput
-    create: XOR<SectionContentCreateWithoutContentInput, SectionContentUncheckedCreateWithoutContentInput>
-  }
-
-  export type SectionContentCreateManyContentInputEnvelope = {
-    data: SectionContentCreateManyContentInput | SectionContentCreateManyContentInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ContentMediaCreateWithoutContentInput = {
     order?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    media: MediaCreateNestedOneWithoutContentMediaInput
   }
 
-  export type ContentMediaUncheckedCreateWithoutContentInput = {
-    id?: number
-    mediaId: number
-    order?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type SectionContentItemCreateOrConnectWithoutContentInput = {
+    where: SectionContentItemWhereUniqueInput
+    create: XOR<SectionContentItemCreateWithoutContentInput, SectionContentItemUncheckedCreateWithoutContentInput>
   }
 
-  export type ContentMediaCreateOrConnectWithoutContentInput = {
-    where: ContentMediaWhereUniqueInput
-    create: XOR<ContentMediaCreateWithoutContentInput, ContentMediaUncheckedCreateWithoutContentInput>
-  }
-
-  export type ContentMediaCreateManyContentInputEnvelope = {
-    data: ContentMediaCreateManyContentInput | ContentMediaCreateManyContentInput[]
+  export type SectionContentItemCreateManyContentInputEnvelope = {
+    data: SectionContentItemCreateManyContentInput | SectionContentItemCreateManyContentInput[]
     skipDuplicates?: boolean
   }
 
@@ -26218,7 +24642,6 @@ export namespace Prisma {
     owner: ClientCreateNestedOneWithoutMediaInput
     project: ProjectCreateNestedOneWithoutMediaInput
     contentVersions?: ContentVersionMediaCreateNestedManyWithoutMediaInput
-    contentMedia?: ContentMediaCreateNestedManyWithoutMediaInput
   }
 
   export type MediaUncheckedCreateWithoutFeaturedInInput = {
@@ -26237,7 +24660,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     contentVersions?: ContentVersionMediaUncheckedCreateNestedManyWithoutMediaInput
-    contentMedia?: ContentMediaUncheckedCreateNestedManyWithoutMediaInput
   }
 
   export type MediaCreateOrConnectWithoutFeaturedInInput = {
@@ -26321,48 +24743,20 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ContentVersion"> | Date | string
   }
 
-  export type SectionContentUpsertWithWhereUniqueWithoutContentInput = {
-    where: SectionContentWhereUniqueInput
-    update: XOR<SectionContentUpdateWithoutContentInput, SectionContentUncheckedUpdateWithoutContentInput>
-    create: XOR<SectionContentCreateWithoutContentInput, SectionContentUncheckedCreateWithoutContentInput>
+  export type SectionContentItemUpsertWithWhereUniqueWithoutContentInput = {
+    where: SectionContentItemWhereUniqueInput
+    update: XOR<SectionContentItemUpdateWithoutContentInput, SectionContentItemUncheckedUpdateWithoutContentInput>
+    create: XOR<SectionContentItemCreateWithoutContentInput, SectionContentItemUncheckedCreateWithoutContentInput>
   }
 
-  export type SectionContentUpdateWithWhereUniqueWithoutContentInput = {
-    where: SectionContentWhereUniqueInput
-    data: XOR<SectionContentUpdateWithoutContentInput, SectionContentUncheckedUpdateWithoutContentInput>
+  export type SectionContentItemUpdateWithWhereUniqueWithoutContentInput = {
+    where: SectionContentItemWhereUniqueInput
+    data: XOR<SectionContentItemUpdateWithoutContentInput, SectionContentItemUncheckedUpdateWithoutContentInput>
   }
 
-  export type SectionContentUpdateManyWithWhereWithoutContentInput = {
-    where: SectionContentScalarWhereInput
-    data: XOR<SectionContentUpdateManyMutationInput, SectionContentUncheckedUpdateManyWithoutContentInput>
-  }
-
-  export type ContentMediaUpsertWithWhereUniqueWithoutContentInput = {
-    where: ContentMediaWhereUniqueInput
-    update: XOR<ContentMediaUpdateWithoutContentInput, ContentMediaUncheckedUpdateWithoutContentInput>
-    create: XOR<ContentMediaCreateWithoutContentInput, ContentMediaUncheckedCreateWithoutContentInput>
-  }
-
-  export type ContentMediaUpdateWithWhereUniqueWithoutContentInput = {
-    where: ContentMediaWhereUniqueInput
-    data: XOR<ContentMediaUpdateWithoutContentInput, ContentMediaUncheckedUpdateWithoutContentInput>
-  }
-
-  export type ContentMediaUpdateManyWithWhereWithoutContentInput = {
-    where: ContentMediaScalarWhereInput
-    data: XOR<ContentMediaUpdateManyMutationInput, ContentMediaUncheckedUpdateManyWithoutContentInput>
-  }
-
-  export type ContentMediaScalarWhereInput = {
-    AND?: ContentMediaScalarWhereInput | ContentMediaScalarWhereInput[]
-    OR?: ContentMediaScalarWhereInput[]
-    NOT?: ContentMediaScalarWhereInput | ContentMediaScalarWhereInput[]
-    id?: IntFilter<"ContentMedia"> | number
-    contentId?: IntFilter<"ContentMedia"> | number
-    mediaId?: IntFilter<"ContentMedia"> | number
-    order?: IntFilter<"ContentMedia"> | number
-    createdAt?: DateTimeFilter<"ContentMedia"> | Date | string
-    updatedAt?: DateTimeFilter<"ContentMedia"> | Date | string
+  export type SectionContentItemUpdateManyWithWhereWithoutContentInput = {
+    where: SectionContentItemScalarWhereInput
+    data: XOR<SectionContentItemUpdateManyMutationInput, SectionContentItemUncheckedUpdateManyWithoutContentInput>
   }
 
   export type MediaUpsertWithoutFeaturedInInput = {
@@ -26391,7 +24785,6 @@ export namespace Prisma {
     owner?: ClientUpdateOneRequiredWithoutMediaNestedInput
     project?: ProjectUpdateOneRequiredWithoutMediaNestedInput
     contentVersions?: ContentVersionMediaUpdateManyWithoutMediaNestedInput
-    contentMedia?: ContentMediaUpdateManyWithoutMediaNestedInput
   }
 
   export type MediaUncheckedUpdateWithoutFeaturedInInput = {
@@ -26410,7 +24803,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contentVersions?: ContentVersionMediaUncheckedUpdateManyWithoutMediaNestedInput
-    contentMedia?: ContentMediaUncheckedUpdateManyWithoutMediaNestedInput
   }
 
   export type ContentCreateWithoutVersionsInput = {
@@ -26422,8 +24814,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutContentsInput
-    sectionContents?: SectionContentCreateNestedManyWithoutContentInput
-    media?: ContentMediaCreateNestedManyWithoutContentInput
+    sectionItems?: SectionContentItemCreateNestedManyWithoutContentInput
     featuredMedia?: MediaCreateNestedOneWithoutFeaturedInInput
   }
 
@@ -26438,8 +24829,7 @@ export namespace Prisma {
     featuredMediaId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sectionContents?: SectionContentUncheckedCreateNestedManyWithoutContentInput
-    media?: ContentMediaUncheckedCreateNestedManyWithoutContentInput
+    sectionItems?: SectionContentItemUncheckedCreateNestedManyWithoutContentInput
   }
 
   export type ContentCreateOrConnectWithoutVersionsInput = {
@@ -26487,8 +24877,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutContentsNestedInput
-    sectionContents?: SectionContentUpdateManyWithoutContentNestedInput
-    media?: ContentMediaUpdateManyWithoutContentNestedInput
+    sectionItems?: SectionContentItemUpdateManyWithoutContentNestedInput
     featuredMedia?: MediaUpdateOneWithoutFeaturedInNestedInput
   }
 
@@ -26503,8 +24892,7 @@ export namespace Prisma {
     featuredMediaId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sectionContents?: SectionContentUncheckedUpdateManyWithoutContentNestedInput
-    media?: ContentMediaUncheckedUpdateManyWithoutContentNestedInput
+    sectionItems?: SectionContentItemUncheckedUpdateManyWithoutContentNestedInput
   }
 
   export type ContentVersionMediaUpsertWithWhereUniqueWithoutContentVersionInput = {
@@ -26576,7 +24964,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     owner: ClientCreateNestedOneWithoutMediaInput
     project: ProjectCreateNestedOneWithoutMediaInput
-    contentMedia?: ContentMediaCreateNestedManyWithoutMediaInput
     featuredIn?: ContentCreateNestedManyWithoutFeaturedMediaInput
   }
 
@@ -26595,7 +24982,6 @@ export namespace Prisma {
     projectId: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    contentMedia?: ContentMediaUncheckedCreateNestedManyWithoutMediaInput
     featuredIn?: ContentUncheckedCreateNestedManyWithoutFeaturedMediaInput
   }
 
@@ -26665,7 +25051,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: ClientUpdateOneRequiredWithoutMediaNestedInput
     project?: ProjectUpdateOneRequiredWithoutMediaNestedInput
-    contentMedia?: ContentMediaUpdateManyWithoutMediaNestedInput
     featuredIn?: ContentUpdateManyWithoutFeaturedMediaNestedInput
   }
 
@@ -26684,171 +25069,6 @@ export namespace Prisma {
     projectId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    contentMedia?: ContentMediaUncheckedUpdateManyWithoutMediaNestedInput
-    featuredIn?: ContentUncheckedUpdateManyWithoutFeaturedMediaNestedInput
-  }
-
-  export type ContentCreateWithoutMediaInput = {
-    type?: $Enums.ContentType
-    state?: $Enums.ContentState
-    visibility?: $Enums.ContentVisibility
-    slug?: string | null
-    title?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    project: ProjectCreateNestedOneWithoutContentsInput
-    versions?: ContentVersionCreateNestedManyWithoutContentInput
-    sectionContents?: SectionContentCreateNestedManyWithoutContentInput
-    featuredMedia?: MediaCreateNestedOneWithoutFeaturedInInput
-  }
-
-  export type ContentUncheckedCreateWithoutMediaInput = {
-    id?: number
-    type?: $Enums.ContentType
-    state?: $Enums.ContentState
-    visibility?: $Enums.ContentVisibility
-    slug?: string | null
-    title?: string | null
-    projectId: number
-    featuredMediaId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    versions?: ContentVersionUncheckedCreateNestedManyWithoutContentInput
-    sectionContents?: SectionContentUncheckedCreateNestedManyWithoutContentInput
-  }
-
-  export type ContentCreateOrConnectWithoutMediaInput = {
-    where: ContentWhereUniqueInput
-    create: XOR<ContentCreateWithoutMediaInput, ContentUncheckedCreateWithoutMediaInput>
-  }
-
-  export type MediaCreateWithoutContentMediaInput = {
-    type?: $Enums.MediaType
-    url: string
-    filename?: string | null
-    mimeType?: string | null
-    size?: number | null
-    width?: number | null
-    height?: number | null
-    altText?: string | null
-    caption?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    owner: ClientCreateNestedOneWithoutMediaInput
-    project: ProjectCreateNestedOneWithoutMediaInput
-    contentVersions?: ContentVersionMediaCreateNestedManyWithoutMediaInput
-    featuredIn?: ContentCreateNestedManyWithoutFeaturedMediaInput
-  }
-
-  export type MediaUncheckedCreateWithoutContentMediaInput = {
-    id?: number
-    type?: $Enums.MediaType
-    ownerId: number
-    url: string
-    filename?: string | null
-    mimeType?: string | null
-    size?: number | null
-    width?: number | null
-    height?: number | null
-    altText?: string | null
-    caption?: string | null
-    projectId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    contentVersions?: ContentVersionMediaUncheckedCreateNestedManyWithoutMediaInput
-    featuredIn?: ContentUncheckedCreateNestedManyWithoutFeaturedMediaInput
-  }
-
-  export type MediaCreateOrConnectWithoutContentMediaInput = {
-    where: MediaWhereUniqueInput
-    create: XOR<MediaCreateWithoutContentMediaInput, MediaUncheckedCreateWithoutContentMediaInput>
-  }
-
-  export type ContentUpsertWithoutMediaInput = {
-    update: XOR<ContentUpdateWithoutMediaInput, ContentUncheckedUpdateWithoutMediaInput>
-    create: XOR<ContentCreateWithoutMediaInput, ContentUncheckedCreateWithoutMediaInput>
-    where?: ContentWhereInput
-  }
-
-  export type ContentUpdateToOneWithWhereWithoutMediaInput = {
-    where?: ContentWhereInput
-    data: XOR<ContentUpdateWithoutMediaInput, ContentUncheckedUpdateWithoutMediaInput>
-  }
-
-  export type ContentUpdateWithoutMediaInput = {
-    type?: EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
-    state?: EnumContentStateFieldUpdateOperationsInput | $Enums.ContentState
-    visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneRequiredWithoutContentsNestedInput
-    versions?: ContentVersionUpdateManyWithoutContentNestedInput
-    sectionContents?: SectionContentUpdateManyWithoutContentNestedInput
-    featuredMedia?: MediaUpdateOneWithoutFeaturedInNestedInput
-  }
-
-  export type ContentUncheckedUpdateWithoutMediaInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
-    state?: EnumContentStateFieldUpdateOperationsInput | $Enums.ContentState
-    visibility?: EnumContentVisibilityFieldUpdateOperationsInput | $Enums.ContentVisibility
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    projectId?: IntFieldUpdateOperationsInput | number
-    featuredMediaId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    versions?: ContentVersionUncheckedUpdateManyWithoutContentNestedInput
-    sectionContents?: SectionContentUncheckedUpdateManyWithoutContentNestedInput
-  }
-
-  export type MediaUpsertWithoutContentMediaInput = {
-    update: XOR<MediaUpdateWithoutContentMediaInput, MediaUncheckedUpdateWithoutContentMediaInput>
-    create: XOR<MediaCreateWithoutContentMediaInput, MediaUncheckedCreateWithoutContentMediaInput>
-    where?: MediaWhereInput
-  }
-
-  export type MediaUpdateToOneWithWhereWithoutContentMediaInput = {
-    where?: MediaWhereInput
-    data: XOR<MediaUpdateWithoutContentMediaInput, MediaUncheckedUpdateWithoutContentMediaInput>
-  }
-
-  export type MediaUpdateWithoutContentMediaInput = {
-    type?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
-    url?: StringFieldUpdateOperationsInput | string
-    filename?: NullableStringFieldUpdateOperationsInput | string | null
-    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableIntFieldUpdateOperationsInput | number | null
-    width?: NullableIntFieldUpdateOperationsInput | number | null
-    height?: NullableIntFieldUpdateOperationsInput | number | null
-    altText?: NullableStringFieldUpdateOperationsInput | string | null
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: ClientUpdateOneRequiredWithoutMediaNestedInput
-    project?: ProjectUpdateOneRequiredWithoutMediaNestedInput
-    contentVersions?: ContentVersionMediaUpdateManyWithoutMediaNestedInput
-    featuredIn?: ContentUpdateManyWithoutFeaturedMediaNestedInput
-  }
-
-  export type MediaUncheckedUpdateWithoutContentMediaInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
-    ownerId?: IntFieldUpdateOperationsInput | number
-    url?: StringFieldUpdateOperationsInput | string
-    filename?: NullableStringFieldUpdateOperationsInput | string | null
-    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableIntFieldUpdateOperationsInput | number | null
-    width?: NullableIntFieldUpdateOperationsInput | number | null
-    height?: NullableIntFieldUpdateOperationsInput | number | null
-    altText?: NullableStringFieldUpdateOperationsInput | string | null
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    projectId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    contentVersions?: ContentVersionMediaUncheckedUpdateManyWithoutMediaNestedInput
     featuredIn?: ContentUncheckedUpdateManyWithoutFeaturedMediaNestedInput
   }
 
@@ -26940,31 +25160,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ContentMediaCreateWithoutMediaInput = {
-    order?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    content: ContentCreateNestedOneWithoutMediaInput
-  }
-
-  export type ContentMediaUncheckedCreateWithoutMediaInput = {
-    id?: number
-    contentId: number
-    order?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ContentMediaCreateOrConnectWithoutMediaInput = {
-    where: ContentMediaWhereUniqueInput
-    create: XOR<ContentMediaCreateWithoutMediaInput, ContentMediaUncheckedCreateWithoutMediaInput>
-  }
-
-  export type ContentMediaCreateManyMediaInputEnvelope = {
-    data: ContentMediaCreateManyMediaInput | ContentMediaCreateManyMediaInput[]
-    skipDuplicates?: boolean
-  }
-
   export type ContentCreateWithoutFeaturedMediaInput = {
     type?: $Enums.ContentType
     state?: $Enums.ContentState
@@ -26975,8 +25170,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutContentsInput
     versions?: ContentVersionCreateNestedManyWithoutContentInput
-    sectionContents?: SectionContentCreateNestedManyWithoutContentInput
-    media?: ContentMediaCreateNestedManyWithoutContentInput
+    sectionItems?: SectionContentItemCreateNestedManyWithoutContentInput
   }
 
   export type ContentUncheckedCreateWithoutFeaturedMediaInput = {
@@ -26990,8 +25184,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     versions?: ContentVersionUncheckedCreateNestedManyWithoutContentInput
-    sectionContents?: SectionContentUncheckedCreateNestedManyWithoutContentInput
-    media?: ContentMediaUncheckedCreateNestedManyWithoutContentInput
+    sectionItems?: SectionContentItemUncheckedCreateNestedManyWithoutContentInput
   }
 
   export type ContentCreateOrConnectWithoutFeaturedMediaInput = {
@@ -27098,22 +25291,6 @@ export namespace Prisma {
   export type ContentVersionMediaUpdateManyWithWhereWithoutMediaInput = {
     where: ContentVersionMediaScalarWhereInput
     data: XOR<ContentVersionMediaUpdateManyMutationInput, ContentVersionMediaUncheckedUpdateManyWithoutMediaInput>
-  }
-
-  export type ContentMediaUpsertWithWhereUniqueWithoutMediaInput = {
-    where: ContentMediaWhereUniqueInput
-    update: XOR<ContentMediaUpdateWithoutMediaInput, ContentMediaUncheckedUpdateWithoutMediaInput>
-    create: XOR<ContentMediaCreateWithoutMediaInput, ContentMediaUncheckedCreateWithoutMediaInput>
-  }
-
-  export type ContentMediaUpdateWithWhereUniqueWithoutMediaInput = {
-    where: ContentMediaWhereUniqueInput
-    data: XOR<ContentMediaUpdateWithoutMediaInput, ContentMediaUncheckedUpdateWithoutMediaInput>
-  }
-
-  export type ContentMediaUpdateManyWithWhereWithoutMediaInput = {
-    where: ContentMediaScalarWhereInput
-    data: XOR<ContentMediaUpdateManyMutationInput, ContentMediaUncheckedUpdateManyWithoutMediaInput>
   }
 
   export type ContentUpsertWithWhereUniqueWithoutFeaturedMediaInput = {
@@ -27291,7 +25468,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     owner: ClientCreateNestedOneWithoutMediaInput
     contentVersions?: ContentVersionMediaCreateNestedManyWithoutMediaInput
-    contentMedia?: ContentMediaCreateNestedManyWithoutMediaInput
     featuredIn?: ContentCreateNestedManyWithoutFeaturedMediaInput
   }
 
@@ -27310,7 +25486,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     contentVersions?: ContentVersionMediaUncheckedCreateNestedManyWithoutMediaInput
-    contentMedia?: ContentMediaUncheckedCreateNestedManyWithoutMediaInput
     featuredIn?: ContentUncheckedCreateNestedManyWithoutFeaturedMediaInput
   }
 
@@ -27331,6 +25506,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     site?: SiteCreateNestedOneWithoutPagesInput
     mobileApp?: MobileAppCreateNestedOneWithoutPagesInput
     sections?: SectionCreateNestedManyWithoutPageInput
@@ -27349,6 +25526,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     sections?: SectionUncheckedCreateNestedManyWithoutPageInput
     subPages?: PageUncheckedCreateNestedManyWithoutParentPageInput
   }
@@ -27372,8 +25551,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     versions?: ContentVersionCreateNestedManyWithoutContentInput
-    sectionContents?: SectionContentCreateNestedManyWithoutContentInput
-    media?: ContentMediaCreateNestedManyWithoutContentInput
+    sectionItems?: SectionContentItemCreateNestedManyWithoutContentInput
     featuredMedia?: MediaCreateNestedOneWithoutFeaturedInInput
   }
 
@@ -27388,8 +25566,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     versions?: ContentVersionUncheckedCreateNestedManyWithoutContentInput
-    sectionContents?: SectionContentUncheckedCreateNestedManyWithoutContentInput
-    media?: ContentMediaUncheckedCreateNestedManyWithoutContentInput
+    sectionItems?: SectionContentItemUncheckedCreateNestedManyWithoutContentInput
   }
 
   export type ContentCreateOrConnectWithoutProjectInput = {
@@ -27625,6 +25802,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutPagesInput
     mobileApp?: MobileAppCreateNestedOneWithoutPagesInput
     sections?: SectionCreateNestedManyWithoutPageInput
@@ -27643,6 +25822,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     sections?: SectionUncheckedCreateNestedManyWithoutPageInput
     subPages?: PageUncheckedCreateNestedManyWithoutParentPageInput
   }
@@ -27762,6 +25943,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutPagesInput
     site?: SiteCreateNestedOneWithoutPagesInput
     sections?: SectionCreateNestedManyWithoutPageInput
@@ -27780,6 +25963,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     sections?: SectionUncheckedCreateNestedManyWithoutPageInput
     subPages?: PageUncheckedCreateNestedManyWithoutParentPageInput
   }
@@ -28042,7 +26227,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutMediaNestedInput
     contentVersions?: ContentVersionMediaUpdateManyWithoutMediaNestedInput
-    contentMedia?: ContentMediaUpdateManyWithoutMediaNestedInput
     featuredIn?: ContentUpdateManyWithoutFeaturedMediaNestedInput
   }
 
@@ -28061,7 +26245,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contentVersions?: ContentVersionMediaUncheckedUpdateManyWithoutMediaNestedInput
-    contentMedia?: ContentMediaUncheckedUpdateManyWithoutMediaNestedInput
     featuredIn?: ContentUncheckedUpdateManyWithoutFeaturedMediaNestedInput
   }
 
@@ -28148,6 +26331,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type SectionUpdateWithoutPageInput = {
@@ -28158,7 +26343,7 @@ export namespace Prisma {
     columnLayout?: NullableEnumColumnLayoutFieldUpdateOperationsInput | $Enums.ColumnLayout | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sectionContent?: SectionContentUpdateManyWithoutSectionNestedInput
+    contents?: SectionContentItemUpdateManyWithoutSectionNestedInput
     parentSection?: SectionUpdateOneWithoutSubSectionsNestedInput
     subSections?: SectionUpdateManyWithoutParentSectionNestedInput
   }
@@ -28173,7 +26358,7 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sectionContent?: SectionContentUncheckedUpdateManyWithoutSectionNestedInput
+    contents?: SectionContentItemUncheckedUpdateManyWithoutSectionNestedInput
     subSections?: SectionUncheckedUpdateManyWithoutParentSectionNestedInput
   }
 
@@ -28196,6 +26381,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutPagesNestedInput
     site?: SiteUpdateOneWithoutPagesNestedInput
     mobileApp?: MobileAppUpdateOneWithoutPagesNestedInput
@@ -28214,6 +26401,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: SectionUncheckedUpdateManyWithoutPageNestedInput
     subPages?: PageUncheckedUpdateManyWithoutParentPageNestedInput
   }
@@ -28229,14 +26418,13 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SectionContentCreateManySectionInput = {
-    id?: number
-    type?: $Enums.SectionContentType
+  export type SectionContentItemCreateManySectionInput = {
     contentId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    order?: number
   }
 
   export type SectionCreateManyParentSectionInput = {
@@ -28251,27 +26439,19 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type SectionContentUpdateWithoutSectionInput = {
-    type?: EnumSectionContentTypeFieldUpdateOperationsInput | $Enums.SectionContentType
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    content?: ContentUpdateOneRequiredWithoutSectionContentsNestedInput
+  export type SectionContentItemUpdateWithoutSectionInput = {
+    order?: IntFieldUpdateOperationsInput | number
+    content?: ContentUpdateOneRequiredWithoutSectionItemsNestedInput
   }
 
-  export type SectionContentUncheckedUpdateWithoutSectionInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: EnumSectionContentTypeFieldUpdateOperationsInput | $Enums.SectionContentType
+  export type SectionContentItemUncheckedUpdateWithoutSectionInput = {
     contentId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
   }
 
-  export type SectionContentUncheckedUpdateManyWithoutSectionInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: EnumSectionContentTypeFieldUpdateOperationsInput | $Enums.SectionContentType
+  export type SectionContentItemUncheckedUpdateManyWithoutSectionInput = {
     contentId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
   }
 
   export type SectionUpdateWithoutParentSectionInput = {
@@ -28282,8 +26462,8 @@ export namespace Prisma {
     columnLayout?: NullableEnumColumnLayoutFieldUpdateOperationsInput | $Enums.ColumnLayout | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sectionContent?: SectionContentUpdateManyWithoutSectionNestedInput
     page?: PageUpdateOneRequiredWithoutSectionsNestedInput
+    contents?: SectionContentItemUpdateManyWithoutSectionNestedInput
     subSections?: SectionUpdateManyWithoutParentSectionNestedInput
   }
 
@@ -28297,7 +26477,7 @@ export namespace Prisma {
     columnLayout?: NullableEnumColumnLayoutFieldUpdateOperationsInput | $Enums.ColumnLayout | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sectionContent?: SectionContentUncheckedUpdateManyWithoutSectionNestedInput
+    contents?: SectionContentItemUncheckedUpdateManyWithoutSectionNestedInput
     subSections?: SectionUncheckedUpdateManyWithoutParentSectionNestedInput
   }
 
@@ -28325,20 +26505,9 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type SectionContentCreateManyContentInput = {
-    id?: number
-    type?: $Enums.SectionContentType
+  export type SectionContentItemCreateManyContentInput = {
     sectionId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ContentMediaCreateManyContentInput = {
-    id?: number
-    mediaId: number
     order?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type ContentVersionUpdateWithoutContentInput = {
@@ -28378,50 +26547,19 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SectionContentUpdateWithoutContentInput = {
-    type?: EnumSectionContentTypeFieldUpdateOperationsInput | $Enums.SectionContentType
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    section?: SectionUpdateOneRequiredWithoutSectionContentNestedInput
+  export type SectionContentItemUpdateWithoutContentInput = {
+    order?: IntFieldUpdateOperationsInput | number
+    section?: SectionUpdateOneRequiredWithoutContentsNestedInput
   }
 
-  export type SectionContentUncheckedUpdateWithoutContentInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: EnumSectionContentTypeFieldUpdateOperationsInput | $Enums.SectionContentType
+  export type SectionContentItemUncheckedUpdateWithoutContentInput = {
     sectionId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
   }
 
-  export type SectionContentUncheckedUpdateManyWithoutContentInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: EnumSectionContentTypeFieldUpdateOperationsInput | $Enums.SectionContentType
+  export type SectionContentItemUncheckedUpdateManyWithoutContentInput = {
     sectionId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ContentMediaUpdateWithoutContentInput = {
     order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    media?: MediaUpdateOneRequiredWithoutContentMediaNestedInput
-  }
-
-  export type ContentMediaUncheckedUpdateWithoutContentInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    mediaId?: IntFieldUpdateOperationsInput | number
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ContentMediaUncheckedUpdateManyWithoutContentInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    mediaId?: IntFieldUpdateOperationsInput | number
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ContentVersionMediaCreateManyContentVersionInput = {
@@ -28447,14 +26585,6 @@ export namespace Prisma {
   export type ContentVersionMediaCreateManyMediaInput = {
     contentVersionId: number
     order?: number
-  }
-
-  export type ContentMediaCreateManyMediaInput = {
-    id?: number
-    contentId: number
-    order?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type ContentCreateManyFeaturedMediaInput = {
@@ -28484,29 +26614,6 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
   }
 
-  export type ContentMediaUpdateWithoutMediaInput = {
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    content?: ContentUpdateOneRequiredWithoutMediaNestedInput
-  }
-
-  export type ContentMediaUncheckedUpdateWithoutMediaInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    contentId?: IntFieldUpdateOperationsInput | number
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ContentMediaUncheckedUpdateManyWithoutMediaInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    contentId?: IntFieldUpdateOperationsInput | number
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type ContentUpdateWithoutFeaturedMediaInput = {
     type?: EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
     state?: EnumContentStateFieldUpdateOperationsInput | $Enums.ContentState
@@ -28517,8 +26624,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutContentsNestedInput
     versions?: ContentVersionUpdateManyWithoutContentNestedInput
-    sectionContents?: SectionContentUpdateManyWithoutContentNestedInput
-    media?: ContentMediaUpdateManyWithoutContentNestedInput
+    sectionItems?: SectionContentItemUpdateManyWithoutContentNestedInput
   }
 
   export type ContentUncheckedUpdateWithoutFeaturedMediaInput = {
@@ -28532,8 +26638,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     versions?: ContentVersionUncheckedUpdateManyWithoutContentNestedInput
-    sectionContents?: SectionContentUncheckedUpdateManyWithoutContentNestedInput
-    media?: ContentMediaUncheckedUpdateManyWithoutContentNestedInput
+    sectionItems?: SectionContentItemUncheckedUpdateManyWithoutContentNestedInput
   }
 
   export type ContentUncheckedUpdateManyWithoutFeaturedMediaInput = {
@@ -28609,6 +26714,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ContentCreateManyProjectInput = {
@@ -28740,7 +26847,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: ClientUpdateOneRequiredWithoutMediaNestedInput
     contentVersions?: ContentVersionMediaUpdateManyWithoutMediaNestedInput
-    contentMedia?: ContentMediaUpdateManyWithoutMediaNestedInput
     featuredIn?: ContentUpdateManyWithoutFeaturedMediaNestedInput
   }
 
@@ -28759,7 +26865,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contentVersions?: ContentVersionMediaUncheckedUpdateManyWithoutMediaNestedInput
-    contentMedia?: ContentMediaUncheckedUpdateManyWithoutMediaNestedInput
     featuredIn?: ContentUncheckedUpdateManyWithoutFeaturedMediaNestedInput
   }
 
@@ -28786,6 +26891,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneWithoutPagesNestedInput
     mobileApp?: MobileAppUpdateOneWithoutPagesNestedInput
     sections?: SectionUpdateManyWithoutPageNestedInput
@@ -28804,6 +26911,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: SectionUncheckedUpdateManyWithoutPageNestedInput
     subPages?: PageUncheckedUpdateManyWithoutParentPageNestedInput
   }
@@ -28819,6 +26928,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ContentUpdateWithoutProjectInput = {
@@ -28830,8 +26941,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     versions?: ContentVersionUpdateManyWithoutContentNestedInput
-    sectionContents?: SectionContentUpdateManyWithoutContentNestedInput
-    media?: ContentMediaUpdateManyWithoutContentNestedInput
+    sectionItems?: SectionContentItemUpdateManyWithoutContentNestedInput
     featuredMedia?: MediaUpdateOneWithoutFeaturedInNestedInput
   }
 
@@ -28846,8 +26956,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     versions?: ContentVersionUncheckedUpdateManyWithoutContentNestedInput
-    sectionContents?: SectionContentUncheckedUpdateManyWithoutContentNestedInput
-    media?: ContentMediaUncheckedUpdateManyWithoutContentNestedInput
+    sectionItems?: SectionContentItemUncheckedUpdateManyWithoutContentNestedInput
   }
 
   export type ContentUncheckedUpdateManyWithoutProjectInput = {
@@ -28873,6 +26982,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PageUpdateWithoutSiteInput = {
@@ -28882,6 +26993,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutPagesNestedInput
     mobileApp?: MobileAppUpdateOneWithoutPagesNestedInput
     sections?: SectionUpdateManyWithoutPageNestedInput
@@ -28900,6 +27013,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: SectionUncheckedUpdateManyWithoutPageNestedInput
     subPages?: PageUncheckedUpdateManyWithoutParentPageNestedInput
   }
@@ -28915,6 +27030,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PageCreateManyMobileAppInput = {
@@ -28928,6 +27045,8 @@ export namespace Prisma {
     metaDescription?: string | null
     ogImage?: string | null
     keywords?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PageUpdateWithoutMobileAppInput = {
@@ -28937,6 +27056,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutPagesNestedInput
     site?: SiteUpdateOneWithoutPagesNestedInput
     sections?: SectionUpdateManyWithoutPageNestedInput
@@ -28955,6 +27076,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: SectionUncheckedUpdateManyWithoutPageNestedInput
     subPages?: PageUncheckedUpdateManyWithoutParentPageNestedInput
   }
@@ -28970,6 +27093,8 @@ export namespace Prisma {
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     ogImage?: NullableStringFieldUpdateOperationsInput | string | null
     keywords?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

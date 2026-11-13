@@ -12,6 +12,7 @@ import { MobileAppsPage } from './pages/mobile-apps/MobileAppsPage';
 import { ApisPage } from './pages/apis/ApisPage';
 import { ApiDetailPage } from './pages/apis/ApiDetailPage';
 import { UsersPage } from './pages/users/UsersPage';
+import { PageDetailPage} from "./pages/pages/PageDetailPage.tsx";
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
@@ -45,6 +46,7 @@ function App() {
           <Route path="mobile-apps" element={<MobileAppsPage />} />
           <Route path="apis" element={<ApisPage />} />
           <Route path="apis/:id" element={<ApiDetailPage />} />
+          <Route path="pages/:id" element={<PageDetailPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

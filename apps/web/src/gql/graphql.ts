@@ -38,6 +38,12 @@ export enum ApiType {
   ThemeLibrary = 'THEME_LIBRARY'
 }
 
+export type AddSectionContentItemInput = {
+  contentId: Scalars['Int']['input'];
+  order?: InputMaybe<Scalars['Int']['input']>;
+  sectionId: Scalars['Int']['input'];
+};
+
 export type Address = {
   __typename?: 'Address';
   address1?: Maybe<Scalars['String']['output']>;
@@ -83,26 +89,15 @@ export type Content = {
   featuredMedia?: Maybe<Media>;
   featuredMediaId?: Maybe<Scalars['Int']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
-  media?: Maybe<Array<ContentMedia>>;
   project?: Maybe<Project>;
   projectId?: Maybe<Scalars['Int']['output']>;
-  sectionContents?: Maybe<Array<SectionContent>>;
+  sectionItems?: Maybe<Array<SectionContentItem>>;
   slug?: Maybe<Scalars['String']['output']>;
   state?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
   type?: Maybe<Scalars['String']['output']>;
   versions?: Maybe<Array<ContentVersion>>;
   visibility?: Maybe<Scalars['String']['output']>;
-};
-
-export type ContentMedia = {
-  __typename?: 'ContentMedia';
-  content?: Maybe<Content>;
-  contentId?: Maybe<Scalars['Int']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
-  media?: Maybe<Media>;
-  mediaId?: Maybe<Scalars['Int']['output']>;
-  order?: Maybe<Scalars['Int']['output']>;
 };
 
 export enum ContentState {
@@ -183,12 +178,6 @@ export type CreateContentInput = {
   visibility?: InputMaybe<ContentVisibility>;
 };
 
-export type CreateContentMediaInput = {
-  contentId: Scalars['Int']['input'];
-  mediaId: Scalars['Int']['input'];
-  order?: InputMaybe<Scalars['Int']['input']>;
-};
-
 export type CreateContentVersionInput = {
   body?: InputMaybe<Scalars['String']['input']>;
   contentId: Scalars['Int']['input'];
@@ -249,12 +238,6 @@ export type CreateProjectInput = {
   type: ProjectType;
 };
 
-export type CreateSectionContentInput = {
-  contentId: Scalars['Int']['input'];
-  sectionId: Scalars['Int']['input'];
-  type?: InputMaybe<SectionContentType>;
-};
-
 export type CreateSectionInput = {
   columnLayout?: InputMaybe<ColumnLayout>;
   containerType?: InputMaybe<ContainerType>;
@@ -280,7 +263,6 @@ export type Media = {
   __typename?: 'Media';
   altText?: Maybe<Scalars['String']['output']>;
   caption?: Maybe<Scalars['String']['output']>;
-  contentMedia?: Maybe<Array<ContentMedia>>;
   contentVersions?: Maybe<Array<ContentVersionMedia>>;
   featuredIn?: Maybe<Array<Content>>;
   filename?: Maybe<Scalars['String']['output']>;
@@ -350,11 +332,11 @@ export enum MobileAppType {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addSectionContentItem?: Maybe<SectionContentItem>;
   createAPI?: Maybe<Api>;
   createClient?: Maybe<Client>;
   createClientAddress?: Maybe<Address>;
   createContent?: Maybe<Content>;
-  createContentMedia?: Maybe<ContentMedia>;
   createContentVersion?: Maybe<ContentVersion>;
   createContentVersionMedia?: Maybe<ContentVersionMedia>;
   createMedia?: Maybe<Media>;
@@ -362,13 +344,11 @@ export type Mutation = {
   createPage?: Maybe<Page>;
   createProject?: Maybe<Project>;
   createSection?: Maybe<Section>;
-  createSectionContent?: Maybe<SectionContent>;
   createSite: Site;
   deleteAPI?: Maybe<Api>;
   deleteAddress?: Maybe<Address>;
   deleteClient?: Maybe<Client>;
   deleteContent?: Maybe<Content>;
-  deleteContentMedia?: Maybe<ContentMedia>;
   deleteContentVersion?: Maybe<ContentVersion>;
   deleteContentVersionMedia?: Maybe<ContentVersionMedia>;
   deleteMedia?: Maybe<Media>;
@@ -376,13 +356,12 @@ export type Mutation = {
   deletePage?: Maybe<Page>;
   deleteProject?: Maybe<Project>;
   deleteSection?: Maybe<Section>;
-  deleteSectionContent?: Maybe<SectionContent>;
   deleteSite?: Maybe<Site>;
+  removeSectionContentItem?: Maybe<SectionContentItem>;
   updateAPI?: Maybe<Api>;
   updateAddress?: Maybe<Address>;
   updateClient?: Maybe<Client>;
   updateContent?: Maybe<Content>;
-  updateContentMediaOrder?: Maybe<ContentMedia>;
   updateContentVersion?: Maybe<ContentVersion>;
   updateContentVersionMediaOrder?: Maybe<ContentVersionMedia>;
   updateMedia?: Maybe<Media>;
@@ -390,8 +369,13 @@ export type Mutation = {
   updatePage?: Maybe<Page>;
   updateProject?: Maybe<Project>;
   updateSection?: Maybe<Section>;
-  updateSectionContent?: Maybe<SectionContent>;
+  updateSectionContentItemOrder?: Maybe<SectionContentItem>;
   updateSite?: Maybe<Site>;
+};
+
+
+export type MutationAddSectionContentItemArgs = {
+  input: AddSectionContentItemInput;
 };
 
 
@@ -412,11 +396,6 @@ export type MutationCreateClientAddressArgs = {
 
 export type MutationCreateContentArgs = {
   input: CreateContentInput;
-};
-
-
-export type MutationCreateContentMediaArgs = {
-  input: CreateContentMediaInput;
 };
 
 
@@ -455,11 +434,6 @@ export type MutationCreateSectionArgs = {
 };
 
 
-export type MutationCreateSectionContentArgs = {
-  input: CreateSectionContentInput;
-};
-
-
 export type MutationCreateSiteArgs = {
   input: CreateSiteInput;
 };
@@ -481,11 +455,6 @@ export type MutationDeleteClientArgs = {
 
 
 export type MutationDeleteContentArgs = {
-  id: Scalars['Int']['input'];
-};
-
-
-export type MutationDeleteContentMediaArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -526,13 +495,14 @@ export type MutationDeleteSectionArgs = {
 };
 
 
-export type MutationDeleteSectionContentArgs = {
+export type MutationDeleteSiteArgs = {
   id: Scalars['Int']['input'];
 };
 
 
-export type MutationDeleteSiteArgs = {
-  id: Scalars['Int']['input'];
+export type MutationRemoveSectionContentItemArgs = {
+  contentId: Scalars['Int']['input'];
+  sectionId: Scalars['Int']['input'];
 };
 
 
@@ -557,12 +527,6 @@ export type MutationUpdateClientArgs = {
 export type MutationUpdateContentArgs = {
   id: Scalars['Int']['input'];
   input: UpdateContentInput;
-};
-
-
-export type MutationUpdateContentMediaOrderArgs = {
-  id: Scalars['Int']['input'];
-  order: Scalars['Int']['input'];
 };
 
 
@@ -609,9 +573,10 @@ export type MutationUpdateSectionArgs = {
 };
 
 
-export type MutationUpdateSectionContentArgs = {
-  id: Scalars['Int']['input'];
-  input: UpdateSectionContentInput;
+export type MutationUpdateSectionContentItemOrderArgs = {
+  contentId: Scalars['Int']['input'];
+  order: Scalars['Int']['input'];
+  sectionId: Scalars['Int']['input'];
 };
 
 
@@ -622,10 +587,13 @@ export type MutationUpdateSiteArgs = {
 
 export type Page = {
   __typename?: 'Page';
+  createdAt: Scalars['String']['output'];
   id?: Maybe<Scalars['Int']['output']>;
   keywords?: Maybe<Scalars['String']['output']>;
   metaDescription?: Maybe<Scalars['String']['output']>;
   metaTitle?: Maybe<Scalars['String']['output']>;
+  mobileApp?: Maybe<MobileApp>;
+  mobileAppId?: Maybe<Scalars['Int']['output']>;
   ogImage?: Maybe<Scalars['String']['output']>;
   parentId?: Maybe<Scalars['Int']['output']>;
   parentPage?: Maybe<Page>;
@@ -637,6 +605,7 @@ export type Page = {
   slug?: Maybe<Scalars['String']['output']>;
   subPages?: Maybe<Array<Page>>;
   title?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['String']['output'];
 };
 
 export type Project = {
@@ -677,8 +646,6 @@ export type Query = {
   client?: Maybe<Client>;
   clients?: Maybe<Array<Client>>;
   content?: Maybe<Content>;
-  contentMedia?: Maybe<ContentMedia>;
-  contentMedias?: Maybe<Array<ContentMedia>>;
   contentVersion?: Maybe<ContentVersion>;
   contentVersionMedia?: Maybe<ContentVersionMedia>;
   contentVersionMedias?: Maybe<Array<ContentVersionMedia>>;
@@ -694,8 +661,7 @@ export type Query = {
   project?: Maybe<Project>;
   projects?: Maybe<Array<Project>>;
   section?: Maybe<Section>;
-  sectionContent?: Maybe<SectionContent>;
-  sectionContents?: Maybe<Array<SectionContent>>;
+  sectionContentItems?: Maybe<Array<SectionContentItem>>;
   sections?: Maybe<Array<Section>>;
   site?: Maybe<Site>;
   sites?: Maybe<Array<Site>>;
@@ -729,16 +695,6 @@ export type QueryClientArgs = {
 
 export type QueryContentArgs = {
   id: Scalars['Int']['input'];
-};
-
-
-export type QueryContentMediaArgs = {
-  id: Scalars['Int']['input'];
-};
-
-
-export type QueryContentMediasArgs = {
-  contentId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -808,12 +764,7 @@ export type QuerySectionArgs = {
 };
 
 
-export type QuerySectionContentArgs = {
-  id: Scalars['Int']['input'];
-};
-
-
-export type QuerySectionContentsArgs = {
+export type QuerySectionContentItemsArgs = {
   sectionId?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -831,6 +782,7 @@ export type Section = {
   __typename?: 'Section';
   columnLayout?: Maybe<Scalars['String']['output']>;
   containerType?: Maybe<Scalars['String']['output']>;
+  contents?: Maybe<Array<SectionContentItem>>;
   id?: Maybe<Scalars['Int']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   order?: Maybe<Scalars['Int']['output']>;
@@ -838,30 +790,18 @@ export type Section = {
   pageId?: Maybe<Scalars['Int']['output']>;
   parentId?: Maybe<Scalars['Int']['output']>;
   parentSection?: Maybe<Section>;
-  sectionContent?: Maybe<Array<SectionContent>>;
   subSections?: Maybe<Array<Section>>;
   type?: Maybe<Scalars['String']['output']>;
 };
 
-export type SectionContent = {
-  __typename?: 'SectionContent';
+export type SectionContentItem = {
+  __typename?: 'SectionContentItem';
   content?: Maybe<Content>;
   contentId?: Maybe<Scalars['Int']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
+  order?: Maybe<Scalars['Int']['output']>;
   section?: Maybe<Section>;
   sectionId?: Maybe<Scalars['Int']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
 };
-
-export enum SectionContentType {
-  Archive = 'ARCHIVE',
-  Audio = 'AUDIO',
-  Document = 'DOCUMENT',
-  Image = 'IMAGE',
-  Other = 'OTHER',
-  Text = 'TEXT',
-  Video = 'VIDEO'
-}
 
 export enum SectionType {
   BackgroundImage = 'BACKGROUND_IMAGE',
@@ -870,16 +810,12 @@ export enum SectionType {
   Contact = 'CONTACT',
   Cta = 'CTA',
   Gallery = 'GALLERY',
-  GalleryItem = 'GALLERY_ITEM',
   Grid = 'GRID',
-  GridItem = 'GRID_ITEM',
   Hero = 'HERO',
-  Img_1_3Txt_2_3 = 'IMG_1_3_TXT_2_3',
   List = 'LIST',
-  ListItem = 'LIST_ITEM',
   Other = 'OTHER',
-  Testimonial = 'TESTIMONIAL',
-  Txt_2_3Img_1_3 = 'TXT_2_3_IMG_1_3'
+  SplitImageText = 'SPLIT_IMAGE_TEXT',
+  Testimonial = 'TESTIMONIAL'
 }
 
 export type Site = {
@@ -981,10 +917,6 @@ export type UpdateProjectInput = {
   slug?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<ProjectStatus>;
   type?: InputMaybe<ProjectType>;
-};
-
-export type UpdateSectionContentInput = {
-  type: SectionContentType;
 };
 
 export type UpdateSectionInput = {
@@ -1100,6 +1032,47 @@ export type DeleteMobileAppMutationVariables = Exact<{
 
 export type DeleteMobileAppMutation = { __typename?: 'Mutation', deleteMobileApp?: { __typename?: 'MobileApp', id?: number | null } | null };
 
+export type GetPagesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPagesQuery = { __typename?: 'Query', pages?: Array<{ __typename?: 'Page', id?: number | null, title?: string | null, slug?: string | null, projectId?: number | null, siteId?: number | null, mobileAppId?: number | null, site?: { __typename?: 'Site', id?: number | null, name?: string | null, domain?: string | null, host?: string | null, slug?: string | null, type?: string | null, projectId?: number | null } | null, mobileApp?: { __typename?: 'MobileApp', id?: number | null, name?: string | null, description?: string | null, type?: string | null, projectId?: number | null } | null, sections?: Array<{ __typename?: 'Section', id?: number | null, name?: string | null, parentId?: number | null, pageId?: number | null, type?: string | null }> | null }> | null };
+
+export type GetPageDetailQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type GetPageDetailQuery = { __typename?: 'Query', page?: { __typename?: 'Page', id?: number | null, title?: string | null, slug?: string | null, projectId?: number | null, siteId?: number | null, mobileAppId?: number | null, metaTitle?: string | null, metaDescription?: string | null, keywords?: string | null, ogImage?: string | null, createdAt: string, updatedAt: string, site?: { __typename?: 'Site', id?: number | null, name?: string | null, domain?: string | null, host?: string | null, slug?: string | null, type?: string | null, projectId?: number | null } | null, mobileApp?: { __typename?: 'MobileApp', id?: number | null, name?: string | null, description?: string | null, type?: string | null, projectId?: number | null } | null, sections?: Array<{ __typename?: 'Section', id?: number | null, name?: string | null, type?: string | null, order?: number | null, columnLayout?: string | null, containerType?: string | null, parentId?: number | null, subSections?: Array<{ __typename?: 'Section', id?: number | null, name?: string | null, type?: string | null, order?: number | null, columnLayout?: string | null, containerType?: string | null, parentId?: number | null }> | null }> | null, subPages?: Array<{ __typename?: 'Page', id?: number | null, title?: string | null, slug?: string | null }> | null } | null };
+
+export type CreateSectionMutationVariables = Exact<{
+  input: CreateSectionInput;
+}>;
+
+
+export type CreateSectionMutation = { __typename?: 'Mutation', createSection?: { __typename?: 'Section', id?: number | null, name?: string | null, type?: string | null, order?: number | null, columnLayout?: string | null, containerType?: string | null, parentId?: number | null, pageId?: number | null } | null };
+
+export type UpdateSectionMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  input: UpdateSectionInput;
+}>;
+
+
+export type UpdateSectionMutation = { __typename?: 'Mutation', updateSection?: { __typename?: 'Section', id?: number | null, name?: string | null, type?: string | null, order?: number | null, columnLayout?: string | null, containerType?: string | null, parentId?: number | null, pageId?: number | null } | null };
+
+export type DeleteSectionMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type DeleteSectionMutation = { __typename?: 'Mutation', deleteSection?: { __typename?: 'Section', id?: number | null } | null };
+
+export type DeletePageMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type DeletePageMutation = { __typename?: 'Mutation', deletePage?: { __typename?: 'Page', id?: number | null } | null };
+
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1190,6 +1163,12 @@ export const GetMobileAppsDocument = {"kind":"Document","definitions":[{"kind":"
 export const CreateMobileAppDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateMobileApp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateMobileAppInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createMobileApp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<CreateMobileAppMutation, CreateMobileAppMutationVariables>;
 export const UpdateMobileAppDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateMobileApp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateMobileAppInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateMobileApp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<UpdateMobileAppMutation, UpdateMobileAppMutationVariables>;
 export const DeleteMobileAppDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteMobileApp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteMobileApp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteMobileAppMutation, DeleteMobileAppMutationVariables>;
+export const GetPagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"siteId"}},{"kind":"Field","name":{"kind":"Name","value":"site"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"domain"}},{"kind":"Field","name":{"kind":"Name","value":"host"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mobileAppId"}},{"kind":"Field","name":{"kind":"Name","value":"mobileApp"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"sections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"pageId"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]} as unknown as DocumentNode<GetPagesQuery, GetPagesQueryVariables>;
+export const GetPageDetailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPageDetail"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"siteId"}},{"kind":"Field","name":{"kind":"Name","value":"site"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"domain"}},{"kind":"Field","name":{"kind":"Name","value":"host"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mobileAppId"}},{"kind":"Field","name":{"kind":"Name","value":"mobileApp"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"metaTitle"}},{"kind":"Field","name":{"kind":"Name","value":"metaDescription"}},{"kind":"Field","name":{"kind":"Name","value":"keywords"}},{"kind":"Field","name":{"kind":"Name","value":"ogImage"}},{"kind":"Field","name":{"kind":"Name","value":"sections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"order"}},{"kind":"Field","name":{"kind":"Name","value":"columnLayout"}},{"kind":"Field","name":{"kind":"Name","value":"containerType"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"subSections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"order"}},{"kind":"Field","name":{"kind":"Name","value":"columnLayout"}},{"kind":"Field","name":{"kind":"Name","value":"containerType"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"subPages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetPageDetailQuery, GetPageDetailQueryVariables>;
+export const CreateSectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateSection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateSectionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createSection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"order"}},{"kind":"Field","name":{"kind":"Name","value":"columnLayout"}},{"kind":"Field","name":{"kind":"Name","value":"containerType"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"pageId"}}]}}]}}]} as unknown as DocumentNode<CreateSectionMutation, CreateSectionMutationVariables>;
+export const UpdateSectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateSection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateSectionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateSection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"order"}},{"kind":"Field","name":{"kind":"Name","value":"columnLayout"}},{"kind":"Field","name":{"kind":"Name","value":"containerType"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"pageId"}}]}}]}}]} as unknown as DocumentNode<UpdateSectionMutation, UpdateSectionMutationVariables>;
+export const DeleteSectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteSection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteSection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteSectionMutation, DeleteSectionMutationVariables>;
+export const DeletePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeletePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deletePage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeletePageMutation, DeletePageMutationVariables>;
 export const GetProjectsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProjects"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"projects"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"clientId"}}]}}]}}]} as unknown as DocumentNode<GetProjectsQuery, GetProjectsQueryVariables>;
 export const CreateProjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateProject"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateProjectInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createProject"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]} as unknown as DocumentNode<CreateProjectMutation, CreateProjectMutationVariables>;
 export const UpdateProjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateProject"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateProjectInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateProject"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]} as unknown as DocumentNode<UpdateProjectMutation, UpdateProjectMutationVariables>;

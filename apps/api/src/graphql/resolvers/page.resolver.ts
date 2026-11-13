@@ -19,6 +19,10 @@ builder.prismaObject('Page', {
         sections: t.relation('sections'),
         subPages: t.relation('subPages'),
         parentPage: t.relation('parentPage', { nullable: true }),
+        mobileApp: t.relation('mobileApp', { nullable: true }),
+        mobileAppId: t.exposeInt('mobileAppId', { nullable: true }),
+        createdAt: t.field({ type: 'String', nullable: false, resolve: (page) => page.createdAt.toISOString() }),
+        updatedAt: t.field({ type: 'String', nullable: false, resolve: (page) => page.updatedAt.toISOString() }),
     }),
 });
 

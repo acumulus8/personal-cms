@@ -1,0 +1,40 @@
+$kind: graphql-request
+url: localhost:3000/graphql
+query: >
+  mutation CreatePage($siteId: ID!, $title: String!, $slug: String!, $content:
+  String) {
+      createPage(
+          siteId: $siteId
+          title: $title
+          slug: $slug
+          content: $content
+      ) {
+          id
+          keywords
+          metaDescription
+          metaTitle
+          ogImage
+          parentId
+          projectId
+          siteId
+          slug
+          title
+      }
+  }
+variables: >-
+  {
+      "input": {
+          "siteId": 1,
+          "title": "About",
+          "metaDescription": "The 'about' page for Tim Wilburn's development portfolio.",
+          "metaTitle": "about",
+          "slug": "about"
+      }
+  }
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN}}"
+schema:
+  source: auto
+order: 155052111036415

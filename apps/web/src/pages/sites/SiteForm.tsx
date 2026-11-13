@@ -1,10 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from '@apollo/client/react';
-import type { Site } from '../../gql/graphql';
-import { CREATE_SITE, UPDATE_SITE, GET_SITES } from './sites.gql';
-import { GET_CLIENTS } from '../clients/clients.gql';
-import { GET_PROJECTS } from '../projects/projects.gql';
+import type { Site, SiteType } from '../../gql/graphql';
+import { GetClientsDocument, GetProjectsDocument, GetSitesDocument, CreateSiteDocument, UpdateSiteDocument } from '../../gql/graphql';
 
 interface SiteFormValues {
   name: string;
@@ -29,8 +27,8 @@ export function SiteForm({ open, onClose, site }: SiteFormProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const isEdit = !!site;
 
-  const { data: clientsData } = useQuery<{ clients: { id: number; name: string }[] }>(GET_CLIENTS, { skip: !open });
-  const { data: projectsData } = useQuery<{ projects: { id: number; name: string }[] }>(GET_PROJECTS, { skip: !open });
+  const { data: clientsData } = useQuery(GetClientsDocument, { skip: !open });
+  const { data: projectsData } = useQuery(GetProjectsDocument, { skip: !open });
   const clients = clientsData?.clients ?? [];
   const projects = projectsData?.projects ?? [];
 
@@ -43,8 +41,8 @@ export function SiteForm({ open, onClose, site }: SiteFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<SiteFormValues>();
 
-  const [createSite, { error: createError }] = useMutation(CREATE_SITE, { refetchQueries: [GET_SITES] });
-  const [updateSite, { error: updateError }] = useMutation(UPDATE_SITE, { refetchQueries: [GET_SITES] });
+  const [createSite, { error: createError }] = useMutation(CreateSiteDocument, { refetchQueries: [GetSitesDocument] });
+  const [updateSite, { error: updateError }] = useMutation(UpdateSiteDocument, { refetchQueries: [GetSitesDocument] });
   const mutationError = createError ?? updateError;
 
   useEffect(() => {
@@ -83,7 +81,7 @@ export function SiteForm({ open, onClose, site }: SiteFormProps) {
             domain: values.domain,
             host: values.host,
             description: values.description || undefined,
-            type: values.type,
+            type: values.type as SiteType,
           },
         },
       });
@@ -96,7 +94,7 @@ export function SiteForm({ open, onClose, site }: SiteFormProps) {
             domain: values.domain,
             host: values.host,
             description: values.description || undefined,
-            type: values.type,
+            type: values.type as SiteType,
             clientId: parseInt(values.clientId, 10),
             projectId: parseInt(values.projectId, 10),
           },

@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useQuery, useMutation } from '@apollo/client/react';
-import type { Api, Client, MobileApp, Project, Site } from '../../gql/graphql';
+import { GetProjectDetailDocument, DeleteProjectDocument, GetClientDocument } from '../../gql/graphql';
 import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal';
 import { ProjectForm } from './ProjectForm';
-import { GET_PROJECT_DETAIL, DELETE_PROJECT } from './projects.gql';
-import { GET_CLIENT_BY_ID } from '../clients/clients.gql';
 
 const statusBadge: Record<string, string> = {
   ACTIVE: 'badge-success',
@@ -14,31 +12,25 @@ const statusBadge: Record<string, string> = {
   ARCHIVED: 'badge-ghost',
 };
 
-type ProjectDetail = Project & {
-  sites?: Site[];
-  mobileApps?: MobileApp[];
-  apis?: Api[];
-};
-
 export function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const projectId = parseInt(id!, 10);
 
-  const { data, loading, error } = useQuery<{ project: ProjectDetail }>(GET_PROJECT_DETAIL, {
+  const { data, loading, error } = useQuery(GetProjectDetailDocument, {
     variables: { id: projectId },
   });
 
   const project = data?.project;
 
-  const { data: clientData } = useQuery<{ client: Client }>(GET_CLIENT_BY_ID, {
-    variables: { id: project?.clientId },
+  const { data: clientData } = useQuery(GetClientDocument, {
+    variables: { id: project?.clientId ?? 0 },
     skip: !project?.clientId,
   });
 
   const client = clientData?.client;
 
-  const [deleteProject, { loading: deleting }] = useMutation(DELETE_PROJECT, {
+  const [deleteProject, { loading: deleting }] = useMutation(DeleteProjectDocument, {
     onCompleted: () => navigate('/projects'),
   });
 
@@ -119,7 +111,7 @@ export function ProjectDetailPage() {
         </div>
 
         {/* Client info */}
-        <div className="card bg-base-100 shadow">
+        <div className="card bg-linear-to-br/shorter from-primary via-base-100 via-15% to-base-100 to-50% shadow">
           <div className="card-body">
             <h2 className="card-title text-base">Client</h2>
             {client ? (
@@ -173,6 +165,7 @@ export function ProjectDetailPage() {
                     <th>Domain</th>
                     <th>Type</th>
                     <th>Slug</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -188,6 +181,9 @@ export function ProjectDetailPage() {
                         <span className="badge badge-outline badge-xs">{site.type?.replace(/_/g, ' ')}</span>
                       </td>
                       <td className="font-mono text-xs text-base-content/60">{site.slug}</td>
+                      <td>
+                        <button className="btn btn-sm btn-ghost" onClick={() => navigate(`/sites/${site.id}`)} >Edit</button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

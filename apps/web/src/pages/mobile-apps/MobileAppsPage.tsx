@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client/react';
 import type { MobileApp } from '../../gql/graphql';
+import { GetMobileAppsDocument, DeleteMobileAppDocument } from '../../gql/graphql';
 import { usePagination } from '../../hooks/usePagination';
 import { Pagination } from '../../components/Pagination';
 import { TableSkeleton } from '../../components/TableSkeleton';
 import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal';
 import { MobileAppForm } from './MobileAppForm';
-import { GET_MOBILE_APPS, DELETE_MOBILE_APP } from './mobile-apps.gql';
 
 const PAGE_SIZE = 10;
 
 export function MobileAppsPage() {
-  const { data, loading, error } = useQuery<{ mobileApps: MobileApp[] }>(GET_MOBILE_APPS);
+  const { data, loading, error } = useQuery(GetMobileAppsDocument);
   const apps = data?.mobileApps ?? [];
 
-  const [deleteApp, { loading: deleting }] = useMutation(DELETE_MOBILE_APP, {
-    refetchQueries: [GET_MOBILE_APPS],
+  const [deleteApp, { loading: deleting }] = useMutation(DeleteMobileAppDocument, {
+    refetchQueries: [GetMobileAppsDocument],
   });
 
   const [formOpen, setFormOpen] = useState(false);

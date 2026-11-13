@@ -1,9 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from '@apollo/client/react';
-import type { MobileApp } from '../../gql/graphql';
-import { CREATE_MOBILE_APP, UPDATE_MOBILE_APP, GET_MOBILE_APPS } from './mobile-apps.gql';
-import { GET_PROJECTS } from '../projects/projects.gql';
+import type { MobileApp, MobileAppCategory, MobileAppPlatform, MobileAppType } from '../../gql/graphql';
+import { GetProjectsDocument, GetMobileAppsDocument, CreateMobileAppDocument, UpdateMobileAppDocument } from '../../gql/graphql';
 
 interface MobileAppFormValues {
   name: string;
@@ -29,7 +28,7 @@ export function MobileAppForm({ open, onClose, app }: MobileAppFormProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const isEdit = !!app;
 
-  const { data: projectsData } = useQuery<{ projects: { id: number; name: string }[] }>(GET_PROJECTS, { skip: !open });
+  const { data: projectsData } = useQuery(GetProjectsDocument, { skip: !open });
   const projects = projectsData?.projects ?? [];
 
   const {
@@ -41,8 +40,8 @@ export function MobileAppForm({ open, onClose, app }: MobileAppFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<MobileAppFormValues>();
 
-  const [createApp, { error: createError }] = useMutation(CREATE_MOBILE_APP, { refetchQueries: [GET_MOBILE_APPS] });
-  const [updateApp, { error: updateError }] = useMutation(UPDATE_MOBILE_APP, { refetchQueries: [GET_MOBILE_APPS] });
+  const [createApp, { error: createError }] = useMutation(CreateMobileAppDocument, { refetchQueries: [GetMobileAppsDocument] });
+  const [updateApp, { error: updateError }] = useMutation(UpdateMobileAppDocument, { refetchQueries: [GetMobileAppsDocument] });
   const mutationError = createError ?? updateError;
 
   useEffect(() => {
@@ -78,9 +77,9 @@ export function MobileAppForm({ open, onClose, app }: MobileAppFormProps) {
             name: values.name,
             slug: values.slug,
             description: values.description || undefined,
-            platform: values.platform,
-            category: values.category,
-            type: values.type,
+            platform: values.platform as MobileAppPlatform,
+            category: values.category as MobileAppCategory,
+            type: values.type as MobileAppType,
           },
         },
       });
@@ -91,9 +90,9 @@ export function MobileAppForm({ open, onClose, app }: MobileAppFormProps) {
             name: values.name,
             slug: values.slug,
             description: values.description || undefined,
-            platform: values.platform,
-            category: values.category,
-            type: values.type,
+            platform: values.platform as MobileAppPlatform,
+            category: values.category as MobileAppCategory,
+            type: values.type as MobileAppType,
             projectId: parseInt(values.projectId, 10),
           },
         },
