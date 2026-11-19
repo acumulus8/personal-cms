@@ -19,6 +19,12 @@ enum APIType {
   THEME_LIBRARY
 }
 
+input AddSectionContentItemInput {
+  contentId: Int!
+  order: Int
+  sectionId: Int!
+}
+
 type Address {
   address1: String
   address2: String
@@ -61,25 +67,15 @@ type Content {
   featuredMedia: Media
   featuredMediaId: Int
   id: Int
-  media: [ContentMedia!]
   project: Project
   projectId: Int
-  sectionContents: [SectionContent!]
+  sectionItems: [SectionContentItem!]
   slug: String
   state: String
   title: String
   type: String
   versions: [ContentVersion!]
   visibility: String
-}
-
-type ContentMedia {
-  content: Content
-  contentId: Int
-  id: Int
-  media: Media
-  mediaId: Int
-  order: Int
 }
 
 enum ContentState {
@@ -158,12 +154,6 @@ input CreateContentInput {
   visibility: ContentVisibility
 }
 
-input CreateContentMediaInput {
-  contentId: Int!
-  mediaId: Int!
-  order: Int
-}
-
 input CreateContentVersionInput {
   body: String
   contentId: Int!
@@ -224,12 +214,6 @@ input CreateProjectInput {
   type: ProjectType!
 }
 
-input CreateSectionContentInput {
-  contentId: Int!
-  sectionId: Int!
-  type: SectionContentType
-}
-
 input CreateSectionInput {
   columnLayout: ColumnLayout
   containerType: ContainerType
@@ -254,7 +238,6 @@ input CreateSiteInput {
 type Media {
   altText: String
   caption: String
-  contentMedia: [ContentMedia!]
   contentVersions: [ContentVersionMedia!]
   featuredIn: [Content!]
   filename: String
@@ -322,11 +305,11 @@ enum MobileAppType {
 }
 
 type Mutation {
+  addSectionContentItem(input: AddSectionContentItemInput!): SectionContentItem
   createAPI(input: CreateAPIInput!): API
   createClient(input: CreateClientInput!): Client
   createClientAddress(input: CreateClientAddressInput!): Address
   createContent(input: CreateContentInput!): Content
-  createContentMedia(input: CreateContentMediaInput!): ContentMedia
   createContentVersion(input: CreateContentVersionInput!): ContentVersion
   createContentVersionMedia(input: CreateContentVersionMediaInput!): ContentVersionMedia
   createMedia(input: CreateMediaInput!): Media
@@ -334,13 +317,11 @@ type Mutation {
   createPage(input: CreatePageInput!): Page
   createProject(input: CreateProjectInput!): Project
   createSection(input: CreateSectionInput!): Section
-  createSectionContent(input: CreateSectionContentInput!): SectionContent
   createSite(input: CreateSiteInput!): Site!
   deleteAPI(id: Int!): API
   deleteAddress(id: Int!): Address
   deleteClient(id: Int!): Client
   deleteContent(id: Int!): Content
-  deleteContentMedia(id: Int!): ContentMedia
   deleteContentVersion(id: Int!): ContentVersion
   deleteContentVersionMedia(contentVersionId: Int!, mediaId: Int!): ContentVersionMedia
   deleteMedia(id: Int!): Media
@@ -348,13 +329,12 @@ type Mutation {
   deletePage(id: Int!): Page
   deleteProject(id: Int!): Project
   deleteSection(id: Int!): Section
-  deleteSectionContent(id: Int!): SectionContent
   deleteSite(id: Int!): Site
+  removeSectionContentItem(contentId: Int!, sectionId: Int!): SectionContentItem
   updateAPI(id: Int!, input: UpdateAPIInput!): API
   updateAddress(id: Int!, input: UpdateAddressInput!): Address
   updateClient(id: Int!, input: UpdateClientInput!): Client
   updateContent(id: Int!, input: UpdateContentInput!): Content
-  updateContentMediaOrder(id: Int!, order: Int!): ContentMedia
   updateContentVersion(id: Int!, input: UpdateContentVersionInput!): ContentVersion
   updateContentVersionMediaOrder(contentVersionId: Int!, mediaId: Int!, order: Int!): ContentVersionMedia
   updateMedia(id: Int!, input: UpdateMediaInput!): Media
@@ -362,15 +342,18 @@ type Mutation {
   updatePage(id: Int!, input: UpdatePageInput!): Page
   updateProject(id: Int!, input: UpdateProjectInput!): Project
   updateSection(id: Int!, input: UpdateSectionInput!): Section
-  updateSectionContent(id: Int!, input: UpdateSectionContentInput!): SectionContent
+  updateSectionContentItemOrder(contentId: Int!, order: Int!, sectionId: Int!): SectionContentItem
   updateSite(id: Int!, input: UpdateSiteInput!): Site
 }
 
 type Page {
+  createdAt: String!
   id: Int
   keywords: String
   metaDescription: String
   metaTitle: String
+  mobileApp: MobileApp
+  mobileAppId: Int
   ogImage: String
   parentId: Int
   parentPage: Page
@@ -382,6 +365,7 @@ type Page {
   slug: String
   subPages: [Page!]
   title: String
+  updatedAt: String!
 }
 
 type Project {
@@ -420,8 +404,6 @@ type Query {
   client(id: Int!): Client
   clients: [Client!]
   content(id: Int!): Content
-  contentMedia(id: Int!): ContentMedia
-  contentMedias(contentId: Int): [ContentMedia!]
   contentVersion(id: Int!): ContentVersion
   contentVersionMedia(contentVersionId: Int!, mediaId: Int!): ContentVersionMedia
   contentVersionMedias(contentVersionId: Int): [ContentVersionMedia!]
@@ -437,8 +419,7 @@ type Query {
   project(id: Int!): Project
   projects: [Project!]
   section(id: Int!): Section
-  sectionContent(id: Int!): SectionContent
-  sectionContents(sectionId: Int): [SectionContent!]
+  sectionContentItems(sectionId: Int): [SectionContentItem!]
   sections(pageId: Int): [Section!]
   site(id: Int!): Site
   sites: [Site!]
@@ -447,6 +428,7 @@ type Query {
 type Section {
   columnLayout: String
   containerType: String
+  contents: [SectionContentItem!]
   id: Int
   name: String
   order: Int
@@ -454,28 +436,16 @@ type Section {
   pageId: Int
   parentId: Int
   parentSection: Section
-  sectionContent: [SectionContent!]
   subSections: [Section!]
   type: String
 }
 
-type SectionContent {
+type SectionContentItem {
   content: Content
   contentId: Int
-  id: Int
+  order: Int
   section: Section
   sectionId: Int
-  type: String
-}
-
-enum SectionContentType {
-  ARCHIVE
-  AUDIO
-  DOCUMENT
-  IMAGE
-  OTHER
-  TEXT
-  VIDEO
 }
 
 enum SectionType {
@@ -485,16 +455,12 @@ enum SectionType {
   CONTACT
   CTA
   GALLERY
-  GALLERY_ITEM
   GRID
-  GRID_ITEM
   HERO
-  IMG_1_3_TXT_2_3
   LIST
-  LIST_ITEM
   OTHER
+  SPLIT_IMAGE_TEXT
   TESTIMONIAL
-  TXT_2_3_IMG_1_3
 }
 
 type Site {
@@ -595,10 +561,6 @@ input UpdateProjectInput {
   slug: String
   status: ProjectStatus
   type: ProjectType
-}
-
-input UpdateSectionContentInput {
-  type: SectionContentType!
 }
 
 input UpdateSectionInput {

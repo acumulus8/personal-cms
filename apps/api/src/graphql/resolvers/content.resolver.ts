@@ -24,8 +24,7 @@ builder.prismaObject('Content', {
         }),
         project: t.relation('project'),
         versions: t.relation('versions'),
-        sectionContents: t.relation('sectionContents'),
-        media: t.relation('media'),
+        sectionItems: t.relation('sectionItems'),
         featuredMedia: t.relation('featuredMedia', { nullable: true }),
     }),
 });

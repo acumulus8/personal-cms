@@ -23,7 +23,6 @@ builder.prismaObject('Media', {
         owner: t.relation('owner'),
         project: t.relation('project'),
         contentVersions: t.relation('contentVersions'),
-        contentMedia: t.relation('contentMedia'),
         featuredIn: t.relation('featuredIn'),
     }),
 });

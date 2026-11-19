@@ -24,7 +24,7 @@ builder.prismaObject('Section', {
             resolve: (section) => section.columnLayout ?? null,
         }),
         page: t.relation('page'),
-        sectionContent: t.relation('sectionContent'),
+        contents: t.relation('contents'),
         subSections: t.relation('subSections'),
         parentSection: t.relation('parentSection', { nullable: true }),
     }),

@@ -1,10 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@apollo/client/react';
-import { useQuery } from '@apollo/client/react';
-import type { Project } from '../../gql/graphql';
-import { CREATE_PROJECT, UPDATE_PROJECT, GET_PROJECTS } from './projects.gql';
-import { GET_CLIENTS } from '../clients/clients.gql';
+import { useMutation, useQuery } from '@apollo/client/react';
+import type { Project, ProjectStatus, ProjectType } from '../../gql/graphql';
+import { GetClientsDocument, GetProjectsDocument, CreateProjectDocument, UpdateProjectDocument } from '../../gql/graphql';
 
 interface ProjectFormValues {
   name: string;
@@ -28,10 +26,7 @@ export function ProjectForm({ open, onClose, project }: ProjectFormProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const isEdit = !!project;
 
-  const { data: clientsData } = useQuery<{ clients: { id: number; name: string }[] }>(
-    GET_CLIENTS,
-    { skip: !open },
-  );
+  const { data: clientsData } = useQuery(GetClientsDocument, { skip: !open });
   const clients = clientsData?.clients ?? [];
 
   const {
@@ -43,11 +38,11 @@ export function ProjectForm({ open, onClose, project }: ProjectFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<ProjectFormValues>();
 
-  const [createProject, { error: createError }] = useMutation(CREATE_PROJECT, {
-    refetchQueries: [GET_PROJECTS],
+  const [createProject, { error: createError }] = useMutation(CreateProjectDocument, {
+    refetchQueries: [GetProjectsDocument],
   });
-  const [updateProject, { error: updateError }] = useMutation(UPDATE_PROJECT, {
-    refetchQueries: [GET_PROJECTS],
+  const [updateProject, { error: updateError }] = useMutation(UpdateProjectDocument, {
+    refetchQueries: [GetProjectsDocument],
   });
 
   const mutationError = createError ?? updateError;
@@ -84,8 +79,8 @@ export function ProjectForm({ open, onClose, project }: ProjectFormProps) {
             name: values.name,
             slug: values.slug,
             description: values.description || undefined,
-            status: values.status,
-            type: values.type,
+            status: values.status as ProjectStatus,
+            type: values.type as ProjectType,
           },
         },
       });
@@ -96,8 +91,8 @@ export function ProjectForm({ open, onClose, project }: ProjectFormProps) {
             name: values.name,
             slug: values.slug,
             description: values.description || undefined,
-            status: values.status,
-            type: values.type,
+            status: values.status as ProjectStatus,
+            type: values.type as ProjectType,
             clientId: parseInt(values.clientId, 10),
           },
         },

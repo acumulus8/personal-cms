@@ -1,9 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from '@apollo/client/react';
-import type { Api } from '../../gql/graphql';
-import { CREATE_API, UPDATE_API, GET_APIS } from './apis.gql';
-import { GET_PROJECTS } from '../projects/projects.gql';
+import type { Api, ApiType } from '../../gql/graphql';
+import { GetProjectsDocument, GetApisDocument, CreateApiDocument, UpdateApiDocument } from '../../gql/graphql';
 
 interface ApiFormValues {
   name: string;
@@ -25,7 +24,7 @@ export function ApiForm({ open, onClose, api }: ApiFormProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const isEdit = !!api;
 
-  const { data: projectsData } = useQuery<{ projects: { id: number; name: string }[] }>(GET_PROJECTS, { skip: !open });
+  const { data: projectsData } = useQuery(GetProjectsDocument, { skip: !open });
   const projects = projectsData?.projects ?? [];
 
   const {
@@ -37,8 +36,8 @@ export function ApiForm({ open, onClose, api }: ApiFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<ApiFormValues>();
 
-  const [createApi, { error: createError }] = useMutation(CREATE_API, { refetchQueries: [GET_APIS] });
-  const [updateApi, { error: updateError }] = useMutation(UPDATE_API, { refetchQueries: [GET_APIS] });
+  const [createApi, { error: createError }] = useMutation(CreateApiDocument, { refetchQueries: [GetApisDocument] });
+  const [updateApi, { error: updateError }] = useMutation(UpdateApiDocument, { refetchQueries: [GetApisDocument] });
   const mutationError = createError ?? updateError;
 
   useEffect(() => {
@@ -72,7 +71,7 @@ export function ApiForm({ open, onClose, api }: ApiFormProps) {
             name: values.name,
             slug: values.slug,
             description: values.description || undefined,
-            type: values.type,
+            type: values.type as ApiType,
           },
         },
       });
@@ -83,7 +82,7 @@ export function ApiForm({ open, onClose, api }: ApiFormProps) {
             name: values.name,
             slug: values.slug,
             description: values.description || undefined,
-            type: values.type,
+            type: values.type as ApiType,
             projectId: parseInt(values.projectId, 10),
           },
         },

@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client/react';
 import type { Client } from '../../gql/graphql';
+import { GetClientsDocument, DeleteClientDocument } from '../../gql/graphql';
 import { usePagination } from '../../hooks/usePagination';
 import { Pagination } from '../../components/Pagination';
 import { TableSkeleton } from '../../components/TableSkeleton';
 import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal';
 import { ClientForm } from './ClientForm';
-import { GET_CLIENTS, DELETE_CLIENT } from './clients.gql';
 
 const PAGE_SIZE = 10;
 
 export function ClientsPage() {
-  const { data, loading, error } = useQuery<{ clients: Client[] }>(GET_CLIENTS);
+  const { data, loading, error } = useQuery(GetClientsDocument);
   const clients = data?.clients ?? [];
 
-  const [deleteClient, { loading: deleting }] = useMutation(DELETE_CLIENT, {
-    refetchQueries: [GET_CLIENTS],
+  const [deleteClient, { loading: deleting }] = useMutation(DeleteClientDocument, {
+    refetchQueries: [GetClientsDocument],
   });
 
   const [formOpen, setFormOpen] = useState(false);

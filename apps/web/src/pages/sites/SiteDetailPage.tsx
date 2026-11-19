@@ -1,13 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useQuery, useMutation } from '@apollo/client/react';
-import type { Page, Project, Site } from '../../gql/graphql';
+import { GetSiteDetailDocument, DeleteSiteDocument, GetProjectByIdDocument } from '../../gql/graphql';
 import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal';
-import { SiteForm } from './SiteForm';
-import { GET_SITE_DETAIL, DELETE_SITE } from './sites.gql';
-import { GET_PROJECT_BY_ID } from '../projects/projects.gql';
-
-type SiteDetail = Site & { pages?: Page[] };
 
 const statusBadge: Record<string, string> = {
   ACTIVE: 'badge-success',
@@ -21,20 +16,20 @@ export function SiteDetailPage() {
   const navigate = useNavigate();
   const siteId = parseInt(id!, 10);
 
-  const { data, loading, error } = useQuery<{ site: SiteDetail }>(GET_SITE_DETAIL, {
+  const { data, loading, error } = useQuery(GetSiteDetailDocument, {
     variables: { id: siteId },
   });
 
   const site = data?.site;
 
-  const { data: projectData } = useQuery<{ project: Project }>(GET_PROJECT_BY_ID, {
-    variables: { id: site?.projectId },
+  const { data: projectData } = useQuery(GetProjectByIdDocument, {
+    variables: { id: site?.projectId ?? 0 },
     skip: !site?.projectId,
   });
 
   const project = projectData?.project;
 
-  const [deleteSite, { loading: deleting }] = useMutation(DELETE_SITE, {
+  const [deleteSite, { loading: deleting }] = useMutation(DeleteSiteDocument, {
     onCompleted: () => navigate('/sites'),
   });
 
@@ -186,6 +181,7 @@ export function SiteDetailPage() {
                     <th>Title</th>
                     <th>Slug</th>
                     <th>Sub-pages</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -193,14 +189,18 @@ export function SiteDetailPage() {
                     const children = childPages.filter((c) => c.parentId === page.id);
                     return (
                       <tr key={page.id ?? page.slug} className="hover">
-                        <td className="font-medium">{page.title ?? '(untitled)'}</td>
-                        <td className="font-mono text-xs text-base-content/60">{page.slug}</td>
+                          <td className="font-medium">{<a href={`/pages/${page.id}`}>{page.title ?? '(untitled)'}</a>}</td>
+                        <td className="font-mono text-xs text-base-content/60">{page.slug ?? '—'}</td>
                         <td>
                           {children.length > 0 ? (
                             <span className="badge badge-ghost badge-sm">{children.length}</span>
                           ) : (
                             <span className="text-base-content/30">—</span>
                           )}
+                        </td>
+                        <td>
+                          <button className="btn btn-xs mr-6" onClick={() => navigate(`/pages/${page.id}`)}>Edit</button>
+                          <button className="btn btn-xs">Delete</button>
                         </td>
                       </tr>
                     );
@@ -211,8 +211,6 @@ export function SiteDetailPage() {
           )}
         </div>
       </section>
-
-      <SiteForm open={editOpen} onClose={() => setEditOpen(false)} site={site} />
 
       <ConfirmDeleteModal
         open={deleteOpen}

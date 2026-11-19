@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { useQuery, useMutation } from '@apollo/client/react';
 import type { Project } from '../../gql/graphql';
+import { GetProjectsDocument, DeleteProjectDocument } from '../../gql/graphql';
 import { usePagination } from '../../hooks/usePagination';
 import { Pagination } from '../../components/Pagination';
 import { TableSkeleton } from '../../components/TableSkeleton';
 import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal';
 import { ProjectForm } from './ProjectForm';
-import { GET_PROJECTS, DELETE_PROJECT } from './projects.gql';
 
 const PAGE_SIZE = 10;
 
@@ -19,11 +19,11 @@ const statusBadge: Record<string, string> = {
 };
 
 export function ProjectsPage() {
-  const { data, loading, error } = useQuery<{ projects: Project[] }>(GET_PROJECTS);
+  const { data, loading, error } = useQuery(GetProjectsDocument);
   const projects = data?.projects ?? [];
 
-  const [deleteProject, { loading: deleting }] = useMutation(DELETE_PROJECT, {
-    refetchQueries: [GET_PROJECTS],
+  const [deleteProject, { loading: deleting }] = useMutation(DeleteProjectDocument, {
+    refetchQueries: [GetProjectsDocument],
   });
 
   const [createOpen, setCreateOpen] = useState(false);

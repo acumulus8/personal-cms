@@ -152,7 +152,9 @@ exports.Prisma.PageScalarFieldEnum = {
   metaTitle: 'metaTitle',
   metaDescription: 'metaDescription',
   ogImage: 'ogImage',
-  keywords: 'keywords'
+  keywords: 'keywords',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SectionScalarFieldEnum = {
@@ -168,13 +170,10 @@ exports.Prisma.SectionScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.SectionContentScalarFieldEnum = {
-  id: 'id',
-  type: 'type',
-  contentId: 'contentId',
+exports.Prisma.SectionContentItemScalarFieldEnum = {
   sectionId: 'sectionId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  contentId: 'contentId',
+  order: 'order'
 };
 
 exports.Prisma.ContentScalarFieldEnum = {
@@ -207,15 +206,6 @@ exports.Prisma.ContentVersionMediaScalarFieldEnum = {
   contentVersionId: 'contentVersionId',
   mediaId: 'mediaId',
   order: 'order'
-};
-
-exports.Prisma.ContentMediaScalarFieldEnum = {
-  id: 'id',
-  contentId: 'contentId',
-  mediaId: 'mediaId',
-  order: 'order',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.MediaScalarFieldEnum = {
@@ -405,14 +395,10 @@ exports.SectionType = exports.$Enums.SectionType = {
   HERO: 'HERO',
   BACKGROUND_IMAGE: 'BACKGROUND_IMAGE',
   BACKGROUND_VIDEO: 'BACKGROUND_VIDEO',
-  IMG_1_3_TXT_2_3: 'IMG_1_3_TXT_2_3',
-  TXT_2_3_IMG_1_3: 'TXT_2_3_IMG_1_3',
+  SPLIT_IMAGE_TEXT: 'SPLIT_IMAGE_TEXT',
   LIST: 'LIST',
-  LIST_ITEM: 'LIST_ITEM',
   GRID: 'GRID',
-  GRID_ITEM: 'GRID_ITEM',
   GALLERY: 'GALLERY',
-  GALLERY_ITEM: 'GALLERY_ITEM',
   BANNER: 'BANNER',
   CONTACT: 'CONTACT',
   CTA: 'CTA',
@@ -435,16 +421,6 @@ exports.ColumnLayout = exports.$Enums.ColumnLayout = {
   EQUAL_QUARTERS: 'EQUAL_QUARTERS',
   FULL: 'FULL',
   AUTO: 'AUTO'
-};
-
-exports.SectionContentType = exports.$Enums.SectionContentType = {
-  TEXT: 'TEXT',
-  IMAGE: 'IMAGE',
-  VIDEO: 'VIDEO',
-  AUDIO: 'AUDIO',
-  DOCUMENT: 'DOCUMENT',
-  ARCHIVE: 'ARCHIVE',
-  OTHER: 'OTHER'
 };
 
 exports.ContentType = exports.$Enums.ContentType = {
@@ -544,11 +520,10 @@ exports.Prisma.ModelName = {
   Client: 'Client',
   Page: 'Page',
   Section: 'Section',
-  SectionContent: 'SectionContent',
+  SectionContentItem: 'SectionContentItem',
   Content: 'Content',
   ContentVersion: 'ContentVersion',
   ContentVersionMedia: 'ContentVersionMedia',
-  ContentMedia: 'ContentMedia',
   Media: 'Media',
   Project: 'Project',
   Site: 'Site',

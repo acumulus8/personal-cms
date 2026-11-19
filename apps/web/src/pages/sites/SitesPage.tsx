@@ -2,21 +2,21 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { useQuery, useMutation } from '@apollo/client/react';
 import type { Site } from '../../gql/graphql';
+import { GetSitesDocument, DeleteSiteDocument } from '../../gql/graphql';
 import { usePagination } from '../../hooks/usePagination';
 import { Pagination } from '../../components/Pagination';
 import { TableSkeleton } from '../../components/TableSkeleton';
 import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal';
 import { SiteForm } from './SiteForm';
-import { GET_SITES, DELETE_SITE } from './sites.gql';
 
 const PAGE_SIZE = 10;
 
 export function SitesPage() {
-  const { data, loading, error } = useQuery<{ sites: Site[] }>(GET_SITES);
+  const { data, loading, error } = useQuery(GetSitesDocument);
   const sites = data?.sites ?? [];
 
-  const [deleteSite, { loading: deleting }] = useMutation(DELETE_SITE, {
-    refetchQueries: [GET_SITES],
+  const [deleteSite, { loading: deleting }] = useMutation(DeleteSiteDocument, {
+    refetchQueries: [GetSitesDocument],
   });
 
   const [createOpen, setCreateOpen] = useState(false);
@@ -79,7 +79,7 @@ export function SitesPage() {
                       </Link>
                     </td>
                     <td>
-                      <a href={`https://${site.domain}`} target="_blank" rel="noopener noreferrer" className="link link-primary text-sm">
+                      <a href={site.domain} target="_blank" rel="noopener noreferrer" className="link link-primary text-sm">
                         {site.domain}
                       </a>
                     </td>

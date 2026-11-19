@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useQuery, useMutation } from '@apollo/client/react';
-import type { Api, Project } from '../../gql/graphql';
+import { GetApiDetailDocument, DeleteApiDocument } from '../../gql/graphql';
 import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal';
 import { ApiForm } from './ApiForm';
-import { GET_API_DETAIL, DELETE_API } from './apis.gql';
-
-type ApiDetail = Api & { project?: Project | null };
 
 const statusBadge: Record<string, string> = {
   ACTIVE: 'badge-success',
@@ -20,13 +17,13 @@ export function ApiDetailPage() {
   const navigate = useNavigate();
   const apiId = parseInt(id!, 10);
 
-  const { data, loading, error } = useQuery<{ api: ApiDetail }>(GET_API_DETAIL, {
+  const { data, loading, error } = useQuery(GetApiDetailDocument, {
     variables: { id: apiId },
   });
 
   const api = data?.api;
 
-  const [deleteApi, { loading: deleting }] = useMutation(DELETE_API, {
+  const [deleteApi, { loading: deleting }] = useMutation(DeleteApiDocument, {
     onCompleted: () => navigate('/apis'),
   });
 

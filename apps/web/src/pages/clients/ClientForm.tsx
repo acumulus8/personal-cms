@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client/react';
 import type { Client } from '../../gql/graphql';
-import { CREATE_CLIENT, UPDATE_CLIENT, GET_CLIENTS } from './clients.gql';
+import { CreateClientDocument, UpdateClientDocument, GetClientsDocument } from '../../gql/graphql';
 
 interface ClientFormValues {
   name: string;
@@ -31,11 +31,11 @@ export function ClientForm({ open, onClose, client }: ClientFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<ClientFormValues>();
 
-  const [createClient, { error: createError }] = useMutation(CREATE_CLIENT, {
-    refetchQueries: [GET_CLIENTS],
+  const [createClient, { error: createError }] = useMutation(CreateClientDocument, {
+    refetchQueries: [GetClientsDocument],
   });
-  const [updateClient, { error: updateError }] = useMutation(UPDATE_CLIENT, {
-    refetchQueries: [GET_CLIENTS],
+  const [updateClient, { error: updateError }] = useMutation(UpdateClientDocument, {
+    refetchQueries: [GetClientsDocument],
   });
 
   const mutationError = createError ?? updateError;
